@@ -23,18 +23,21 @@ html {
 }
 
 html.webp {
-  background-image: url(assets/wallpaper.webp);
+  background-image: url(../assets/wallpaper.webp);
 }
 
 html.no-js,
 html.no-webp {
   width: 100%;
   height: 100%;
-  background-image: url(assets/wallpaper.jpg);
+  background-image: url(../assets/wallpaper.jpg);
 }
 
 body {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 header {
@@ -42,14 +45,12 @@ header {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  margin: 0 20px;
+  margin: 30px 20px;
 }
 
 .logo {
   width: 265.13px;
   max-width: 100%;
-  margin: auto 0;
 }
 
 footer {
@@ -81,4 +82,22 @@ footer {
 
 .instagram-icon:hover {
   opacity: 0.7;
+}
+
+/* wip */
+.sandbox {
+  background-color: grey;
+  padding: 20px;
+  margin: auto;
+  width: 300px;
+  height: 300px;
+}
+
+.dot {
+  width: 100px;
+  height: 100px;
+  background-color: red;
+  border-radius: 50%;
+  position: absolute;
+  transform: translate(-50%, -50%);
 }
