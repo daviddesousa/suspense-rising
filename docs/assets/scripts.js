@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   const sandbox = document.getElementById('sandbox');
+  const surface = document.getElementsByTagName('body')[0];
 
   sandbox.addEventListener('touchstart', (e) => {
     e.preventDefault();
@@ -32,4 +33,19 @@ document.addEventListener('DOMContentLoaded', () => {
       dot.remove();
     });
   });
+
+  const dot = document.getElementsByClassName('dot')[0];
+
+  // if (true) {
+    surface.addEventListener('mousemove', (e) => {
+      // var halfViewer = dot.offsetWidth / 2;
+      // var rect = e.target.getBoundingClientRect();
+      // console.log(e);
+      var x = e.clientX;
+      var y = e.clientY;
+      dot.style.left = x;
+      dot.style.top = y;
+      // dot.style.backgroundPosition = -x + 'px' + ' ' + -y + 'px';
+    });
+  // }
 });
