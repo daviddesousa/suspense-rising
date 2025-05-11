@@ -4,6 +4,11 @@
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
     <title>Suspense Rising</title>
     <meta name="description" content="A Story About Trauma">
+    <!-- Google Font start -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@400;600;700&display=swap" rel="stylesheet">
+    <!-- Google Font end -->
     <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -20,13 +25,44 @@
     <link rel="stylesheet" href="assets/styles.css">
   </head>
   <body>
-    <header>
-      <picture class="logo">
-        <source type="image/webp" srcset="assets/suspense-rising-chrome-unicolor.webp">
-        <source type="image/png" srcset="assets/suspense-rising-chrome-unicolor.png">
-        <img src="assets/suspense-rising-chrome-unicolor.png" alt="Suspense Rising" width="265" height="27.5">
-      </picture>
-    </header>
+    <main>
+      <section class="hero">
+        <h1 class="sr-only">Suspense Rising</h1>
+        <picture class="hero-center">
+          <source type="image/webp" srcset="assets/suspense-rising-chrome-unicolor.webp">
+          <source type="image/png" srcset="assets/suspense-rising-chrome-unicolor.png">
+          <img src="assets/suspense-rising-chrome-unicolor.png" alt="Suspense Rising in chrome lettering" width="265" height="27.5" class="logo">
+        </picture>
+        <span class="scroll-down">SCROLL DOWN</span>
+      </section>
+      <section class="releases page-width">
+        <h2 class="section-title">Releases</h2>
+        <article class="release">
+          <img src="assets/haslow.jpeg" alt="Blurred face with text A story about Killian" class="release-cover">
+          <div class="release-info">
+            <h3>Haslow</h3>
+            <p>Description. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <div class="release-links">
+              <a href="#">Beatport</a>
+              <a href="#">Spotify</a>
+              <a href="#">Apple Music</a>
+            </div>
+          </div>
+        </article>
+        <article class="release">
+          <img src="assets/killian.jpeg" alt="Blurred face with text A story about Killian" class="release-cover">
+          <div class="release-info">
+            <h3>Killian</h3>
+            <p>Description. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.</p>
+            <div class="release-links">
+              <a href="#">Beatport</a>
+              <a href="#">Spotify</a>
+              <a href="#">Apple Music</a>
+            </div>
+          </div>
+        </article>
+      </section>
+    </main>
     <footer>
       <a href="https://www.instagram.com/suspenserising" class="instagram-link" aria-label="Follow us on Instagram" target="_blank" rel="noreferrer nooepener">
         <picture>
@@ -36,7 +72,5 @@
         </picture>
       </a>
     </footer>
-    <style>
-    </style>
   </body>
 </html>
