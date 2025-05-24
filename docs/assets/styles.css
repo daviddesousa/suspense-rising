@@ -158,6 +158,12 @@ footer {
   }
 }
 
+.release-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 /* Utilities */
 .sr-only {
   position: absolute;
