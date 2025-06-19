@@ -66,6 +66,11 @@ img {
   max-width: 100%;
 }
 
+h2,
+h3 {
+  letter-spacing: 1px;
+}
+
 h2 {
   font-size: 200%;
 }
