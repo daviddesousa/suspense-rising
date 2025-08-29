@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3D Suspense Rising Logo Animation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: radial-gradient(ellipse at center, #2c3e50 0%, #1a1a1a 100%);
+            font-family: Arial, sans-serif;
+        }
+        
+        #container {
+            width: 100vw;
+            height: 100vh;
+        }
+        
+        #info {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            color: white;
+            z-index: 100;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        
+        #logo-source {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="info">3D Suspense Rising Logo Animation</div>
+    <div id="container"></div>
+    
+    <!-- Hidden source image extracted from main index.html -->
+    <div id="logo-source">
+        <picture class="hero-center">
+            <source
+                type="image/webp"
+                srcset="
+                ../assets/suspense-rising-chrome-unicolor-265.webp,
+                ../assets/suspense-rising-chrome-unicolor-530.webp 2x,
+                ../assets/suspense-rising-chrome-unicolor-795.webp 3x,
+                ../assets/suspense-rising-chrome-unicolor-1060.webp 4x
+                "
+            />
+            <source
+                type="image/png"
+                srcset="
+                ../assets/suspense-rising-chrome-unicolor-265.png,
+                ../assets/suspense-rising-chrome-unicolor-530.png 2x,
+                ../assets/suspense-rising-chrome-unicolor-795.png 3x,
+                ../assets/suspense-rising-chrome-unicolor-1060.png 4x
+                "
+            />
+            <img
+                id="logo-img"
+                src="../assets/suspense-rising-chrome-unicolor-530.png"
+                alt="Suspense Rising in chrome lettering"
+                width="530"
+                height="56"
+                class="logo"
+            />
+        </picture>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/FontLoader.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/geometries/TextGeometry.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.setClearColor(0x000000, 0);
+        document.getElementById('container').appendChild(renderer.domElement);
+        
+        // Enhanced lighting for chrome effect
+        const ambientLight = new THREE.AmbientLight(0x404040, 0.3);
+        scene.add(ambientLight);
+        
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 1.5);
+        directionalLight.position.set(5, 5, 5);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.mapSize.width = 2048;
+        directionalLight.shadow.mapSize.height = 2048;
+        scene.add(directionalLight);
+        
+        const pointLight1 = new THREE.PointLight(0x00aaff, 0.8, 50);
+        pointLight1.position.set(-10, 5, 10);
+        scene.add(pointLight1);
+        
+        const pointLight2 = new THREE.PointLight(0xff6600, 0.6, 50);
+        pointLight2.position.set(10, -5, 10);
+        scene.add(pointLight2);
+        
+        // Add rim lighting for chrome effect
+        const rimLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        rimLight.position.set(-5, 5, -5);
+        scene.add(rimLight);
+        
+        // Create individual 3D characters
+        const textGroup = new THREE.Group();
+        scene.add(textGroup);
+        
+        // Animation variables
+        let time = 0;
+        let characters = [];
+        const text = 'SUSPENSE RISING';
+        let slamEffectTriggered = false;
+        let slamTime = 0;
+        let cycleStartTime = 0;
+        let slamEffectCompleted = false;
+        const cycleDuration = 14.0; // Total cycle: 9s animation + 5s delay
+        
+        // Font loader for 3D text
+        const fontLoader = new THREE.FontLoader();
+        
+        // Load font and create individual 3D characters
+        fontLoader.load('https://threejs.org/examples/fonts/helvetiker_bold.typeface.json', function(font) {
+            create3DCharacters(font);
+        }, undefined, function(error) {
+            console.error('Error loading font:', error);
+            // Fallback: try a different font
+            fontLoader.load('https://threejs.org/examples/fonts/helvetiker_regular.typeface.json', function(font) {
+                create3DCharacters(font);
+            });
+        });
+        
+        function create3DCharacters(font) {
+            let totalWidth = 0;
+            const characterData = [];
+            
+            // First pass: create all characters and calculate total width
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                if (char === ' ') {
+                    characterData.push({
+                        char: char,
+                        width: 0.8, // Space width
+                        geometry: null,
+                        mesh: null
+                    });
+                    totalWidth += 0.8;
+                    continue;
+                }
+                
+                // Create geometry for each character
+                const charGeometry = new THREE.TextGeometry(char, {
+                    font: font,
+                    size: 1.0,           // Base character size
+                    height: 0.3,         // 3D depth
+                    curveSegments: 12,   // Smooth curves
+                    bevelEnabled: true,  // Beveled edges
+                    bevelThickness: 0.06,
+                    bevelSize: 0.04,
+                    bevelOffset: 0,
+                    bevelSegments: 8
+                });
+                
+                charGeometry.computeBoundingBox();
+                const charWidth = charGeometry.boundingBox.max.x - charGeometry.boundingBox.min.x;
+                
+                characterData.push({
+                    char: char,
+                    width: charWidth + 0.1, // Add spacing
+                    geometry: charGeometry,
+                    mesh: null
+                });
+                
+                totalWidth += charWidth + 0.1;
+            }
+            
+            // Second pass: create meshes and position them
+            let currentX = -totalWidth / 2;
+            
+            for (let i = 0; i < characterData.length; i++) {
+                const charData = characterData[i];
+                
+                if (charData.char === ' ') {
+                    currentX += charData.width;
+                    characters.push({
+                        mesh: null,
+                        char: ' ',
+                        index: i,
+                        baseScale: 1.0,
+                        currentScale: 0.1,
+                        targetScale: 1.0,
+                        position: { x: currentX, y: 0, z: 0 }
+                    });
+                    continue;
+                }
+                
+                // Create chrome material
+                const chromeMaterial = new THREE.MeshPhongMaterial({
+                    color: 0xe8e8e8,
+                    shininess: 150,
+                    specular: 0xffffff,
+                    reflectivity: 0.8
+                });
+                
+                // Create mesh
+                const charMesh = new THREE.Mesh(charData.geometry, chromeMaterial);
+                
+                // Position character
+                charMesh.position.x = currentX;
+                charMesh.position.y = 0;
+                charMesh.position.z = 0;
+                
+                // Start with small scale
+                charMesh.scale.set(0.1, 0.1, 0.1);
+                
+                charMesh.castShadow = true;
+                charMesh.receiveShadow = true;
+                
+                textGroup.add(charMesh);
+                
+                // Store character data
+                characters.push({
+                    mesh: charMesh,
+                    char: charData.char,
+                    index: i,
+                    baseScale: 1.0,
+                    currentScale: 0.1,
+                    targetScale: 1.0 + (i * 0.05), // Each character slightly bigger
+                    position: { x: currentX, y: 0, z: 0 },
+                    animationPhase: 'growing', // 'growing', 'maintaining', 'returning'
+                    phaseStartTime: 0
+                });
+                
+                currentX += charData.width;
+            }
+        }
+        
+        // Camera position
+        camera.position.set(0, 0, 20);
+        camera.lookAt(0, 0, 0);
+        
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+            
+            time += 0.02;
+            
+            // Check if slam effect should be triggered
+            let allCharactersInReturnPhase = true;
+            characters.forEach((charData, index) => {
+                if (charData.mesh) {
+                    const charDelay = index * 0.2;
+                    const adjustedTime = time - charDelay;
+                    if (adjustedTime < 9.0) {
+                        allCharactersInReturnPhase = false;
+                    }
+                }
+            });
+            
+            // Trigger slam effect once when all characters reach uniform state
+            if (allCharactersInReturnPhase && !slamEffectTriggered) {
+                slamEffectTriggered = true;
+                slamTime = time;
+            }
+            
+            // Mark slam as completed after the effect duration
+            if (slamEffectTriggered && !slamEffectCompleted && (time - slamTime) > 1.0) {
+                slamEffectCompleted = true;
+            }
+            
+            // Calculate slam effect intensity
+            let slamIntensity = 0;
+            let cameraShake = { x: 0, y: 0, z: 0 };
+            let lightFlash = 0;
+            
+            if (slamEffectTriggered) {
+                const slamProgress = time - slamTime;
+                if (slamProgress < 0.5) {
+                    // Slam effect duration: 0.5 seconds
+                    slamIntensity = Math.exp(-slamProgress * 8) * Math.sin(slamProgress * 40);
+                    
+                    // Camera shake
+                    cameraShake.x = slamIntensity * 0.3;
+                    cameraShake.y = slamIntensity * 0.2;
+                    cameraShake.z = slamIntensity * 0.1;
+                    
+                    // Light flash
+                    lightFlash = Math.exp(-slamProgress * 6) * 2;
+                }
+            }
+            
+            // Animate individual characters
+            characters.forEach((charData, index) => {
+                if (!charData.mesh) return; // Skip spaces
+                
+                const charDelay = index * 0.2; // Stagger animation
+                const adjustedTime = time - charDelay;
+                
+                if (adjustedTime > 0) {
+                    // Phase 1: Growing phase (each character grows to different size)
+                    if (adjustedTime < 3.0) {
+                        const growthProgress = Math.min(1, adjustedTime / 3.0);
+                        const easeOut = 1 - Math.pow(1 - growthProgress, 3);
+                        charData.currentScale = 0.1 + (charData.targetScale - 0.1) * easeOut;
+                        charData.animationPhase = 'growing';
+                    }
+                    // Phase 2: Maintaining different sizes
+                    else if (adjustedTime < 6.0) {
+                        charData.animationPhase = 'maintaining';
+                        // Keep the crescendo scale
+                    }
+                    // Phase 3: Returning to same height with slam buildup
+                    else if (adjustedTime < 9.0) {
+                        const returnProgress = (adjustedTime - 6.0) / 3.0;
+                        // Use a more dramatic easing for slam preparation
+                        const easeInOut = returnProgress < 0.8 ? 
+                            0.5 * Math.pow(returnProgress / 0.8, 2) : 
+                            0.5 + 0.5 * (1 - Math.pow((1 - returnProgress) / 0.2, 0.5));
+                        charData.currentScale = charData.targetScale + (1.0 - charData.targetScale) * easeInOut;
+                        charData.animationPhase = 'returning';
+                    }
+                    // Phase 4: Slam effect and uniform size
+                    else {
+                        charData.currentScale = 1.0;
+                        charData.animationPhase = 'uniform';
+                        
+                        // Add slam bounce effect
+                        if (slamEffectTriggered) {
+                            const slamProgress = time - slamTime;
+                            if (slamProgress < 0.8) {
+                                const bounceEffect = Math.exp(-slamProgress * 4) * Math.sin(slamProgress * 15) * 0.2;
+                                charData.currentScale = 1.0 + bounceEffect;
+                            }
+                        }
+                    }
+                    
+                    // Apply scale
+                    charData.mesh.scale.set(charData.currentScale, charData.currentScale, charData.currentScale);
+                    
+                    // Gentle floating motion (enhanced during slam)
+                    let floatIntensity = 1.0;
+                    if (slamEffectTriggered && (time - slamTime) < 0.5) {
+                        floatIntensity = 1.0 + slamIntensity * 2;
+                    }
+                    charData.mesh.position.y = Math.sin(time * 0.8 + index * 0.3) * 0.1 * floatIntensity;
+                    
+                    // Subtle individual rotation (enhanced during slam)
+                    let rotationIntensity = 1.0;
+                    if (slamEffectTriggered && (time - slamTime) < 0.5) {
+                        rotationIntensity = 1.0 + Math.abs(slamIntensity) * 5;
+                    }
+                    charData.mesh.rotation.z = Math.sin(time * 0.5 + index * 0.2) * 0.02 * rotationIntensity;
+                }
+            });
+            
+            // Overall text group rotation (only starts after slam)
+            let shouldRotate = false;
+            
+            // Only rotate after slam effect is completely finished
+            if (slamEffectCompleted) {
+                // shouldRotate = true;
+            }
+            
+            if (shouldRotate) {
+                // Start rotation after slam effect is complete
+                const rotationStartTime = slamTime + 1.0; // 1 second after slam started
+                const rotationTime = time - rotationStartTime;
+                
+                textGroup.rotation.y = rotationTime * 0.1 + cameraShake.y * 0.5;
+                textGroup.rotation.x = Math.sin(time * 0.3) * 0.05 + cameraShake.x * 0.3;
+            } else {
+                // No rotation during crescendo/buildup/slam phases
+                textGroup.rotation.y = 0 + cameraShake.y * 0.5;
+                textGroup.rotation.x = 0 + cameraShake.x * 0.3;
+            }
+            
+            // Gentle group floating (enhanced during slam)
+            let groupFloatIntensity = 1.0;
+            if (slamEffectTriggered && (time - slamTime) < 0.5) {
+                groupFloatIntensity = 1.0 + Math.abs(slamIntensity) * 3;
+            }
+            textGroup.position.y = Math.sin(time * 0.6) * 0.2 * groupFloatIntensity;
+            
+            // Animate lights for dynamic chrome reflections (enhanced during slam)
+            const lightIntensityMultiplier = 1.0 + lightFlash;
+            
+            pointLight1.position.x = Math.sin(time * 0.7) * 8 + cameraShake.x * 10;
+            pointLight1.position.y = Math.cos(time * 0.5) * 6 + cameraShake.y * 8;
+            pointLight1.position.z = 8 + Math.sin(time * 0.4) * 3 + cameraShake.z * 5;
+            
+            pointLight2.position.x = Math.cos(time * 0.6) * 7 + cameraShake.x * 8;
+            pointLight2.position.y = Math.sin(time * 0.8) * 4 + cameraShake.y * 6;
+            pointLight2.position.z = 10 + Math.cos(time * 0.3) * 4 + cameraShake.z * 4;
+            
+            // Dynamic light intensity (flash effect during slam)
+            pointLight1.intensity = (0.6 + Math.sin(time * 1.5) * 0.2) * lightIntensityMultiplier;
+            pointLight2.intensity = (0.5 + Math.cos(time * 1.8) * 0.15) * lightIntensityMultiplier;
+            
+            // Add white flash during slam
+            if (lightFlash > 0) {
+                ambientLight.intensity = 0.3 + lightFlash * 0.5;
+                directionalLight.intensity = 1.5 + lightFlash;
+            } else {
+                ambientLight.intensity = 0.3;
+                directionalLight.intensity = 1.5;
+            }
+            
+            // Camera movement with slam shake
+            const baseCameraX = Math.sin(time * 0.06) * 2.5;
+            const baseCameraY = Math.cos(time * 0.04) * 1.5;
+            
+            camera.position.x = baseCameraX + cameraShake.x;
+            camera.position.y = baseCameraY + cameraShake.y;
+            camera.position.z = 20 + cameraShake.z;
+            camera.lookAt(0, 0, 0);
+            
+            renderer.render(scene, camera);
+        }
+        
+        // Handle window resize
+        function onWindowResize() {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        }
+        
+        window.addEventListener('resize', onWindowResize);
+        
+        // Start animation
+        animate();
+        
+        // Optional: Add mouse interaction for camera control
+        let mouseX = 0;
+        let mouseY = 0;
+        
+        document.addEventListener('mousemove', (event) => {
+            mouseX = (event.clientX / window.innerWidth) * 2 - 1;
+            mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+            
+            // Subtle camera movement based on mouse
+            const targetX = mouseX * 3;
+            const targetY = mouseY * 2;
+            
+            camera.position.x += (targetX - camera.position.x) * 0.02;
+            camera.position.y += (targetY - camera.position.y) * 0.02;
+            camera.lookAt(0, 0, 0);
+        });
+    </script>
+</body>
+</html>
