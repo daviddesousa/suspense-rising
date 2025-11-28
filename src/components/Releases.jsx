@@ -1,8 +1,16 @@
 import haslowCover from '../assets/haslow.jpg';
 
+import { motion as Motion } from 'motion/react';
+
 export default function Releases() {
   return (
-    <section className="releases page-width" id="releases">
+    <Motion.section
+      className="releases page-width"
+      id="releases"
+      initial={{ y: -50, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 1, ease: 'easeOut' }}
+    >
       <h2 className="section-title">Releases</h2>
       <article className="release">
         <img
@@ -27,6 +35,6 @@ export default function Releases() {
           </div>
         </div>
       </article>
-    </section>
+    </Motion.section>
   );
 }
