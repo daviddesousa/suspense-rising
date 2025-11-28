@@ -1,6 +1,6 @@
 @font-face {
   font-family: 'Felony Condensed';
-  src: url('FelonyCondensed.otf') format('opentype');
+  src: url('assets/FelonyCondensed.otf') format('opentype');
 }
 
 :root {
@@ -20,12 +20,12 @@ html {
   scroll-behavior: smooth;
 
   &.webp {
-    background-image: url(wallpaper-bw.webp);
+    background-image: url(assets/wallpaper-bw.webp);
   }
 
   &.no-js,
   &.no-webp {
-    background-image: url(wallpaper-bw.jpg);
+    background-image: url(assets/wallpaper-bw.jpg);
   }
 }
 
