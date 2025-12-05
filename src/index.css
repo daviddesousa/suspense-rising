@@ -17,17 +17,12 @@
 
 html {
   box-sizing: border-box;
-  background: #060606 no-repeat top center;
+  background: url(assets/wallpaper-bw.webp) #060606 no-repeat top center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
   scroll-behavior: smooth;
 
-  &.webp {
-    background-image: url(assets/wallpaper-bw.webp);
-  }
-
-  &.no-js,
   &.no-webp {
     background-image: url(assets/wallpaper-bw.jpg);
   }
