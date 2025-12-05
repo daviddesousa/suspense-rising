@@ -1,25 +1,46 @@
 import { motion as Motion } from 'motion/react';
 
-import haslowCover from '../assets/haslow.jpg';
+import haslow302 from '../assets/haslow-302.jpg';
+import haslow672 from '../assets/haslow-672.jpg';
+import haslow906 from '../assets/haslow-906.jpg';
+import haslow1208 from '../assets/haslow-1208.jpg';
+import haslow1600 from '../assets/haslow-1600.jpg';
 
 export default function Releases() {
   return (
     <main>
-      <Motion.section
-        className="page-width"
-        id="releases"
-        initial={{ y: -50, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 1, ease: 'easeOut' }}
-      >
-        <h2 className="section-title">Releases</h2>
+      <section className="page-width" id="releases">
+        <Motion.h2
+          className="section-title"
+          initial={{ y: -10, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 1, ease: 'easeOut' }}
+        >
+          Releases
+        </Motion.h2>
         <article className="release">
           <img
-            src={haslowCover}
+            srcSet={`
+              ${haslow302} 302w,
+              ${haslow672} 672w,
+              ${haslow906} 906w,
+              ${haslow1208} 1208w,
+              ${haslow1600} 1600w
+            `}
+            sizes="(max-width: 767px) 100vw, 302px"
+            src={haslow672}
             alt="A man's stretched and distorted face with text A story about Haslow"
             className="release-cover"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
           />
-          <div className="release-info">
+          <Motion.div
+            className="release-info"
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+          >
             <h3>Haffenfold - Haslow (SR001)</h3>
             <p>
               Meet Haslow. He speaks with charm and moves with grace but there’s
@@ -35,9 +56,9 @@ export default function Releases() {
                 Listen / Buy
               </a>
             </div>
-          </div>
+          </Motion.div>
         </article>
-      </Motion.section>
+      </section>
     </main>
   );
 }
