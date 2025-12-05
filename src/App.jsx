@@ -1,16 +1,23 @@
-import Hero from './components/Hero';
-import Releases from './components/Releases';
+import { Outlet, useLocation } from 'react-router';
+
 import Footer from './components/Footer';
+import Logo from './components/Logo';
+import Nav from './components/Nav';
 
 function App() {
+  const location = useLocation();
+
   return (
-    <>
-      <main>
-        <Hero />
-        <Releases />
-      </main>
+    <div className="site-wrapper" data-page-handle={location.pathname}>
+      <header>
+        <Nav />
+      </header>
+      <nav className="nav-logo">
+        <Logo />
+      </nav>
+      <Outlet />
       <Footer />
-    </>
+    </div>
   );
 }
 
