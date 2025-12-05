@@ -1,6 +1,10 @@
 @font-face {
   font-family: 'Felony Condensed';
-  src: url('assets/FelonyCondensed.otf') format('opentype');
+  /* Prefer woff2 if you add a .woff2 font to assets; fall back to the existing OTF.
+     Add a woff2 build of this font for better performance in production. */
+  src: url('assets/FelonyCondensed.woff2') format('woff2'),
+       url('assets/FelonyCondensed.otf') format('opentype');
+  font-display: swap;
 }
 
 :root {
@@ -13,17 +17,12 @@
 
 html {
   box-sizing: border-box;
-  background: #000000 no-repeat center center;
+  background: url(assets/wallpaper-bw.webp) #060606 no-repeat top center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   background-size: cover;
   scroll-behavior: smooth;
 
-  &.webp {
-    background-image: url(assets/wallpaper-bw.webp);
-  }
-
-  &.no-js,
   &.no-webp {
     background-image: url(assets/wallpaper-bw.jpg);
   }
@@ -51,9 +50,14 @@ body {
     right: 0;
     bottom: 0;
     background-color: #000;
-    opacity: 0.5;
+    opacity: 0.9;
+    transition: opacity 400ms ease-in-out;
     z-index: -1;
   }
+}
+
+body:has(.site-wrapper[data-page-handle="/"])::before {
+  opacity: 0.5;
 }
 
 * {
@@ -90,9 +94,11 @@ p {
 a {
   color: inherit;
   transition: opacity 200ms ease-in-out;
+}
 
-  &:hover {
-    opacity: 0.5;
+@media (hover: hover) {
+  a:hover {
+    opacity: 0.65;
   }
 }
 
@@ -105,27 +111,10 @@ a {
 
 section {
   margin: 0 var(--gutter-size);
-
-  &.hero {
-    height: 40svh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
 }
 
 .section-title {
-  margin-bottom: 24px;
-}
-
-.hero-center {
-  margin-top: auto;
-  margin-bottom: auto;
-}
-
-.scroll-down {
-  text-decoration: none;
-  margin-bottom: var(--gutter-size);
+  margin-bottom: 2rem;
 }
 
 .logo {
@@ -142,10 +131,6 @@ footer {
 
 .instagram-link {
   display: inline-block;
-
-  &:hover {
-    opacity: 0.65;
-  }
 }
 
 .instagram-icon {
@@ -153,11 +138,6 @@ footer {
   height: 100%;
   opacity: 1;
   transition: opacity .1s ease-in-out;
-}
-
-.releases {
-  padding-top: var(--gutter-size);
-  padding-bottom: var(--gutter-size);
 }
 
 .release {
@@ -184,6 +164,68 @@ footer {
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+
+  @media screen and (max-width: 767px) {
+    margin-top: var(--gutter-size);
+    gap: 1rem;
+  }
+}
+
+.release-cover {
+  aspect-ratio: 1 / 1;
+}
+
+.nav-logo {
+  font-size: 0;
+  display: inline-block;
+  align-self: center;
+  padding-top: var(--gutter-size);
+  padding-bottom: var(--gutter-size);
+  transform: scale(1);
+  transition: transform 700ms ease;
+  will-change: transform;
+
+  &:has(.active) {
+    transform: scale(1.25);
+  }
+}
+
+.header-nav {
+  a {
+    text-decoration: none;
+    font-size: 200%;
+
+    + a {
+      margin-left: var(--gutter-size);
+    }
+
+    &.active {
+      text-decoration: underline;
+    }
+  }
+}
+
+header {
+  padding: var(--gutter-size);
+}
+
+main {
+  padding-top: var(--gutter-size);
+  padding-bottom: var(--gutter-size);
+  margin-bottom: auto;
+}
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.site-wrapper[data-page-handle="/"] {
+  justify-content: space-between;
 }
 
 /* Utilities */
