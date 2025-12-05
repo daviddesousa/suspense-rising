@@ -14,9 +14,10 @@ export default function Logo() {
   return (
     <NavLink to="/">
       <h1 className="sr-only">Suspense Rising</h1>
+      {/* Keep the image visible for LCP; only animate translation so we don't delay the LCP paint */}
       <Motion.picture
-        initial={{ x: -80, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
+        initial={{ x: -80 }}
+        animate={{ x: 0 }}
         transition={{ duration: 1, ease: 'easeIn' }}
       >
         <source
@@ -43,6 +44,9 @@ export default function Logo() {
           width="265"
           height="28"
           className="logo"
+          fetchPriority="high"
+          decoding="async"
+          loading="eager"
         />
       </Motion.picture>
     </NavLink>
