@@ -1,0 +1,246 @@
+@font-face {
+  font-family: 'Felony Condensed';
+  /* Prefer woff2 if you add a .woff2 font to assets; fall back to the existing OTF.
+     Add a woff2 build of this font for better performance in production. */
+  src: url('assets/FelonyCondensed.woff2') format('woff2'),
+       url('assets/FelonyCondensed.otf') format('opentype');
+  font-display: swap;
+}
+
+:root {
+  --gutter-size: 24px;
+
+  @media screen and (min-width: 536px) {
+    --gutter-size: 40px;
+  }
+}
+
+html {
+  box-sizing: border-box;
+  background: url(assets/wallpaper-bw.webp) #060606 no-repeat top center;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  background-size: cover;
+  scroll-behavior: smooth;
+
+  &.no-webp {
+    background-image: url(assets/wallpaper-bw.jpg);
+  }
+}
+
+body {
+  font-family: 'Felony Condensed', sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: 16px;
+  color: white;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  @media screen and (min-width: 536px) {
+    font-size: 18px;
+  }
+
+  &::before {
+    content: '';
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #000;
+    opacity: 0.9;
+    transition: opacity 400ms ease-in-out;
+    z-index: -1;
+  }
+}
+
+body:has(.site-wrapper[data-page-handle="/"])::before {
+  opacity: 0.5;
+}
+
+* {
+  box-sizing: inherit;
+  padding: 0;
+  margin: 0;
+}
+
+img {
+  max-width: 100%;
+}
+
+picture {
+  display: block;
+}
+
+h2,
+h3 {
+  letter-spacing: 1px;
+}
+
+h2 {
+  font-size: 200%;
+}
+
+h3 {
+  font-size: 150%;
+}
+
+p {
+  line-height: 150%;
+}
+
+a {
+  color: inherit;
+  transition: opacity 200ms ease-in-out;
+}
+
+@media (hover: hover) {
+  a:hover {
+    opacity: 0.65;
+  }
+}
+
+.page-width {
+  max-width: 1024px;
+  margin: 0 auto;
+  padding-left: var(--gutter-size);
+  padding-right: var(--gutter-size);
+}
+
+section {
+  margin: 0 var(--gutter-size);
+}
+
+.section-title {
+  margin-bottom: 2rem;
+}
+
+.logo {
+  width: 265px;
+  height: auto;
+}
+
+footer {
+  font-size: 0;
+  padding: var(--gutter-size);
+  padding-top: calc(var(--gutter-size) * 2);
+  text-align: right;
+}
+
+.instagram-link {
+  display: inline-block;
+}
+
+.instagram-icon {
+  width: 40px;
+  height: 100%;
+  opacity: 1;
+  transition: opacity .1s ease-in-out;
+}
+
+.release {
+  @media screen and (min-width: 768px) {
+    display: grid;
+    grid-template-columns: 1fr 2fr;
+    gap: var(--gutter-size);
+  }
+
+  + .release {
+    margin-top: calc(var(--gutter-size) * 1.5);
+  }
+}
+
+.release-links {
+  margin-top: 8px;
+
+  a + a {
+    margin-left: 4px;
+  }
+}
+
+.release-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+
+  @media screen and (max-width: 767px) {
+    margin-top: var(--gutter-size);
+    gap: 1rem;
+  }
+}
+
+.release-cover {
+  aspect-ratio: 1 / 1;
+}
+
+.nav-logo {
+  font-size: 0;
+  display: inline-block;
+  align-self: center;
+  padding-top: var(--gutter-size);
+  padding-bottom: var(--gutter-size);
+  transform: scale(1);
+  transition: transform 700ms ease;
+  will-change: transform;
+
+  &:has(.active) {
+    transform: scale(1.25);
+  }
+}
+
+.header-nav {
+  a {
+    text-decoration: none;
+    font-size: 200%;
+
+    + a {
+      margin-left: var(--gutter-size);
+    }
+
+    &.active {
+      text-decoration: underline;
+    }
+  }
+}
+
+header {
+  padding: var(--gutter-size);
+}
+
+main {
+  padding-top: var(--gutter-size);
+  padding-bottom: var(--gutter-size);
+  margin-bottom: auto;
+}
+
+.site-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100svh;
+  max-width: 1440px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.site-wrapper[data-page-handle="/"] {
+  justify-content: space-between;
+}
+
+/* Utilities */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+h1.sr-only {
+  font-size: 0;
+}
