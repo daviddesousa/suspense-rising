@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router';
 import { motion as Motion } from 'motion/react';
+import Instagram from './Instagram';
 
 export default function Nav() {
   return (
@@ -15,6 +16,7 @@ export default function Nav() {
       <NavLink to="/shop" end>
         Shop
       </NavLink>
+      <Instagram />
     </Motion.nav>
   );
 }
