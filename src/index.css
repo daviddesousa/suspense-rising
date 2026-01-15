@@ -122,15 +122,10 @@ section {
   height: auto;
 }
 
-footer {
-  font-size: 0;
-  padding: var(--gutter-size);
-  padding-top: calc(var(--gutter-size) * 2);
-  text-align: right;
-}
-
 .instagram-link {
+  font-size: 0;
   display: inline-block;
+  margin-left: auto;
 }
 
 .instagram-icon {
@@ -191,13 +186,13 @@ footer {
 }
 
 .header-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--gutter-size);
+
   a {
     text-decoration: none;
     font-size: 200%;
-
-    + a {
-      margin-left: var(--gutter-size);
-    }
 
     &.active {
       text-decoration: underline;
@@ -225,7 +220,14 @@ main {
 }
 
 .site-wrapper[data-page-handle="/"] {
-  justify-content: space-between;
+  justify-content: center;
+
+  header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
 }
 
 /* Utilities */
