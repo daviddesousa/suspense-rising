@@ -27,8 +27,7 @@ export default function Releases() {
         <article className="release" id="petrone">
           <Motion.img
             initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
             whileHover={{ scale: 1.05, rotate: 1 }}
             transition={{
               duration: 0.8,
@@ -54,8 +53,7 @@ export default function Releases() {
           <Motion.div
             className="release-info"
             initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
+            animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
           >
             <h3>Haffenfold - Petrone (SR002)</h3>
@@ -73,17 +71,23 @@ export default function Releases() {
                 href="https://go.protonradio.com/r/rlYsUN9sbuUp0"
                 target="_blank"
                 rel="noopener"
+                className="shimmer-text"
+                style={{
+                  '--shimmer-color-1': '#ffffff',
+                  '--shimmer-color-2': '#80f3b0',
+                  '--shimmer-color-3': '#fdf4c8',
+                }}
               >
                 Listen / Buy
               </a>
             </div>
           </Motion.div>
         </article>
+        <hr />
         <article className="release" id="haslow">
           <Motion.img
             initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-            viewport={{ once: true }}
+            animate={{ opacity: 1, scale: 1, rotate: 0 }}
             whileHover={{ scale: 1.05, rotate: -1 }}
             transition={{
               duration: 0.8,
@@ -109,8 +113,7 @@ export default function Releases() {
           <Motion.div
             className="release-info"
             initial={{ y: 20, opacity: 0 }}
-            whileInView={{ y: 0, opacity: 1 }}
-            viewport={{ once: true }}
+            animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
           >
             <h3>Haffenfold - Haslow (SR001)</h3>
@@ -124,7 +127,17 @@ export default function Releases() {
               smoke and mirrors...
             </p>
             <div className="release-links">
-              <a href="https://tr.ee/GlTHS933U_" target="_blank" rel="noopener">
+              <a
+                href="https://tr.ee/GlTHS933U_"
+                target="_blank"
+                rel="noopener"
+                className="shimmer-text"
+                style={{
+                  '--shimmer-color-1': '#ffffff',
+                  '--shimmer-color-2': '#4b6cff',
+                  '--shimmer-color-3': '#8a9fff',
+                }}
+              >
                 Listen / Buy
               </a>
             </div>
