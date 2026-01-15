@@ -122,15 +122,10 @@ section {
   height: auto;
 }
 
-footer {
-  font-size: 0;
-  padding: var(--gutter-size);
-  padding-top: calc(var(--gutter-size) * 2);
-  text-align: right;
-}
-
 .instagram-link {
+  font-size: 0;
   display: inline-block;
+  margin-left: auto;
 }
 
 .instagram-icon {
@@ -153,10 +148,31 @@ footer {
 }
 
 .release-links {
-  margin-top: 8px;
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
 
-  a + a {
-    margin-left: 4px;
+  a {
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 0.8rem 2rem;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 2px;
+    display: inline-block;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1);
+
+    &:hover {
+      border-color: var(--shimmer-color-2, #ffffff);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05),
+                  inset 0 0 10px rgba(255, 255, 255, 0.02);
+      transform: translateY(-3px);
+    }
+
+    &:active {
+      transform: translateY(-1px);
+    }
   }
 }
 
@@ -191,13 +207,13 @@ footer {
 }
 
 .header-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--gutter-size);
+
   a {
     text-decoration: none;
     font-size: 200%;
-
-    + a {
-      margin-left: var(--gutter-size);
-    }
 
     &.active {
       text-decoration: underline;
@@ -225,7 +241,14 @@ main {
 }
 
 .site-wrapper[data-page-handle="/"] {
-  justify-content: space-between;
+  justify-content: center;
+
+  header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+  }
 }
 
 /* Utilities */
@@ -243,4 +266,35 @@ main {
 
 h1.sr-only {
   font-size: 0;
+}
+
+.shimmer-text {
+  background: linear-gradient(
+    90deg,
+    var(--shimmer-color-1, #ffffff) 0%,
+    var(--shimmer-color-2, #ffffff) 25%,
+    var(--shimmer-color-3, #ffffff) 50%,
+    var(--shimmer-color-2, #ffffff) 75%,
+    var(--shimmer-color-1, #ffffff) 100%
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  color: var(--shimmer-color-2, #ffffff);
+  animation: shimmer 3s linear infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    background-position: 0% center;
+  }
+  100% {
+    background-position: 200% center;
+  }
+}
+
+hr {
+  margin: calc(var(--gutter-size) * 1.5) auto;
+  max-width: 75%;
 }

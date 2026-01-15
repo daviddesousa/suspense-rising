@@ -1,6 +1,5 @@
 import { Outlet, useLocation } from 'react-router';
 
-import Footer from './components/Footer';
 import Logo from './components/Logo';
 import Nav from './components/Nav';
 
@@ -16,7 +15,6 @@ function App() {
         <Logo />
       </nav>
       <Outlet />
-      <Footer />
     </div>
   );
 }

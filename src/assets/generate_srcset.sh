@@ -1,6 +1,6 @@
 #!/bin/bash
 
-SOURCE_IMAGE="haslow.jpg"
+SOURCE_IMAGE="petrone.jpg"
 # Define the target widths in pixels
 WIDTHS=( 302 672 906 1208 )
 
