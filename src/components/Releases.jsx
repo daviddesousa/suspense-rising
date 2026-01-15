@@ -10,7 +10,7 @@ import petrone302 from '../assets/petrone-302.jpg';
 import petrone672 from '../assets/petrone-672.jpg';
 import petrone906 from '../assets/petrone-906.jpg';
 import petrone1208 from '../assets/petrone-1208.jpg';
-import petrone1400 from '../assets/petrone-1400.jpg';
+import petrone1600 from '../assets/petrone-1600.jpg';
 
 export default function Releases() {
   return (
@@ -40,7 +40,7 @@ export default function Releases() {
               ${petrone672} 672w,
               ${petrone906} 906w,
               ${petrone1208} 1208w,
-              ${petrone1400} 1600w
+              ${petrone1600} 1600w
             `}
             sizes="(max-width: 767px) 100vw, 302px"
             src={petrone672}
