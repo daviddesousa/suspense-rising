@@ -25,7 +25,17 @@ export default function Releases() {
           Releases
         </Motion.h2>
         <article className="release" id="petrone">
-          <img
+          <Motion.img
+            initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ scale: 1.05, rotate: 1 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.2,
+              type: 'spring',
+              bounce: 0.4,
+            }}
             srcSet={`
               ${petrone302} 302w,
               ${petrone672} 672w,
@@ -43,9 +53,10 @@ export default function Releases() {
           />
           <Motion.div
             className="release-info"
-            initial={{ y: 10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: 'easeOut' }}
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
           >
             <h3>Haffenfold - Petrone (SR002)</h3>
             <p>
@@ -69,7 +80,17 @@ export default function Releases() {
           </Motion.div>
         </article>
         <article className="release" id="haslow">
-          <img
+          <Motion.img
+            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
+            whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
+            viewport={{ once: true }}
+            whileHover={{ scale: 1.05, rotate: -1 }}
+            transition={{
+              duration: 0.8,
+              delay: 0.2,
+              type: 'spring',
+              bounce: 0.4,
+            }}
             srcSet={`
               ${haslow302} 302w,
               ${haslow672} 672w,
@@ -87,9 +108,10 @@ export default function Releases() {
           />
           <Motion.div
             className="release-info"
-            initial={{ y: 10, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            transition={{ duration: 1, ease: 'easeOut' }}
+            initial={{ y: 20, opacity: 0 }}
+            whileInView={{ y: 0, opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
           >
             <h3>Haffenfold - Haslow (SR001)</h3>
             <p>
