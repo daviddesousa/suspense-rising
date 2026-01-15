@@ -6,6 +6,12 @@ import haslow906 from '../assets/haslow-906.jpg';
 import haslow1208 from '../assets/haslow-1208.jpg';
 import haslow1600 from '../assets/haslow-1600.jpg';
 
+import petrone302 from '../assets/petrone-302.jpg';
+import petrone672 from '../assets/petrone-672.jpg';
+import petrone906 from '../assets/petrone-906.jpg';
+import petrone1208 from '../assets/petrone-1208.jpg';
+import petrone1400 from '../assets/petrone-1400.jpg';
+
 export default function Releases() {
   return (
     <main>
@@ -18,7 +24,51 @@ export default function Releases() {
         >
           Releases
         </Motion.h2>
-        <article className="release">
+        <article className="release" id="petrone">
+          <img
+            srcSet={`
+              ${petrone302} 302w,
+              ${petrone672} 672w,
+              ${petrone906} 906w,
+              ${petrone1208} 1208w,
+              ${petrone1400} 1600w
+            `}
+            sizes="(max-width: 767px) 100vw, 302px"
+            src={petrone672}
+            alt="A man's stretched and distorted face with text A story about Haslow"
+            className="release-cover"
+            loading="eager"
+            decoding="async"
+            fetchPriority="high"
+          />
+          <Motion.div
+            className="release-info"
+            initial={{ y: 10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 1, ease: 'easeOut' }}
+          >
+            <h3>Haffenfold - Petrone (SR002)</h3>
+            <p>
+              Meet Petrone. Within them lives the spirit of the horse, dynamic,
+              untamed, and ever in motion. A rhythm that never tires, running
+              endlessly through the same stomping and hypnotic patterns. They’ll
+              invite you to follow them until the end, promising to keep the
+              same pulse from the first track to the last. You’ll see this
+              figure on every dance floor, they show up like clockwork every
+              night, carrying the energy until the first streaks of light.
+            </p>
+            <div className="release-links">
+              <a
+                href="https://go.protonradio.com/r/rlYsUN9sbuUp0"
+                target="_blank"
+                rel="noopener"
+              >
+                Listen / Buy
+              </a>
+            </div>
+          </Motion.div>
+        </article>
+        <article className="release" id="haslow">
           <img
             srcSet={`
               ${haslow302} 302w,
