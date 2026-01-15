@@ -213,7 +213,7 @@ section {
 
   a {
     text-decoration: none;
-    font-size: 200%;
+    font-size: 160%;
 
     &.active {
       text-decoration: underline;
