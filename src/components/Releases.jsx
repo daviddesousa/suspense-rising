@@ -12,6 +12,22 @@ import petrone906 from '../assets/petrone-906.jpg';
 import petrone1208 from '../assets/petrone-1208.jpg';
 import petrone1600 from '../assets/petrone-1600.jpg';
 
+const itemVariants = {
+  initial: { opacity: 0, scale: 0.8 },
+  animate: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.8,
+      type: 'spring',
+      bounce: 0.4,
+    },
+  },
+  hovering: {
+    scale: 1.05,
+  },
+};
+
 export default function Releases() {
   return (
     <main>
@@ -26,15 +42,10 @@ export default function Releases() {
         </Motion.h2>
         <article className="release" id="petrone">
           <Motion.img
-            initial={{ opacity: 0, scale: 0.8, rotate: -5 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            whileHover={{ scale: 1.05, rotate: 1 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.2,
-              type: 'spring',
-              bounce: 0.4,
-            }}
+            variants={itemVariants}
+            initial="initial"
+            animate="animate"
+            whileHover="hovering"
             srcSet={`
               ${petrone302} 302w,
               ${petrone672} 672w,
@@ -86,15 +97,10 @@ export default function Releases() {
         <hr />
         <article className="release" id="haslow">
           <Motion.img
-            initial={{ opacity: 0, scale: 0.8, rotate: 5 }}
-            animate={{ opacity: 1, scale: 1, rotate: 0 }}
-            whileHover={{ scale: 1.05, rotate: -1 }}
-            transition={{
-              duration: 0.8,
-              delay: 0.2,
-              type: 'spring',
-              bounce: 0.4,
-            }}
+            variants={itemVariants}
+            initial="initial"
+            animate="animate"
+            whileHover="hovering"
             srcSet={`
               ${haslow302} 302w,
               ${haslow672} 672w,
