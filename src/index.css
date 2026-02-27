@@ -1,3 +1,5 @@
+@import "tailwindcss";
+
 @font-face {
   font-family: 'Felony Condensed';
   /* Prefer woff2 if you add a .woff2 font to assets; fall back to the existing OTF.
