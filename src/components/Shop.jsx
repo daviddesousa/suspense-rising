@@ -1,3 +1,4 @@
+import { useRef } from 'react';
 import Lenis from 'lenis';
 import 'lenis/dist/lenis.css';
 
@@ -5,68 +6,99 @@ import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
-gsap.registerPlugin(ScrollTrigger);
-gsap.registerPlugin(useGSAP);
+// Register plugins and the hook. useGSAP registration prevents version discrepancies.
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
-// global lenis instance for smooth scrolling
-const lenis = new Lenis();
-
-lenis.on('scroll', ScrollTrigger.update);
-
-gsap.ticker.add((time) => {
-  lenis.raf(time * 1000); // Convert time from seconds to milliseconds
-});
-
-gsap.ticker.lagSmoothing(0);
+/**
+ * A helper component that splits text into spans for word-by-word animation.
+ */
+const WordReveal = ({ text }) => {
+  return (
+    <p className="text-4xl md:text-6xl uppercase font-bold tracking-tighter flex flex-wrap justify-center gap-x-[0.25em] gap-y-2 max-w-5xl mx-auto px-6">
+      {text.split(' ').map((word, i) => (
+        <span
+          key={i}
+          className="reveal-word opacity-10 inline-block translate-y-4"
+        >
+          {word}
+        </span>
+      ))}
+    </p>
+  );
+};
 
 export default function Shop() {
-  // initialize scroll-triggered scaling for paragraphs
-  useGSAP(() => {
-    const paragraphs = gsap.utils.toArray('section p');
+  const container = useRef();
 
-    paragraphs.forEach((p) => {
-      gsap.fromTo(
-        p,
-        { scale: 0.5 },
-        {
-          scale: 1.5,
-          ease: 'none',
+  useGSAP(
+    () => {
+      // 1. Initialize Lenis (Smoothing)
+      const lenis = new Lenis();
+
+      const onScroll = () => ScrollTrigger.update();
+      const onTicker = (time) => lenis.raf(time * 1000);
+
+      lenis.on('scroll', onScroll);
+      gsap.ticker.add(onTicker);
+      gsap.ticker.lagSmoothing(0);
+
+      // 2. Setup ScrollTrigger Animations for each section
+      const sections = gsap.utils.toArray('section');
+
+      sections.forEach((section) => {
+        const words = section.querySelectorAll('.reveal-word');
+
+        // useGSAP automatically handles ScrollTrigger.kill() / revert()
+        // for triggers created during its execution.
+        gsap.to(words, {
+          opacity: 1,
+          y: 0,
+          stagger: 0.1,
+          ease: 'power1.inOut',
           scrollTrigger: {
-            trigger: p,
-            start: 'top 80%',
-            end: 'bottom 20%',
-            scrub: true,
+            trigger: section,
+            start: 'bottom bottom',
+            end: '+=100%',
+            scrub: 0.5,
+            pin: true,
+            anticipatePin: 1,
           },
-        },
-      );
-    });
-  });
+        });
+      });
+
+      // 3. Cleanup: useGSAP allows returning a cleanup function for external listeners (like Lenis)
+      return () => {
+        lenis.off('scroll', onScroll);
+        gsap.ticker.remove(onTicker);
+        lenis.destroy();
+      };
+    },
+    { scope: container },
+  );
 
   return (
-    <main className="text-center overflow-hidden">
+    <main
+      ref={container}
+      className="text-center overflow-x-hidden bg-black text-white"
+    >
       <section className="h-svh flex items-center justify-center">
-        <p className="text-4xl uppercase transform origin-center">
-          EVERYTHING IS SMOKE AND MIRRORS
-        </p>
+        <WordReveal text="EVERYTHING IS SMOKE AND MIRRORS" />
       </section>
 
       <section className="h-svh flex items-center justify-center">
-        <p className="text-4xl uppercase transform origin-center">
-          He speaks with charm and moves with grace
-        </p>
+        <WordReveal text="He speaks with charm and moves with grace" />
       </section>
 
       <section className="h-svh flex items-center justify-center">
-        <p className="text-4xl uppercase transform origin-center">
-          but there’s something cold beneath his smile
-        </p>
+        <WordReveal text="but there’s something cold beneath his smile" />
       </section>
 
       <section className="h-svh flex items-center justify-center">
-        <p className="text-4xl uppercase transform origin-center">
-          like a man who’s witnessed nights he refuses to speak of
-        </p>
+        <WordReveal text="like a man who’s witnessed nights he refuses to speak of" />
       </section>
+
+      {/* Added a final spacer for scroll headroom */}
+      <div className="h-svh" />
     </main>
   );
 }
