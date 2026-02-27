@@ -1,11 +1,12 @@
-@import "tailwindcss";
+@import 'tailwindcss';
 
 @font-face {
   font-family: 'Felony Condensed';
   /* Prefer woff2 if you add a .woff2 font to assets; fall back to the existing OTF.
      Add a woff2 build of this font for better performance in production. */
-  src: url('assets/FelonyCondensed.woff2') format('woff2'),
-       url('assets/FelonyCondensed.otf') format('opentype');
+  src:
+    url('assets/FelonyCondensed.woff2') format('woff2'),
+    url('assets/FelonyCondensed.otf') format('opentype');
   font-display: swap;
 }
 
@@ -58,8 +59,14 @@ body {
   }
 }
 
-body:has(.site-wrapper[data-page-handle="/"])::before {
+body:has(.site-wrapper[data-page-handle='/'])::before {
   opacity: 0.5;
+}
+
+html:has(.site-wrapper[data-page-handle='/shop']) {
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  background-size: contain;
 }
 
 * {
@@ -134,7 +141,7 @@ section {
   width: 40px;
   height: 100%;
   opacity: 1;
-  transition: opacity .1s ease-in-out;
+  transition: opacity 0.1s ease-in-out;
 }
 
 .release {
@@ -167,8 +174,9 @@ section {
 
     &:hover {
       border-color: var(--shimmer-color-2, #ffffff);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05),
-                  inset 0 0 10px rgba(255, 255, 255, 0.02);
+      box-shadow:
+        0 0 20px rgba(255, 255, 255, 0.05),
+        inset 0 0 10px rgba(255, 255, 255, 0.02);
       transform: translateY(-3px);
     }
 
@@ -242,7 +250,7 @@ main {
   margin-right: auto;
 }
 
-.site-wrapper[data-page-handle="/"] {
+.site-wrapper[data-page-handle='/'] {
   justify-content: center;
 
   header {

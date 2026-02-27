@@ -124,7 +124,7 @@ export default function Releases() {
           >
             <h3>Haffenfold - Haslow (SR001)</h3>
             <p>
-              Meet Haslow. He speaks with charm and moves with grace but there’s
+              Meet Haslow. He speaks with charm and moves with grace, but there’s
               something cold beneath his smile, like a man who’s witnessed
               nights he refuses to speak of. His eyes scan every dancefloor like
               he’s always preparing for someone to betray him or worse,
