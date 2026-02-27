@@ -1,4 +1,5 @@
 import ShopSection from './ShopSection';
+import Carousel3D from './Carousel3D';
 
 const SHOP_CONTENT = [
   'Meet Haslow.',
@@ -19,8 +20,18 @@ export default function Shop() {
         <ShopSection key={index} text={text} />
       ))}
 
-      {/* Added a final spacer for scroll headroom */}
-      <div className="h-svh" />
+      {/* spacer */}
+      <div className="h-[25svh]" />
+
+      <Carousel3D />
+
+      {/* spacer */}
+      <div className="h-[50vh]" />
+
+      <ShopSection
+        key="12321321793as89ds978ad978sa0"
+        text="EVERYTHING IS SMOKE AND MIRRORS"
+      />
     </main>
   );
 }
