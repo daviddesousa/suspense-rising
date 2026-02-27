@@ -9,9 +9,6 @@ import Shop from './components/Shop';
 
 import './index.css';
 
-import Lenis from 'lenis';
-import 'lenis/dist/lenis.css';
-
 // Add WebP detection
 const webpScript = document.createElement('script');
 webpScript.src = '/modernizr-webp.js';
