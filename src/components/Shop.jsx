@@ -1,6 +1,4 @@
 import { useRef } from 'react';
-import Lenis from 'lenis';
-import 'lenis/dist/lenis.css';
 
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -32,24 +30,12 @@ export default function Shop() {
 
   useGSAP(
     () => {
-      // 1. Initialize Lenis (Smoothing)
-      const lenis = new Lenis();
-
-      const onScroll = () => ScrollTrigger.update();
-      const onTicker = (time) => lenis.raf(time * 1000);
-
-      lenis.on('scroll', onScroll);
-      gsap.ticker.add(onTicker);
-      gsap.ticker.lagSmoothing(0);
-
-      // 2. Setup ScrollTrigger Animations for each section
+      // 1. Setup ScrollTrigger Animations for each section
       const sections = gsap.utils.toArray('section');
 
       sections.forEach((section) => {
         const words = section.querySelectorAll('.reveal-word');
 
-        // useGSAP automatically handles ScrollTrigger.kill() / revert()
-        // for triggers created during its execution.
         gsap.to(words, {
           opacity: 1,
           y: 0,
@@ -65,13 +51,6 @@ export default function Shop() {
           },
         });
       });
-
-      // 3. Cleanup: useGSAP allows returning a cleanup function for external listeners (like Lenis)
-      return () => {
-        lenis.off('scroll', onScroll);
-        gsap.ticker.remove(onTicker);
-        lenis.destroy();
-      };
     },
     { scope: container },
   );
