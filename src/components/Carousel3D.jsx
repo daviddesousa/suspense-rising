@@ -20,10 +20,11 @@ import img9 from '../assets/carousel/img9.webp';
 import img10 from '../assets/carousel/img10.webp';
 import img11 from '../assets/carousel/img11.webp';
 import img12 from '../assets/carousel/img12.webp';
+import imgHaslow from '../assets/haslow/Haslow-9x16-NoTitles.jpg';
 
 gsap.registerPlugin(ScrollTrigger, SplitText, ScrollToPlugin);
 
-const CAROUSEL_IMAGES = [img1, img2, img3, img4];
+const CAROUSEL_IMAGES = [imgHaslow, imgHaslow, imgHaslow];
 const GRID_IMAGES = [
   { img: img1, title: 'Kai Vega' },
   { img: img2, title: 'Riven Juno' },
