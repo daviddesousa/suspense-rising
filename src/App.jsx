@@ -24,7 +24,7 @@ function App() {
   return (
     <ReactLenis root options={{ autoRaf: false }} ref={lenisRef}>
       <div className="site-wrapper" data-page-handle={location.pathname}>
-        <header>
+        <header className="site-header">
           <Nav />
         </header>
         <nav className="nav-logo">

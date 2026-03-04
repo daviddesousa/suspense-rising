@@ -26,16 +26,27 @@
       ui.createComponent('product', {
         id: '8692093649050',
         node: document.getElementById('product-component-1764109270275'),
-        moneyFormat: '%24%7B%7Bamount%7D%7D',
+        moneyFormat: '%24%7B%7Bamount_no_decimals%7D%7D',
         options: {
           "product": {
+            "layout": "horizontal",
+            "iframe": false,
+            "contents": {
+              "img": false,
+              "imgWithCarousel": true,
+              "button": true,
+              "title": false,
+              "price": true,
+              "description": true
+            },
+            "width": "100%",
             "styles": {
               "product": {
                 "@media (min-width: 601px)": {
-                  "max-width": "calc(25% - 20px)",
-                  "margin-left": "20px",
+                  "max-width": "100%",
+                  "margin-left": "0",
                   "margin-bottom": "50px"
-                }
+                },
               },
               "title": {
                 "color": "#ffffff"

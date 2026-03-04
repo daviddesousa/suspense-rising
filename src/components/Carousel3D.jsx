@@ -1,4 +1,4 @@
-import { useRef, useState, useMemo, useEffect } from 'react';
+import { useRef, useState, useEffect } from 'react';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -8,37 +8,11 @@ import { ScrollToPlugin } from 'gsap/ScrollToPlugin';
 import './Carousel3D.css';
 
 // Import images
-import img1 from '../assets/carousel/img1.webp';
-import img2 from '../assets/carousel/img2.webp';
-import img3 from '../assets/carousel/img3.webp';
-import img4 from '../assets/carousel/img4.webp';
-import img5 from '../assets/carousel/img5.webp';
-import img6 from '../assets/carousel/img6.webp';
-import img7 from '../assets/carousel/img7.webp';
-import img8 from '../assets/carousel/img8.webp';
-import img9 from '../assets/carousel/img9.webp';
-import img10 from '../assets/carousel/img10.webp';
-import img11 from '../assets/carousel/img11.webp';
-import img12 from '../assets/carousel/img12.webp';
 import imgHaslow from '../assets/haslow/Haslow-9x16-White.jpg';
 
 gsap.registerPlugin(ScrollTrigger, SplitText, ScrollToPlugin);
 
 const CAROUSEL_IMAGES = [imgHaslow, imgHaslow, imgHaslow];
-const GRID_IMAGES = [
-  { img: img1, title: 'Kai Vega' },
-  { img: img2, title: 'Riven Juno' },
-  { img: img3, title: 'Lex Orion' },
-  { img: img4, title: 'Ash Kairos' },
-  { img: img5, title: 'Juno Sol' },
-  { img: img6, title: 'Soren Nyx' },
-  { img: img7, title: 'Quinn Axon' },
-  { img: img8, title: 'Zara Voss' },
-  { img: img9, title: 'Hale B.' },
-  { img: img10, title: 'Gundra Wex' },
-  { img: img11, title: 'Extra One' },
-  { img: img12, title: 'Extra Two' },
-];
 
 export default function Carousel3D() {
   const containerRef = useRef(null);
@@ -48,7 +22,7 @@ export default function Carousel3D() {
   const previewRef = useRef(null);
   const previewTitleRef = useRef(null);
   const previewCloseRef = useRef(null);
-  const gridItemsRef = useRef([]);
+  const productRef = useRef(null);
 
   const titleSplitRef = useRef(null);
   const previewTitleSplitRef = useRef(null);
@@ -209,7 +183,7 @@ export default function Carousel3D() {
       .to(cards, { rotationZ: 0 }, 0)
       .add(() => {
         gsap.set(previewRef.current, { pointerEvents: 'auto', autoAlpha: 1 });
-        animateGridIn();
+        animateContentIn();
         animateChars(previewTitleChars, 'in');
         animateChars(previewCloseChars, 'in');
       }, '<+=1.9');
@@ -225,7 +199,7 @@ export default function Carousel3D() {
 
     animateChars(previewTitleChars, 'out');
     animateChars(previewCloseChars, 'out');
-    animateGridOut();
+    animateContentOut();
 
     gsap.set(sceneRef.current, { autoAlpha: 1 });
 
@@ -280,71 +254,33 @@ export default function Carousel3D() {
     );
   };
 
-  const animateGridIn = () => {
-    const items = gridItemsRef.current;
-    gsap.set(items, { clearProps: 'all' });
-
-    const centerX = window.innerWidth / 2;
-    const centerY = window.innerHeight / 2;
-
-    items.forEach((el, i) => {
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const elCenterX = rect.left + rect.width / 2;
-      const elCenterY = rect.top + rect.height / 2;
-      const dx = centerX - elCenterX;
-      const dy = centerY - elCenterY;
-      const isLeft = elCenterX < centerX;
-      const rotationY = isLeft ? 100 : -100;
-      const delay = i * 0.05; // Simple stagger for React
-
-      gsap.fromTo(
-        el,
-        {
-          transformOrigin: `50% 50% ${dx > 0 ? -dx * 0.8 : dx * 0.8}px`,
-          autoAlpha: 0,
-          y: dy * 0.5,
-          scale: 0.5,
-          rotationY,
-          z: -3500,
-        },
-        {
-          y: 0,
-          scale: 1,
-          rotationY: 0,
-          z: 0,
-          autoAlpha: 1,
-          duration: 0.8,
-          ease: 'power3.out',
-          delay,
-        },
-      );
-    });
+  // animations for the single preview content
+  const animateContentIn = () => {
+    if (!productRef.current) return;
+    gsap.fromTo(
+      productRef.current,
+      { autoAlpha: 0, y: 20 },
+      {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.8,
+        ease: 'power3.out',
+      },
+    );
   };
 
-  const animateGridOut = () => {
-    const items = gridItemsRef.current;
-
-    items.forEach((el, i) => {
-      if (!el) return;
-      const delay = i * 0.02;
-      gsap.to(el, {
-        y: 100,
-        scale: 0.4,
-        autoAlpha: 0,
-        z: -3500,
-        duration: 0.6,
-        ease: 'power3.in',
-        delay,
-        onComplete:
-          i === items.length - 1
-            ? () =>
-                gsap.set(previewRef.current, {
-                  autoAlpha: 0,
-                  pointerEvents: 'none',
-                })
-            : undefined,
-      });
+  const animateContentOut = () => {
+    if (!productRef.current) return;
+    gsap.to(productRef.current, {
+      autoAlpha: 0,
+      y: 20,
+      duration: 0.6,
+      ease: 'power2.in',
+      onComplete: () => {
+        gsap.set(previewRef.current, { autoAlpha: 0, pointerEvents: 'none' });
+        // clear animation props so it can cleanly animate again
+        gsap.set(productRef.current, { clearProps: 'all' });
+      },
     });
   };
 
@@ -370,7 +306,7 @@ export default function Carousel3D() {
 
       <div className="preview-wrapper">
         <div className="preview" ref={previewRef}>
-          <header className="preview__header">
+          <header className="preview__header max-w-225 mx-auto">
             <h2 className="preview__title">
               <span ref={previewTitleRef}>The Haslow Tee</span>
             </h2>
@@ -382,22 +318,10 @@ export default function Carousel3D() {
               Close ×
             </button>
           </header>
-          <div className="grid">
-            {GRID_IMAGES.map((item, i) => (
-              <figure
-                key={i}
-                className="grid__item"
-                ref={(el) => (gridItemsRef.current[i] = el)}
-              >
-                <div
-                  className="grid__item-image"
-                  style={{ backgroundImage: `url(${item.img})` }}
-                ></div>
-                <figcaption className="grid__item-caption">
-                  <h3>{item.title}</h3>
-                </figcaption>
-              </figure>
-            ))}
+          <div className="preview__content max-w-225 mx-auto">
+            <div className="product-container" ref={productRef}>
+              <div id="product-component-1764109270275"></div>
+            </div>
           </div>
         </div>
       </div>

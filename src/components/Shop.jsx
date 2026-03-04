@@ -12,8 +12,8 @@ const SHOP_CONTENT = [
 
 export default function Shop() {
   return (
-    <main className="text-center text-white">
-      <div id="product-component-1764109270275"></div>
+    <main>
+      <Carousel3D />
 
       <ShopSection key="dsa89ds9d6as7d6s9ad678as987d" text="Meet Haslow." />
 
@@ -23,12 +23,8 @@ export default function Shop() {
         <ShopSection key={index} text={text} />
       ))}
 
-      {/* spacer */}
       <div className="h-[25svh]" />
 
-      <Carousel3D />
-
-      {/* spacer */}
       <div className="h-[50vh]" />
     </main>
   );
