@@ -39,7 +39,7 @@ const ShopSection = ({ text }) => {
       ref={sectionRef}
       className="h-[50svh] flex items-center justify-center"
     >
-      <p className="text-4xl md:text-6xl uppercase font-bold tracking-tighter flex flex-wrap justify-center gap-x-[0.25em] gap-y-2 max-w-5xl mx-auto px-6">
+      <p className="text-4xl md:text-6xl text-white uppercase font-bold tracking-tighter flex flex-wrap justify-center gap-x-[0.25em] gap-y-2 max-w-5xl mx-auto px-6">
         {text.split(' ').map((word, i) => (
           <span
             key={i}
