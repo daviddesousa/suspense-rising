@@ -31,6 +31,11 @@ export default function Carousel3D() {
   const [isPreviewActive, setIsPreviewActive] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
 
+  const activatePreviewRef = useRef(null);
+  useEffect(() => {
+    activatePreviewRef.current = activatePreview;
+  });
+
   useEffect(() => {
     if (isPreviewActive) {
       document.body.classList.add('overflow-hidden');
@@ -78,8 +83,11 @@ export default function Carousel3D() {
         scrollTrigger: {
           trigger: sceneRef.current,
           start: 'top bottom',
-          end: 'bottom top',
+          end: 'center center+=10%',
           scrub: true,
+          onLeave: () => {
+            if (activatePreviewRef.current) activatePreviewRef.current();
+          },
         },
       });
 
@@ -128,9 +136,8 @@ export default function Carousel3D() {
   );
 
   const activatePreview = (e) => {
-    e.preventDefault();
-    if (isAnimating || !titleSplitRef.current) return;
-    setIsAnimating(true);
+    if (e) e.preventDefault();
+    if (isAnimating || isPreviewActive || !titleSplitRef.current) return;
 
     const titleChars = titleSplitRef.current.chars;
     const previewTitleChars = previewTitleSplitRef.current.chars;
@@ -141,22 +148,28 @@ export default function Carousel3D() {
       sceneRef.current.getBoundingClientRect().top + window.scrollY;
     const targetY =
       offsetTop - window.innerHeight / 2 + sceneRef.current.offsetHeight / 2;
+    const targetYTop =
+      offsetTop - window.innerHeight / 2 + sceneRef.current.offsetHeight / 3;
 
     // Disable all scroll triggers
     ScrollTrigger.getAll().forEach((t) => t.disable(false));
+
+    // Lock scroll immediately
+    setIsPreviewActive(true);
+    setIsAnimating(true);
 
     const tl = gsap.timeline({
       defaults: { duration: 1.5, ease: 'power2.inOut' },
       onComplete: () => {
         setIsAnimating(false);
-        setIsPreviewActive(true);
         ScrollTrigger.getAll().forEach((t) => t.enable());
-        carouselRef.current._timeline.scrollTrigger.scroll(targetY);
+        carouselRef.current._timeline.scrollTrigger.scroll(targetYTop);
       },
     });
 
     tl.to(window, {
-      scrollTo: { y: targetY, autoKill: true },
+      scrollTo: { y: targetY, autoKill: false },
+      duration: 0.9,
     })
       .to(
         titleChars,
@@ -168,13 +181,13 @@ export default function Carousel3D() {
         },
         0,
       )
-      .to(carouselRef.current, { rotationX: 90, rotationY: -360, z: -2000 }, 0)
+      .to(carouselRef.current, { rotationX: 90, rotationY: -360, z: -1000 }, 0)
       .to(
         carouselRef.current,
         {
           duration: 2.5,
           ease: 'power3.inOut',
-          z: 1500,
+          z: 2000,
           rotationZ: 270,
           onComplete: () => gsap.set(sceneRef.current, { autoAlpha: 0 }),
         },

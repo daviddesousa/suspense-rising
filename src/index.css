@@ -228,12 +228,6 @@ section {
   padding: var(--gutter-size);
 }
 
-main {
-  padding-top: var(--gutter-size);
-  padding-bottom: var(--gutter-size);
-  margin-bottom: auto;
-}
-
 .site-wrapper {
   display: flex;
   flex-direction: column;
@@ -337,10 +331,10 @@ hr {
 .shopify-buy__product {
   display: grid;
   grid-template-areas:
-    "gallery"
-    "description"
-    "price"
-    "cta";
+    'gallery'
+    'description'
+    'price'
+    'cta';
   grid-row-gap: 1rem;
   text-align: right;
 }
@@ -366,9 +360,9 @@ hr {
 @media screen and (min-width: 1024px) {
   .shopify-buy__product {
     grid-template-areas:
-      "gallery description"
-      "gallery price"
-      "gallery cta";
+      'gallery description'
+      'gallery price'
+      'gallery cta';
     grid-template-rows: auto auto 1fr;
     grid-template-columns: 2fr 1fr;
     gap: 1.5rem;
