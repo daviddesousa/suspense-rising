@@ -333,7 +333,55 @@ export default function Carousel3D() {
           </header>
           <div className="preview__content max-w-225 mx-auto">
             <div className="product-container" ref={productRef}>
-              <div id="product-component-1764109270275"></div>
+              <div className="product-container" ref={productRef}>
+                <shopify-context
+                  type="product"
+                  gid="gid://shopify/Product/8692093649050"
+                >
+                  <template>
+                    <div className="product-details">
+                      <shopify-variant-selector></shopify-variant-selector>
+                      <div className="product-actions">
+                        <div className="product-price">
+                          <shopify-money query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
+                        </div>
+                        <div className="product-buttons">
+                          <button
+                            className="product-add-button"
+                            onClick={(e) => {
+                              const cart = document.getElementById('main-cart');
+                              if (cart) {
+                                cart.addLine(e);
+                                cart.showModal();
+                              }
+                            }}
+                            shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale"
+                          >
+                            Add to Cart
+                          </button>
+                          <button
+                            className="product-buy-button"
+                            onClick={(e) => {
+                              const store =
+                                document.querySelector('shopify-store');
+                              if (store) store.buyNow(e);
+                            }}
+                            shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale"
+                          >
+                            Buy Now
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </template>
+                  <div
+                    shopify-loading-placeholder="true"
+                    className="loading-placeholder"
+                  >
+                    Loading Product Details...
+                  </div>
+                </shopify-context>
+              </div>
             </div>
           </div>
         </div>

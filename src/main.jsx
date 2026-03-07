@@ -14,11 +14,6 @@ const webpScript = document.createElement('script');
 webpScript.src = '/modernizr-webp.js';
 document.head.appendChild(webpScript);
 
-// Add Shopify Buy Button
-const shopScript = document.createElement('script');
-shopScript.src = '/shop.js';
-document.head.appendChild(shopScript);
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <HashRouter>

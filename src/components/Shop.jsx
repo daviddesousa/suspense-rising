@@ -12,16 +12,22 @@ const SHOP_CONTENT = [
 
 export default function Shop() {
   return (
-    <main>
-      <ShopSection key="dsa89ds9d6as7d6s9ad678as987d" text="Meet Haslow." />
+    <shopify-store
+      store-domain="6zvhm0-mu.myshopify.com"
+      public-access-token="c233afc68457cdc3b00a15bd9b4bf638"
+    >
+      <main>
+        <ShopSection key="dsa89ds9d6as7d6s9ad678as987d" text="Meet Haslow." />
 
-      <HaslowBackground />
+        <HaslowBackground />
 
-      {SHOP_CONTENT.map((text, index) => (
-        <ShopSection key={index} text={text} />
-      ))}
+        {SHOP_CONTENT.map((text, index) => (
+          <ShopSection key={index} text={text} />
+        ))}
 
-      <Carousel3D />
-    </main>
+        <Carousel3D />
+      </main>
+      <shopify-cart id="main-cart"></shopify-cart>
+    </shopify-store>
   );
 }

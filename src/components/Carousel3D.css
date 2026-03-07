@@ -150,3 +150,144 @@
     padding: 0 15vw;
   }
 }
+
+/* Shopify Web Components Styling */
+.product-details {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+  color: #fff;
+}
+
+.product-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.product-price {
+  font-size: 1.5rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+
+.product-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.product-add-button,
+.product-buy-button {
+  flex: 1;
+  padding: 1rem 2rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #fff;
+}
+
+.product-add-button {
+  background: #fff;
+  color: #000;
+}
+
+.product-add-button:hover {
+  background: transparent;
+  color: #fff;
+}
+
+.product-buy-button {
+  background: transparent;
+  color: #fff;
+}
+
+.product-buy-button:hover {
+  background: #fff;
+  color: #000;
+}
+
+.product-add-button:disabled,
+.product-buy-button:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.loading-placeholder {
+  padding: 4rem 0;
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.75rem;
+  opacity: 0.5;
+}
+
+/* Shopify Web Components Parts */
+shopify-variant-selector::part(form) {
+  gap: 1.5rem;
+}
+
+shopify-variant-selector::part(label) {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  margin-bottom: 0.75rem;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+shopify-variant-selector::part(select) {
+  background: transparent;
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 0.75rem;
+  border-radius: 0;
+  width: 100%;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+shopify-variant-selector::part(select):focus {
+  border-color: #fff;
+  outline: none;
+}
+
+/* Cart Styling */
+shopify-cart::part(dialog) {
+  background: #181717;
+  color: #fff;
+  border: 0;
+  box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+  max-width: 450px;
+}
+
+shopify-cart::part(line-heading) {
+  color: #fff;
+  text-transform: uppercase;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+}
+
+shopify-cart::part(primary-button) {
+  background: #fff;
+  color: #000;
+  border: 0;
+  border-radius: 0;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  padding: 1.25rem;
+}
+
+shopify-cart::part(secondary-button) {
+  background: transparent;
+  color: #fff;
+  fill: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 0;
+}
