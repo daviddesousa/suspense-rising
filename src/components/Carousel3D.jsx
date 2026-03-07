@@ -44,6 +44,30 @@ export default function Carousel3D() {
     }
   }, [isPreviewActive]);
 
+  useEffect(() => {
+    const handleAction = (e) => {
+      const target = e.target.closest('[data-action]');
+      if (!target) return;
+
+      if (target.dataset.action === 'add-to-cart') {
+        const cart = document.getElementById('main-cart');
+        if (cart) {
+          cart.addLine(e);
+          cart.showModal();
+        }
+      } else if (target.dataset.action === 'buy-now') {
+        const store = document.querySelector('shopify-store');
+        if (store) store.buyNow(e);
+      }
+    };
+
+    const container = productRef.current;
+    if (container) {
+      container.addEventListener('click', handleAction);
+      return () => container.removeEventListener('click', handleAction);
+    }
+  }, []);
+
   const getCarouselCellTransforms = (count, radius) => {
     const angleStep = 360 / count;
     return Array.from({ length: count }, (_, i) => {
@@ -332,40 +356,33 @@ export default function Carousel3D() {
             </button>
           </header>
           <div className="preview__content max-w-225 mx-auto">
-            <div className="product-container" ref={productRef}>
-              <div className="product-container" ref={productRef}>
+            <div
+              className="product-container"
+              ref={productRef}
+              dangerouslySetInnerHTML={{
+                __html: `
                 <shopify-context
                   type="product"
                   gid="gid://shopify/Product/8692093649050"
                 >
                   <template>
-                    <div className="product-details">
+                    <div class="product-details">
                       <shopify-variant-selector></shopify-variant-selector>
-                      <div className="product-actions">
-                        <div className="product-price">
+                      <div class="product-actions">
+                        <div class="product-price">
                           <shopify-money query="product.selectedOrFirstAvailableVariant.price"></shopify-money>
                         </div>
-                        <div className="product-buttons">
+                        <div class="product-buttons">
                           <button
-                            className="product-add-button"
-                            onClick={(e) => {
-                              const cart = document.getElementById('main-cart');
-                              if (cart) {
-                                cart.addLine(e);
-                                cart.showModal();
-                              }
-                            }}
+                            class="product-add-button"
+                            data-action="add-to-cart"
                             shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale"
                           >
                             Add to Cart
                           </button>
                           <button
-                            className="product-buy-button"
-                            onClick={(e) => {
-                              const store =
-                                document.querySelector('shopify-store');
-                              if (store) store.buyNow(e);
-                            }}
+                            class="product-buy-button"
+                            data-action="buy-now"
                             shopify-attr--disabled="!product.selectedOrFirstAvailableVariant.availableForSale"
                           >
                             Buy Now
@@ -376,13 +393,14 @@ export default function Carousel3D() {
                   </template>
                   <div
                     shopify-loading-placeholder="true"
-                    className="loading-placeholder"
+                    class="loading-placeholder"
                   >
                     Loading Product Details...
                   </div>
                 </shopify-context>
-              </div>
-            </div>
+              `,
+              }}
+            />
           </div>
         </div>
       </div>
