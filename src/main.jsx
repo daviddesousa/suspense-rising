@@ -1,11 +1,16 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import { HashRouter, Routes, Route } from 'react-router';
+import {
+  ShopifyProvider,
+  CartProvider,
+  // ShopifyCookies,
+} from '@shopify/hydrogen-react';
 
 import App from './App';
-
 import Releases from './components/Releases';
 import Shop from './components/Shop';
+import { shopifyConfig } from './shopify.config';
 
 import './index.css';
 
@@ -17,18 +22,29 @@ document.head.appendChild(webpScript);
 // Add Shopify Buy Button
 const shopScript = document.createElement('script');
 shopScript.src = '/shop.js';
-document.head.appendChild(shopScript);
+// document.head.appendChild(shopScript);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HashRouter>
-      <Routes>
-        <Route element={<App />}>
-          <Route index element={null} />
-          <Route path="releases" element={<Releases />} />
-          <Route path="shop" element={<Shop />} />
-        </Route>
-      </Routes>
-    </HashRouter>
+    <ShopifyProvider
+      storeDomain={shopifyConfig.storeDomain}
+      storefrontToken={shopifyConfig.storefrontToken}
+      storefrontApiVersion={shopifyConfig.storefrontApiVersion}
+      countryIsoCode={shopifyConfig.countryIsoCode}
+      languageIsoCode={shopifyConfig.languageIsoCode}
+    >
+      <CartProvider>
+        {/* <ShopifyCookies /> */}
+        <HashRouter>
+          <Routes>
+            <Route element={<App />}>
+              <Route index element={null} />
+              <Route path="releases" element={<Releases />} />
+              <Route path="shop" element={<Shop />} />
+            </Route>
+          </Routes>
+        </HashRouter>
+      </CartProvider>
+    </ShopifyProvider>
   </StrictMode>,
 );
