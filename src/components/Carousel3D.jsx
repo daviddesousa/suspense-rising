@@ -319,18 +319,8 @@ export default function Carousel3D() {
       </div>
 
       <div className="preview-wrapper">
-        <div
-          id="preview-modal"
-          className="preview overflow-y-auto"
-          ref={previewRef}
-          /*
-           * allowNestedScroll: true
-           * This automatically detects nested scrollable elements and lets them scroll natively.
-           * However, this can create performance issues since Lenis needs to check the DOM tree on every scroll event.
-           * If you experience performance problems, use data-lenis-prevent instead.
-           */
-        >
-          <header className="preview__header max-w-225 mx-auto">
+        <div id="preview-modal" className="preview" ref={previewRef}>
+          <header className="preview__header">
             <h2 className="preview__title">
               <span ref={previewTitleRef}>The Haslow Tee</span>
             </h2>
@@ -342,7 +332,7 @@ export default function Carousel3D() {
               Close ×
             </button>
           </header>
-          <div className="preview__content max-w-225 mx-auto">
+          <div className="preview__content overflow-y-auto">
             <div className="product-container" ref={productRef}>
               <ProductPreview handle="haslow-tee" />
             </div>
