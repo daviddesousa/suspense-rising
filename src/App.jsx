@@ -24,7 +24,11 @@ function App() {
   return (
     <ReactLenis
       root
-      options={{ autoRaf: false, allowNestedScroll: true }}
+      options={{
+        autoRaf: false,
+        allowNestedScroll: true,
+        // prevent: (node) => node.id === 'preview-modal', // @TODO determine which to keep later
+      }}
       ref={lenisRef}
     >
       <div className="site-wrapper" data-page-handle={location.pathname}>
