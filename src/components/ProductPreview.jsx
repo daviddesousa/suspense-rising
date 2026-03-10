@@ -5,7 +5,6 @@ export default function ProductPreview({ handle }) {
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [isAdding, setIsAdding] = useState(false);
 
   // Sandbox states
   const [randomVariant, setRandomVariant] = useState(null);
@@ -42,26 +41,6 @@ export default function ProductPreview({ handle }) {
 
   const prevImage = () => {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
-
-  const handleAddToCart = async () => {
-    if (!variant) return;
-    setIsAdding(true);
-    try {
-      const checkout = await client.checkout.create();
-      const checkoutWithItem = await client.checkout.addLineItems(checkout.id, [
-        {
-          variantId: variant.id,
-          quantity: 1,
-        },
-      ]);
-      window.open(checkoutWithItem.webUrl, '_blank');
-    } catch (error) {
-      console.error('Error adding to cart:', error);
-      alert('Failed to add to cart. Please try again.');
-    } finally {
-      setIsAdding(false);
-    }
   };
 
   // Sandbox functions
@@ -163,27 +142,14 @@ export default function ProductPreview({ handle }) {
       <div className="product-info mt-8 space-y-4 text-left">
         <div className="product-price text-2xl font-medium">{price}</div>
         <div
-          className="product-description text-neutral-400 leading-relaxed font-light text-lg"
+          className="product-description leading-relaxed font-light text-lg"
           dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
         />
-
-        <button
-          onClick={handleAddToCart}
-          disabled={isAdding || !variant?.available}
-          className={`w-full py-4 mt-4 bg-white text-black font-bold uppercase tracking-widest hover:bg-neutral-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed`}
-        >
-          {isAdding
-            ? 'ADDING...'
-            : variant?.available
-              ? 'ADD TO CART'
-              : 'SOLD OUT'}
-        </button>
       </div>
 
       <div className="max-w-full mt-12 pt-12 border-t border-neutral-800 text-left">
-        <h2 className="text-xl font-bold mb-4 uppercase">buy button sandbox</h2>
-        <h3 className="text-sm text-neutral-500 mb-2 uppercase tracking-widest">
-          Available variants:
+        <h3 className="text-sm mb-2 uppercase tracking-widest">
+          What's left...
         </h3>
         <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-2 mb-8">
           {product.variants.map((v) => (
@@ -196,7 +162,7 @@ export default function ProductPreview({ handle }) {
           ))}
         </div>
 
-        <h3 className="text-sm text-neutral-500 mb-2 uppercase tracking-widest">
+        <h3 className="text-sm mb-2 uppercase tracking-widest">
           Roll for your number:
         </h3>
         <div className="flex items-center gap-4 mb-8">
@@ -214,7 +180,7 @@ export default function ProductPreview({ handle }) {
           </p>
         </div>
 
-        <h3 className="text-sm text-neutral-500 mb-2 uppercase tracking-widest">
+        <h3 className="text-sm mb-2 uppercase tracking-widest">
           Purchase your tee:
         </h3>
         <button
