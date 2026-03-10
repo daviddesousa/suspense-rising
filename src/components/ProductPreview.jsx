@@ -56,6 +56,11 @@ export default function ProductPreview({ handle }) {
       return;
     }
 
+    // @TODO for testing
+    alert('Buying disabled during testing.');
+
+    return;
+
     setIsLoadingSandbox(true);
     setSandboxError(null);
 
