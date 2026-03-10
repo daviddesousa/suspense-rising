@@ -1,4 +1,5 @@
-import haslowVideo from '../assets/haslow/Haslow-Canvas-Edit-2.5k.mp4'; // TODO optimize + compress video
+import haslowMp4 from '../assets/haslow/haslow.mp4';
+import haslowWebm from '../assets/haslow/haslow.webm';
 
 const HaslowBackground = () => {
   return (
@@ -11,7 +12,8 @@ const HaslowBackground = () => {
         preload="auto"
         className="w-full h-full object-contain"
       >
-        <source src={haslowVideo} type="video/mp4" />
+        <source src={haslowMp4} type="video/mp4" />
+        <source src={haslowWebm} type="video/webm" />
         Your browser does not support the video tag.
       </video>
     </div>
