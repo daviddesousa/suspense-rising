@@ -11,9 +11,30 @@ const client = Client.buildClient({
 
 const handle = 'haslow-tee';
 
-client.product.fetchByHandle(handle).then((product) => {
-  console.log(product);
+const product = await client.product.fetchByHandle(handle);
+
+const available = product.variants.filter((v) => v.available);
+
+const randomVariant = available[Math.floor(Math.random() * available.length)];
+// console.log(randomVariant.title);
+
+// image helper
+const imageUrl = client.image.helpers.imageForSize(product.images[0], {
+  maxWidth: 50,
+  maxHeight: 50,
 });
+// console.log(imageUrl);
+
+const checkout = await client.checkout.create();
+
+await client.checkout.addLineItems(checkout.id, [
+  {
+    variantId: randomVariant.id,
+    quantity: 1,
+  },
+]);
+
+// window.location.href = checkout.webUrl;
 
 const SHOP_CONTENT = [
   'He speaks with charm and moves with grace,',
@@ -26,6 +47,11 @@ const SHOP_CONTENT = [
 export default function Shop() {
   return (
     <main>
+      <div>
+        <h2>buy button sandbox</h2>
+        Your random number: {randomVariant.title}
+      </div>
+
       <ShopSection key="dsa89ds9d6as7d6s9ad678as987d" text="Meet Haslow." />
 
       <HaslowBackground />
