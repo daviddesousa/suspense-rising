@@ -7,6 +7,11 @@ export default function ProductPreview({ handle }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isAdding, setIsAdding] = useState(false);
 
+  // Sandbox states
+  const [randomVariant, setRandomVariant] = useState(null);
+  const [isLoadingSandbox, setIsLoadingSandbox] = useState(false);
+  const [sandboxError, setSandboxError] = useState(null);
+
   useEffect(() => {
     async function fetchProduct() {
       try {
@@ -56,6 +61,38 @@ export default function ProductPreview({ handle }) {
       alert('Failed to add to cart. Please try again.');
     } finally {
       setIsAdding(false);
+    }
+  };
+
+  // Sandbox functions
+  function rollNumber() {
+    const available = product.variants.filter((v) => v.available);
+    const selected = available[Math.floor(Math.random() * available.length)];
+    setRandomVariant(selected);
+  }
+
+  const buyNow = async () => {
+    if (!randomVariant) {
+      alert('Please roll for a number first!');
+      return;
+    }
+
+    setIsLoadingSandbox(true);
+    setSandboxError(null);
+
+    try {
+      const checkout = await client.checkout.create();
+      await client.checkout.addLineItems(checkout.id, [
+        {
+          variantId: randomVariant.id,
+          quantity: 1,
+        },
+      ]);
+      window.location.href = checkout.webUrl;
+    } catch (err) {
+      console.error('Checkout error:', err);
+      setSandboxError(err.message || 'Something went wrong with the checkout.');
+      setIsLoadingSandbox(false);
     }
   };
 
@@ -141,6 +178,56 @@ export default function ProductPreview({ handle }) {
               ? 'ADD TO CART'
               : 'SOLD OUT'}
         </button>
+      </div>
+
+      <div className="max-w-full mt-12 pt-12 border-t border-neutral-800 text-left">
+        <h2 className="text-xl font-bold mb-4 uppercase">buy button sandbox</h2>
+        <h3 className="text-sm text-neutral-500 mb-2 uppercase tracking-widest">
+          Available variants:
+        </h3>
+        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-2 mb-8">
+          {product.variants.map((v) => (
+            <div
+              key={v.id}
+              className={`border border-neutral-800 p-2 text-xs text-center ${!v.available ? 'line-through opacity-30' : 'opacity-70'}`}
+            >
+              {v.title}
+            </div>
+          ))}
+        </div>
+
+        <h3 className="text-sm text-neutral-500 mb-2 uppercase tracking-widest">
+          Roll for your number:
+        </h3>
+        <div className="flex items-center gap-4 mb-8">
+          <button
+            className="border border-white px-6 py-3 bg-amber-600 text-black font-bold hover:bg-amber-500 transition-colors"
+            onClick={rollNumber}
+          >
+            ROLL
+          </button>
+          <p className="text-lg">
+            Your number is:{' '}
+            <span className="text-amber-500 font-bold">
+              {randomVariant?.title || '---'}
+            </span>
+          </p>
+        </div>
+
+        <h3 className="text-sm text-neutral-500 mb-2 uppercase tracking-widest">
+          Purchase your tee:
+        </h3>
+        <button
+          className={`w-full border border-blue-600 px-6 py-4 bg-blue-600 text-white font-bold uppercase tracking-widest ${isLoadingSandbox ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 hover:border-blue-700'} transition-colors`}
+          onClick={buyNow}
+          disabled={isLoadingSandbox}
+        >
+          {isLoadingSandbox ? 'OPENING CHECKOUT...' : 'BUY NOW'}
+        </button>
+
+        {sandboxError && (
+          <p className="text-red-500 mt-2 text-sm">{sandboxError}</p>
+        )}
       </div>
     </div>
   );
