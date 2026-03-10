@@ -157,7 +157,7 @@
     grid-template-areas:
       'slider description'
       'slider experience';
-    /* grid-template-columns: 2fr 1fr; */
+    grid-template-columns: 30vw 1fr;
     grid-template-rows: auto 1fr;
   }
 
