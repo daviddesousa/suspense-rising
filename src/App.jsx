@@ -22,7 +22,11 @@ function App() {
   }, []);
 
   return (
-    <ReactLenis root options={{ autoRaf: false }} ref={lenisRef}>
+    <ReactLenis
+      root
+      options={{ autoRaf: false, allowNestedScroll: true }}
+      ref={lenisRef}
+    >
       <div className="site-wrapper" data-page-handle={location.pathname}>
         <header className="site-header">
           <Nav />
