@@ -79,17 +79,26 @@ export default function ProductPreview({ handle }) {
     <div className="product-preview grid gap-8">
       {images.length > 0 && (
         <div className="product-carousel">
-          <div className="carousel-inner relative overflow-hidden aspect-2/3 lg:aspect-auto lg:h-full bg-neutral-900">
-            {images.map((img, idx) => (
-              <img
-                key={img.id}
-                src={img.src}
-                alt={product.title}
-                className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-                  idx === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                }`}
-              />
-            ))}
+          <div className="carousel-inner relative overflow-hidden aspect-2/3 bg-neutral-900">
+            {images.map((img, idx) => {
+              const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
+              const srcSet = widths
+                .map((width) => `${img.src}&width=${width} ${width}w`)
+                .join(', ');
+
+              return (
+                <img
+                  key={img.id}
+                  src={`${img.src}&width=800`}
+                  srcSet={srcSet}
+                  sizes="(min-width: 64rem) 30vw, 90vw"
+                  alt={product.title}
+                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
+                    idx === currentImageIndex ? 'opacity-100' : 'opacity-0'
+                  }`}
+                />
+              );
+            })}
 
             {images.length > 1 && (
               <>

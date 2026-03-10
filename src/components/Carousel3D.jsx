@@ -334,7 +334,7 @@ export default function Carousel3D() {
           </header>
           <div className="preview__content overflow-y-auto">
             <div className="product-container" ref={productRef}>
-              <ProductPreview handle="haslow-tee" />
+              <ProductPreview handle="the-haslow-tee" />
             </div>
           </div>
         </div>
