@@ -76,10 +76,10 @@ export default function ProductPreview({ handle }) {
   };
 
   return (
-    <div className="product-preview">
+    <div className="product-preview grid gap-8">
       {images.length > 0 && (
-        <div className="product-carousel" style={{ width: '100%' }}>
-          <div className="carousel-inner relative overflow-hidden aspect-4/5 bg-neutral-900">
+        <div className="product-carousel">
+          <div className="carousel-inner relative overflow-hidden aspect-2/3 lg:aspect-auto lg:h-full bg-neutral-900">
             {images.map((img, idx) => (
               <img
                 key={img.id}
@@ -139,7 +139,7 @@ export default function ProductPreview({ handle }) {
         </div>
       )}
 
-      <div className="product-info mt-8 space-y-4 text-left">
+      <div className="product-info space-y-4 text-left">
         <div className="product-price text-2xl font-medium">{price}</div>
         <div
           className="product-description leading-relaxed font-light text-lg"
@@ -147,11 +147,11 @@ export default function ProductPreview({ handle }) {
         />
       </div>
 
-      <div className="max-w-full mt-12 pt-12 border-t border-neutral-800 text-left">
+      <div className="product-experience max-w-full pt-8 border-t border-neutral-800 text-left">
         <h3 className="text-sm mb-2 uppercase tracking-widest">
           What's left...
         </h3>
-        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-10 gap-2 mb-8">
+        <div className="grid grid-cols-5 md:grid-cols-6 lg:grid-cols-10 gap-2 mb-8">
           {product.variants.map((v) => (
             <div
               key={v.id}
@@ -191,6 +191,7 @@ export default function ProductPreview({ handle }) {
           {isLoadingSandbox ? 'OPENING CHECKOUT...' : 'BUY NOW'}
         </button>
 
+        {/* @TODO test error display */}
         {sandboxError && (
           <p className="text-red-500 mt-2 text-sm">{sandboxError}</p>
         )}

@@ -106,7 +106,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  padding: 0 5vw;
+  padding: 10vw 5vw;
   display: grid;
   align-content: start;
   grid-row-gap: 2rem;
@@ -145,8 +145,31 @@
   color: var(--carousel-color-link-hover);
 }
 
-@media screen and (min-width: 65em) {
+@media screen and (min-width: 64rem) {
   .preview {
-    padding: 0 15vw;
+    padding: 5vw;
+  }
+
+  /* prototyping */
+  .product-preview {
+    display: grid;
+    gap: 2rem;
+    grid-template-areas:
+      'slider description'
+      'slider experience';
+    /* grid-template-columns: 2fr 1fr; */
+    grid-template-rows: auto 1fr;
+  }
+
+  .product-carousel {
+    grid-area: slider;
+  }
+
+  .product-info {
+    grid-area: description;
+  }
+
+  .product-experience {
+    grid-area: experience;
   }
 }
