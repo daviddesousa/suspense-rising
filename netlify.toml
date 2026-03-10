@@ -1,0 +1,13 @@
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+  [[plugins.inputs.audits]]
+  url = "https://suspenserising.netlify.app/#/shop"
+  output_path = "reports/shop.html"
+
+  [[plugins.inputs.audits]]
+  url = "https://suspenserising.netlify.app/#/releases"
+  output_path = "reports/releases.html"
+
+  [[plugins.inputs.audits]]
+  path = "/"
