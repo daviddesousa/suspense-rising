@@ -1,4 +1,5 @@
 import { useRef, useState, useEffect } from 'react';
+import ProductPreview from './ProductPreview';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -333,7 +334,7 @@ export default function Carousel3D() {
           </header>
           <div className="preview__content max-w-225 mx-auto">
             <div className="product-container" ref={productRef}>
-              <div id="product-component-1764109270275"></div>
+              <ProductPreview handle="haslow-tee" />
             </div>
           </div>
         </div>
