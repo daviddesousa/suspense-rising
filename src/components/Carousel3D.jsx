@@ -320,6 +320,7 @@ export default function Carousel3D() {
 
       <div className="preview-wrapper">
         <div
+          id="preview-modal"
           className="preview overflow-y-auto"
           ref={previewRef}
           /*
