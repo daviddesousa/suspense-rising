@@ -108,7 +108,7 @@
   height: 100%;
   padding: 0 5vw;
   display: grid;
-  align-content: center;
+  align-content: start;
   grid-row-gap: 2rem;
   opacity: 0;
   pointer-events: none;

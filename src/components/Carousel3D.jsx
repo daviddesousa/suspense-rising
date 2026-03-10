@@ -149,8 +149,6 @@ export default function Carousel3D() {
       sceneRef.current.getBoundingClientRect().top + window.scrollY;
     const targetY =
       offsetTop - window.innerHeight / 2 + sceneRef.current.offsetHeight / 2;
-    const targetYTop =
-      offsetTop - window.innerHeight / 2 + sceneRef.current.offsetHeight / 3;
 
     // Disable all scroll triggers
     ScrollTrigger.getAll().forEach((t) => t.disable(false));
@@ -163,8 +161,7 @@ export default function Carousel3D() {
       defaults: { duration: 1.5, ease: 'power2.inOut' },
       onComplete: () => {
         setIsAnimating(false);
-        ScrollTrigger.getAll().forEach((t) => t.enable());
-        carouselRef.current._timeline.scrollTrigger.scroll(targetYTop);
+        // We keep ScrollTriggers disabled while preview is active to avoid conflicts
       },
     });
 
@@ -228,6 +225,9 @@ export default function Carousel3D() {
         onComplete: () => {
           setIsAnimating(false);
           setIsPreviewActive(false);
+          // Re-enable scroll triggers and sync to current position
+          ScrollTrigger.getAll().forEach((t) => t.enable());
+          ScrollTrigger.refresh();
         },
       })
       .fromTo(
@@ -319,7 +319,16 @@ export default function Carousel3D() {
       </div>
 
       <div className="preview-wrapper">
-        <div className="preview" ref={previewRef}>
+        <div
+          className="preview overflow-y-auto"
+          ref={previewRef}
+          /*
+           * allowNestedScroll: true
+           * This automatically detects nested scrollable elements and lets them scroll natively.
+           * However, this can create performance issues since Lenis needs to check the DOM tree on every scroll event.
+           * If you experience performance problems, use data-lenis-prevent instead.
+           */
+        >
           <header className="preview__header max-w-225 mx-auto">
             <h2 className="preview__title">
               <span ref={previewTitleRef}>The Haslow Tee</span>
