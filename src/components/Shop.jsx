@@ -3,20 +3,12 @@ import Carousel3D from './Carousel3D';
 import HaslowBackground from './HaslowBackground';
 
 import { client } from '../lib/shopify';
-import { useState } from 'react';
+import { useState, use, Suspense } from 'react';
 
 const handle = 'haslow-tee';
 
-const product = await client.product.fetchByHandle(handle);
-
-const available = product.variants.filter((v) => v.available);
-
-// image helper
-const imageUrl = client.image.helpers.imageForSize(product.images[0], {
-  maxWidth: 50,
-  maxHeight: 50,
-});
-// console.log(imageUrl);
+// 1. Start fetching immediately at the module level (returns a promise)
+const productPromise = client.product.fetchByHandle(handle);
 
 const SHOP_CONTENT = [
   'He speaks with charm and moves with grace,',
@@ -26,7 +18,11 @@ const SHOP_CONTENT = [
   'just layers of smoke and mirrors...',
 ];
 
-export default function Shop() {
+function ShopContent() {
+  // 2. Consume the promise. React will suspend here if it's not ready.
+  const product = use(productPromise);
+  const available = product.variants.filter((v) => v.available);
+
   const [randomVariant, setRandomVariant] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -109,5 +105,20 @@ export default function Shop() {
 
       <Carousel3D />
     </main>
+  );
+}
+
+// 3. Export a wrapper component that provides the Suspense boundary
+export default function Shop() {
+  return (
+    <Suspense
+      fallback={
+        <div className="h-screen flex items-center justify-center">
+          Loading product...
+        </div>
+      }
+    >
+      <ShopContent />
+    </Suspense>
   );
 }
