@@ -153,7 +153,7 @@
   /* prototyping */
   .product-preview {
     display: grid;
-    gap: 2rem;
+    gap: 1.5rem 2rem;
     grid-template-areas:
       'slider description'
       'slider experience';
