@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { client } from '../lib/shopify';
+import RealTimeDropStore from './RealTimeDropStore';
 
 export default function ProductPreview({ handle }) {
   const [product, setProduct] = useState(null);
@@ -33,7 +34,8 @@ export default function ProductPreview({ handle }) {
 
   const images = product.images || [];
   const variant = product.variants[0];
-  const price = variant ? `$${variant.price.amount}` : '';
+  const amount = variant ? parseFloat(variant.price.amount) : 0;
+  const price = variant ? `$${amount.toFixed(2)}` : '';
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -52,17 +54,20 @@ export default function ProductPreview({ handle }) {
 
   const buyNow = async () => {
     if (!randomVariant) {
-      alert('Please roll for a number first!');
+      setSandboxError('Please roll for a number first!');
       return;
     }
 
-    // @TODO for testing
-    alert('Buying disabled during testing.');
-
-    return;
-
     setIsLoadingSandbox(true);
     setSandboxError(null);
+
+    // @TODO for testing
+    setTimeout(() => {
+      setSandboxError('Buying disabled during testing.');
+      setIsLoadingSandbox(false);
+    }, 1000);
+
+    return; // @TODO for testing
 
     try {
       const checkout = await client.checkout.create();
@@ -154,60 +159,29 @@ export default function ProductPreview({ handle }) {
       )}
 
       <div className="product-info space-y-4 text-left">
-        <div className="product-price text-2xl font-medium">{price}</div>
+        <div className="product-price text-[27px] font-medium">{price}</div>
         <div
           className="product-description leading-relaxed font-light text-lg"
           dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
         />
       </div>
 
-      <div className="product-experience max-w-full pt-8 border-t border-neutral-800 text-left">
-        <h3 className="text-sm mb-2 uppercase tracking-widest">
-          What's left...
-        </h3>
-        <div className="grid grid-cols-5 md:grid-cols-6 lg:grid-cols-10 gap-2 mb-8">
-          {product.variants.map((v) => (
-            <div
-              key={v.id}
-              className={`border border-neutral-800 p-2 text-xs text-center ${!v.available ? 'line-through opacity-30' : 'opacity-70'}`}
-            >
-              {v.title}
-            </div>
-          ))}
-        </div>
+      <div className="product-experience max-w-full text-left">
+        <RealTimeDropStore
+          onBuy={buyNow}
+          isLoading={isLoadingSandbox}
+          onRoll={(number) => {
+            const available = product.variants.filter((v) => v.available);
+            // Since variants are 1-indexed in the UI, we match by index or logic
+            // For now, let's assume the roll number corresponds to the variant index or just pick one
+            const selected = product.variants[number - 1] || available[0];
+            setRandomVariant(selected);
+          }}
+        />
 
-        <h3 className="text-sm mb-2 uppercase tracking-widest">
-          Roll for your number:
-        </h3>
-        <div className="flex items-center gap-4 mb-8">
-          <button
-            className="border border-white px-6 py-3 bg-amber-600 text-black font-bold hover:bg-amber-500 transition-colors"
-            onClick={rollNumber}
-          >
-            ROLL
-          </button>
-          <p className="text-lg">
-            Your number is:{' '}
-            <span className="text-amber-500 font-bold">
-              {randomVariant?.title || '---'}
-            </span>
-          </p>
-        </div>
-
-        <h3 className="text-sm mb-2 uppercase tracking-widest">
-          Purchase your tee:
-        </h3>
-        <button
-          className={`w-full border border-blue-600 px-6 py-4 bg-blue-600 text-white font-bold uppercase tracking-widest ${isLoadingSandbox ? 'opacity-50 cursor-not-allowed' : 'hover:bg-blue-700 hover:border-blue-700'} transition-colors`}
-          onClick={buyNow}
-          disabled={isLoadingSandbox}
-        >
-          {isLoadingSandbox ? 'OPENING CHECKOUT...' : 'BUY NOW'}
-        </button>
-
-        {/* @TODO test error display */}
+        {/* @TODO improve mobile display (toast?) */}
         {sandboxError && (
-          <p className="text-red-500 mt-2 text-sm">{sandboxError}</p>
+          <p className="text-red-500 mt-2 text-lg">{sandboxError}</p>
         )}
       </div>
     </div>
