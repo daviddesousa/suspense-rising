@@ -61,14 +61,6 @@ export default function ProductPreview({ handle }) {
     setIsLoadingSandbox(true);
     setSandboxError(null);
 
-    // @TODO for testing
-    setTimeout(() => {
-      setSandboxError('Buying disabled during testing.');
-      setIsLoadingSandbox(false);
-    }, 1000);
-
-    return; // @TODO for testing
-
     try {
       const checkout = await client.checkout.create();
       await client.checkout.addLineItems(checkout.id, [
