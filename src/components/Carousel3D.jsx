@@ -332,7 +332,7 @@ export default function Carousel3D() {
               Close ×
             </button>
           </header>
-          <div className="preview__content overflow-y-auto">
+          <div className="preview__content overflow-y-auto md:pr-3">
             <div className="product-container" ref={productRef}>
               <ProductPreview handle="the-haslow-tee" />
             </div>
