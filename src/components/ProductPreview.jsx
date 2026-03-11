@@ -171,6 +171,7 @@ export default function ProductPreview({ handle }) {
           onBuy={buyNow}
           isLoading={isLoadingSandbox}
           onRoll={(number) => {
+            setSandboxError(null);
             const available = product.variants.filter((v) => v.available);
             // Since variants are 1-indexed in the UI, we match by index or logic
             // For now, let's assume the roll number corresponds to the variant index or just pick one
@@ -181,7 +182,27 @@ export default function ProductPreview({ handle }) {
 
         {/* @TODO improve mobile display (toast?) */}
         {sandboxError && (
-          <p className="text-red-500 mt-2 text-lg">{sandboxError}</p>
+          <div className="flex items-center justify-between gap-4 mt-4 p-4 bg-red-500/5 border border-red-500/20 rounded-lg backdrop-blur-sm animate-in fade-in slide-in-from-top-1 duration-300">
+            <p className="text-red-500 text-lg flex-1">{sandboxError}</p>
+            <button
+              onClick={() => setSandboxError(null)}
+              className="p-1 text-red-500 hover:bg-red-500/10 rounded-full transition-all active:scale-95 cursor-pointer"
+              aria-label="Dismiss error"
+            >
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <path d="M18 6L6 18M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
         )}
       </div>
     </div>
