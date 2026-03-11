@@ -157,6 +157,11 @@ export default function Carousel3D() {
     setIsPreviewActive(true);
     setIsAnimating(true);
 
+    // Kill any ongoing animations on these characters to prevent race conditions
+    gsap.killTweensOf(titleChars);
+    gsap.killTweensOf(previewTitleChars);
+    gsap.killTweensOf(previewCloseChars);
+
     const tl = gsap.timeline({
       defaults: { duration: 1.5, ease: 'power2.inOut' },
       onComplete: () => {
@@ -176,6 +181,7 @@ export default function Carousel3D() {
           duration: 0.02,
           ease: 'none',
           stagger: { each: 0.04, from: 'end' },
+          overwrite: true,
         },
         0,
       )
@@ -208,6 +214,11 @@ export default function Carousel3D() {
     const previewTitleChars = previewTitleSplitRef.current.chars;
     const previewCloseChars = previewCloseSplitRef.current.chars;
 
+    // Kill any ongoing animations to prevent race conditions
+    gsap.killTweensOf(titleChars);
+    gsap.killTweensOf(previewTitleChars);
+    gsap.killTweensOf(previewCloseChars);
+
     animateChars(previewTitleChars, 'out');
     animateChars(previewCloseChars, 'out');
     animateContentOut();
@@ -238,6 +249,7 @@ export default function Carousel3D() {
           duration: 0.02,
           ease: 'none',
           stagger: { each: 0.04, from: 'start' },
+          overwrite: true,
         },
       )
       .fromTo(
@@ -256,6 +268,7 @@ export default function Carousel3D() {
 
   const animateChars = (chars, direction = 'in') => {
     if (!chars) return;
+    gsap.killTweensOf(chars);
     gsap.fromTo(
       chars,
       { autoAlpha: direction === 'in' ? 0 : 1 },
@@ -264,6 +277,7 @@ export default function Carousel3D() {
         duration: 0.02,
         ease: 'none',
         stagger: { each: 0.04, from: direction === 'in' ? 'start' : 'end' },
+        overwrite: true,
       },
     );
   };
