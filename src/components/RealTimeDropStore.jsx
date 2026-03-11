@@ -102,29 +102,40 @@ const RealTimeDropStore = ({ onBuy, isLoading, onRoll }) => {
 
     const availableVariants = variants.filter((v) => v.status === 'available');
     if (availableVariants.length === 0) {
-      // This is a fallback, but the button should be disabled anyway
       setIsRolling(false);
       return;
     }
 
+    // Determine target selection upfront
+    const finalSelection =
+      availableVariants[Math.floor(Math.random() * availableVariants.length)];
+
     // GSAP Shuffle Animation Logic
     const dummy = { val: 0 };
+    let lastTick = -1;
+
     gsap.to(dummy, {
-      val: 20, // number of "ticks" in the animation
-      duration: 2,
-      ease: 'power4.out',
+      val: 30, // Increased ticks for smoother slowdown (matching TOTAL_VARIANTS)
+      duration: 5,
+      ease: 'power1.out', // or 'none'
       onUpdate: () => {
-        const randomIndex = Math.floor(
-          Math.random() * availableVariants.length,
-        );
-        setSelectedNumber(availableVariants[randomIndex].number);
+        const currentTick = Math.floor(dummy.val);
+        if (currentTick !== lastTick) {
+          // If we haven't reached the final few ticks, pick a random number for shuffle
+          // This creates the "slowing down" rhythm as it approaches the end
+          if (currentTick < 28) {
+            const randomIndex = Math.floor(
+              Math.random() * availableVariants.length,
+            );
+            setSelectedNumber(availableVariants[randomIndex].number);
+          } else {
+            // Land on the final selection for the last couple of ticks
+            setSelectedNumber(finalSelection.number);
+          }
+          lastTick = currentTick;
+        }
       },
       onComplete: () => {
-        const finalSelection =
-          availableVariants[
-            Math.floor(Math.random() * availableVariants.length)
-          ];
-
         setSelectedNumber(finalSelection.number);
         setIsRolling(false);
 
