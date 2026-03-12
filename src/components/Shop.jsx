@@ -19,7 +19,9 @@ const SHOP_CONTENT = [
 
 export default function Shop() {
   const haslowRef = useRef(null);
+  const bgContainerRef = useRef(null);
   const playerRef = useRef(null);
+  const animationSpacerRef = useRef(null);
 
   useGSAP(() => {
     if (!haslowRef.current || !playerRef.current) return;
@@ -45,6 +47,21 @@ export default function Shop() {
           ease: 'power1.in',
         }),
     });
+
+    if (bgContainerRef.current && animationSpacerRef.current) {
+      gsap.to(bgContainerRef.current, {
+        scrollTrigger: {
+          trigger: animationSpacerRef.current,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: true,
+        },
+        scale: 2.5,
+        filter: 'blur(10px)',
+        opacity: 0,
+        ease: 'power1.inOut',
+      });
+    }
   }, []);
 
   const scrollToTop = () => {
@@ -63,9 +80,14 @@ export default function Shop() {
       {/* Ref wrapper — marks the trigger point */}
       <div
         ref={haslowRef}
-        className="sticky top-0 w-full h-svh -z-1 after:absolute after:inset-0 after:bg-black/70"
+        className="sticky top-0 w-full h-svh -z-1 overflow-hidden"
       >
-        <HaslowBackground />
+        <div
+          ref={bgContainerRef}
+          className="w-full h-full relative after:absolute after:inset-0 after:bg-black/70 origin-center"
+        >
+          <HaslowBackground />
+        </div>
       </div>
 
       {/* Fixed player — slides in via GSAP */}
@@ -81,9 +103,10 @@ export default function Shop() {
         <ShopSection key={index} text={text} />
       ))}
 
-      <div className="h-svh"></div>
+      {/* Spacer for the haslow zoom/blur animation */}
+      <div ref={animationSpacerRef} className="h-svh" />
 
-      <section className="page-width">
+      <section className="page-width relative z-10 pt-20">
         <div className="mb-20">
           <ProductPreview handle="the-haslow-tee" />
         </div>
