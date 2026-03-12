@@ -20,7 +20,7 @@ const RealTimeDropStore = ({
       <div className="flex bg-neutral-900 p-1 rounded-sm border border-neutral-800">
         <button
           onClick={() => setActiveExperience('choose')}
-          className={`flex-1 py-3 text-sm font-bold uppercase tracking-widest transition-all ${
+          className={`flex-1 py-3 text-sm font-bold uppercase tracking-widest transition-all cursor-pointer ${
             activeExperience === 'choose' 
               ? 'bg-neutral-800 text-white shadow-xl' 
               : 'text-neutral-500 hover:text-neutral-300'
@@ -33,7 +33,7 @@ const RealTimeDropStore = ({
             setActiveExperience('blind');
             onSelectVariant(null);
           }}
-          className={`flex-1 py-3 text-sm font-bold uppercase tracking-widest transition-all ${
+          className={`flex-1 py-3 text-sm font-bold uppercase tracking-widest transition-all cursor-pointer ${
             activeExperience === 'blind' 
               ? 'bg-neutral-800 text-white shadow-xl' 
               : 'text-neutral-500 hover:text-neutral-300'
