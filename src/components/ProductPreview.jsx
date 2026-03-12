@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { client } from '../lib/shopify';
 import RealTimeDropStore from './RealTimeDropStore';
+import DOMPurify from 'dompurify';
 
 export default function ProductPreview({ handle }) {
   const [product, setProduct] = useState(null);
@@ -40,7 +41,9 @@ export default function ProductPreview({ handle }) {
   const images = product.images || [];
   const pricingVariant = product.variants[0];
   const amount = pricingVariant ? parseFloat(pricingVariant.price.amount) : 0;
-  const price = pricingVariant ? `$${amount.toFixed(2).replace(/\.00$/, '')}` : '';
+  const price = pricingVariant
+    ? `$${amount.toFixed(2).replace(/\.00$/, '')}`
+    : '';
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -83,13 +86,12 @@ export default function ProductPreview({ handle }) {
     }
   };
 
-
   return (
     <div className="product-preview grid gap-8">
       {images.length > 0 && (
         <div className="product-carousel">
           <div className="carousel-inner relative overflow-hidden aspect-2/3 bg-neutral-900">
-          {/* TODO test srcSet and sizes */}
+            {/* TODO test srcSet and sizes */}
             {images.map((img, idx) => {
               const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
               const srcSet = widths
@@ -163,8 +165,9 @@ export default function ProductPreview({ handle }) {
         <div className="product-price text-4xl">{price}</div>
         <div
           className="product-description leading-relaxed text-lg"
-          // @TODO fix dangerouslySetInnerHTML
-          dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
+          dangerouslySetInnerHTML={{
+            __html: DOMPurify.sanitize(product.descriptionHtml),
+          }}
         />
       </div>
 
