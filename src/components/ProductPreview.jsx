@@ -7,24 +7,28 @@ export default function ProductPreview({ handle }) {
   const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
-  // Sandbox states
-  const [randomVariant, setRandomVariant] = useState(null);
+  // State for inventory polling
+  const [selectedVariantId, setSelectedVariantId] = useState(null);
   const [isLoadingSandbox, setIsLoadingSandbox] = useState(false);
   const [sandboxError, setSandboxError] = useState(null);
 
   useEffect(() => {
     async function fetchProduct() {
       try {
-        const product = await client.product.fetchByHandle(handle);
-        setProduct(product);
+        const fetchProduct = await client.product.fetchByHandle(handle);
+        setProduct(fetchProduct);
+        if (loading) setLoading(false);
       } catch (error) {
         console.error('Error fetching product:', error);
-      } finally {
-        setLoading(false);
+        if (loading) setLoading(false);
       }
     }
+
     fetchProduct();
-  }, [handle]);
+    // Poll every 5 seconds for inventory updates
+    const interval = setInterval(fetchProduct, 5000);
+    return () => clearInterval(interval);
+  }, [handle, loading]);
 
   if (loading) return <div className="p-8 text-center">Loading product...</div>;
   if (!product)
@@ -33,9 +37,9 @@ export default function ProductPreview({ handle }) {
     );
 
   const images = product.images || [];
-  const variant = product.variants[0];
-  const amount = variant ? parseFloat(variant.price.amount) : 0;
-  const price = variant ? `$${amount.toFixed(2)}` : '';
+  const pricingVariant = product.variants[0];
+  const amount = pricingVariant ? parseFloat(pricingVariant.price.amount) : 0;
+  const price = pricingVariant ? `$${amount.toFixed(2).replace(/\.00$/, '')}` : '';
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev + 1) % images.length);
@@ -45,17 +49,18 @@ export default function ProductPreview({ handle }) {
     setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
   };
 
-  // Sandbox functions
-  function rollNumber() {
-    const available = product.variants.filter((v) => v.available);
-    const selected = available[Math.floor(Math.random() * available.length)];
-    setRandomVariant(selected);
-  }
+  const buyNow = async (variantIdToBuy) => {
+    let targetVariantId = variantIdToBuy || selectedVariantId;
 
-  const buyNow = async () => {
-    if (!randomVariant) {
-      setSandboxError('Please roll for a number first!');
-      return;
+    // If no variant selected (Blind Buy mode), pick a random available one
+    if (!targetVariantId) {
+      const available = product.variants.filter((v) => v.available);
+      if (available.length === 0) {
+        setSandboxError('Sorry, this item is sold out!');
+        return;
+      }
+      const random = available[Math.floor(Math.random() * available.length)];
+      targetVariantId = random.id;
     }
 
     setIsLoadingSandbox(true);
@@ -65,7 +70,7 @@ export default function ProductPreview({ handle }) {
       const checkout = await client.checkout.create();
       await client.checkout.addLineItems(checkout.id, [
         {
-          variantId: randomVariant.id,
+          variantId: targetVariantId,
           quantity: 1,
         },
       ]);
@@ -77,11 +82,13 @@ export default function ProductPreview({ handle }) {
     }
   };
 
+
   return (
     <div className="product-preview grid gap-8">
       {images.length > 0 && (
         <div className="product-carousel">
           <div className="carousel-inner relative overflow-hidden aspect-2/3 bg-neutral-900">
+          {/* TODO test srcSet and sizes */}
             {images.map((img, idx) => {
               const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
               const srcSet = widths
@@ -161,16 +168,11 @@ export default function ProductPreview({ handle }) {
 
       <div className="product-experience max-w-full text-left">
         <RealTimeDropStore
+          variants={product.variants}
+          selectedVariantId={selectedVariantId}
+          onSelectVariant={setSelectedVariantId}
           onBuy={buyNow}
           isLoading={isLoadingSandbox}
-          onRoll={(number) => {
-            setSandboxError(null);
-            const available = product.variants.filter((v) => v.available);
-            // Since variants are 1-indexed in the UI, we match by index or logic
-            // For now, let's assume the roll number corresponds to the variant index or just pick one
-            const selected = product.variants[number - 1] || available[0];
-            setRandomVariant(selected);
-          }}
         />
 
         {/* @TODO improve mobile display (toast?) */}
