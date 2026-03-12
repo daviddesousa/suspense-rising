@@ -55,13 +55,19 @@ export default function MiniAudioPlayer({ src }) {
   // ------------------------------------------------------------------
   const handleTouchStart = useCallback(
     (e) => {
-      e.preventDefault(); // prevent ghost clicks
+      e.preventDefault(); // prevent ghost clicks & text selection
       holdTimer.current = setTimeout(() => {
         unmute();
       }, 200); // slight delay so quick taps don't trigger
     },
     [unmute],
   );
+
+  // Prevent the browser from starting a text-selection drag while the
+  // user is holding the player on iOS.
+  const handleTouchMove = useCallback((e) => {
+    e.preventDefault();
+  }, []);
 
   const handleTouchEnd = useCallback(() => {
     clearTimeout(holdTimer.current);
@@ -79,6 +85,7 @@ export default function MiniAudioPlayer({ src }) {
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
       onTouchStart={handleTouchStart}
+      onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
       onTouchCancel={handleTouchEnd}
       aria-label={
@@ -119,7 +126,10 @@ export default function MiniAudioPlayer({ src }) {
           border-radius: 100px;
           cursor: pointer;
           user-select: none;
+          -webkit-user-select: none;
+          -webkit-touch-callout: none;
           -webkit-tap-highlight-color: transparent;
+          touch-action: none;
           transition: border-color 0.4s ease, background 0.4s ease;
           background: rgba(255, 255, 255, 0.03);
         }
