@@ -30,7 +30,7 @@ const itemVariants = {
 
 export default function Releases() {
   return (
-    <main>
+    <main className="py-(--gutter-size) mb-auto">
       <section className="page-width" id="releases">
         <Motion.h2
           className="section-title"
@@ -124,13 +124,13 @@ export default function Releases() {
           >
             <h3>Haffenfold - Haslow (SR001)</h3>
             <p>
-              Meet Haslow. He speaks with charm and moves with grace but there’s
-              something cold beneath his smile, like a man who’s witnessed
-              nights he refuses to speak of. His eyes scan every dancefloor like
-              he’s always preparing for someone to betray him or worse,
-              recognize him. The closer you get to Haslow, the more it feels
-              like you’re walking into a house without walls, just layers of
-              smoke and mirrors...
+              Meet Haslow. He speaks with charm and moves with grace, but
+              there’s something cold beneath his smile, like a man who’s
+              witnessed nights he refuses to speak of. His eyes scan every
+              dancefloor like he’s always preparing for someone to betray him or
+              worse, recognize him. The closer you get to Haslow, the more it
+              feels like you’re walking into a house without walls, just layers
+              of smoke and mirrors...
             </p>
             <div className="release-links">
               <a
