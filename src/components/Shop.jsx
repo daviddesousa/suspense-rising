@@ -10,6 +10,13 @@ const SHOP_CONTENT = [
 ];
 
 export default function Shop() {
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth',
+    });
+  };
+
   return (
     <main>
       <ShopSection key="dsa89ds9d6as7d6s9ad678as987d" text="Meet Haslow." />
@@ -22,8 +29,19 @@ export default function Shop() {
 
       <div className="h-svh"></div>
 
-      <section className="page-width pb-30">
-        <ProductPreview handle="the-haslow-tee" />
+      <section className="page-width">
+        <div className="mb-20">
+          <ProductPreview handle="the-haslow-tee" />
+        </div>
+        
+        <div className="flex justify-center pb-20">
+          <button
+            onClick={scrollToTop}
+            className="text-white/50 hover:text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[10px] font-bold border-b border-white/10 hover:border-white pb-1"
+          >
+            Back to top
+          </button>
+        </div>
       </section>
     </main>
   );
