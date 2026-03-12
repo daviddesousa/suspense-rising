@@ -49,18 +49,35 @@ export default function Shop() {
     });
 
     if (bgContainerRef.current && animationSpacerRef.current) {
+      const spacerTrigger = {
+        trigger: animationSpacerRef.current,
+        start: 'top bottom',
+        end: 'bottom top',
+        scrub: true,
+      };
+
       gsap.to(bgContainerRef.current, {
-        scrollTrigger: {
-          trigger: animationSpacerRef.current,
-          start: 'top bottom',
-          end: 'bottom top',
-          scrub: true,
-        },
+        scrollTrigger: spacerTrigger,
         scale: 2.5,
         filter: 'blur(10px)',
         opacity: 0,
         ease: 'power1.inOut',
       });
+
+      // Hide the mini audio player in sync
+      gsap.fromTo(playerRef.current,
+        {
+          y: '0%',
+          opacity: 1,
+        },
+        {
+          scrollTrigger: spacerTrigger,
+          y: '120%',
+          opacity: 0,
+          ease: 'power1.inOut',
+          immediateRender: false,
+        }
+      );
     }
   }, []);
 
