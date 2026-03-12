@@ -127,7 +127,7 @@ export default function Shop() {
         <div className="mb-20">
           <ProductPreview handle="the-haslow-tee" />
         </div>
-        <div className="flex justify-center pb-20">
+        <div className="flex justify-center py-8">
           <button
             onClick={scrollToTop}
             className="text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[12px] font-bold border-b border-white/10 hover:border-white pb-1 cursor-pointer"
