@@ -2,6 +2,7 @@ import ShopSection from './ShopSection';
 import ProductPreview from './ProductPreview';
 import HaslowBackground from './HaslowBackground';
 import ScrollIndicator from './ScrollIndicator';
+import MiniAudioPlayer from './MiniAudioPlayer';
 
 const SHOP_CONTENT = [
   'He speaks with charm and moves with grace',
@@ -24,6 +25,10 @@ export default function Shop() {
 
       <ShopSection key="dsa89ds9d6as7d6s9ad678as987d" text="Meet Haslow." />
 
+      <div className="fixed right-8 bottom-8 z-50">
+        <MiniAudioPlayer src="/vocal_loop.mp3" />
+      </div>
+
       <HaslowBackground />
 
       {SHOP_CONTENT.map((text, index) => (
@@ -36,7 +41,6 @@ export default function Shop() {
         <div className="mb-20">
           <ProductPreview handle="the-haslow-tee" />
         </div>
-        
         <div className="flex justify-center pb-20">
           <button
             onClick={scrollToTop}
