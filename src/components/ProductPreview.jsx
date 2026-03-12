@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
+import useEmblaCarousel from 'embla-carousel-react';
 import { client } from '../lib/shopify';
 import RealTimeDropStore from './RealTimeDropStore';
 import DOMPurify from 'dompurify';
@@ -32,6 +33,32 @@ export default function ProductPreview({ handle }) {
     // return () => clearInterval(interval);
   }, [handle, loading]);
 
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+
+  const scrollPrev = useCallback(() => {
+    if (emblaApi) emblaApi.scrollPrev();
+  }, [emblaApi]);
+
+  const scrollNext = useCallback(() => {
+    if (emblaApi) emblaApi.scrollNext();
+  }, [emblaApi]);
+
+  const onSelect = useCallback(() => {
+    if (!emblaApi) return;
+    setCurrentImageIndex(emblaApi.selectedScrollSnap());
+  }, [emblaApi, setCurrentImageIndex]);
+
+  useEffect(() => {
+    if (!emblaApi) return;
+    onSelect();
+    emblaApi.on('select', onSelect);
+    emblaApi.on('reInit', onSelect);
+    return () => {
+      emblaApi.off('select', onSelect);
+      emblaApi.off('reInit', onSelect);
+    };
+  }, [emblaApi, onSelect]);
+
   if (loading) return <div className="p-8 text-center">Loading product...</div>;
   if (!product)
     return (
@@ -44,14 +71,6 @@ export default function ProductPreview({ handle }) {
   const price = pricingVariant
     ? `$${amount.toFixed(2).replace(/\.00$/, '')}`
     : '';
-
-  const nextImage = () => {
-    setCurrentImageIndex((prev) => (prev + 1) % images.length);
-  };
-
-  const prevImage = () => {
-    setCurrentImageIndex((prev) => (prev - 1 + images.length) % images.length);
-  };
 
   const buyNow = async (variantIdToBuy) => {
     let targetVariantId = variantIdToBuy || selectedVariantId;
@@ -90,32 +109,39 @@ export default function ProductPreview({ handle }) {
     <div className="product-preview grid gap-8">
       {images.length > 0 && (
         <div className="product-carousel">
-          <div className="carousel-inner relative overflow-hidden aspect-2/3 bg-neutral-900">
-            {/* TODO test srcSet and sizes */}
-            {images.map((img, idx) => {
-              const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
-              const srcSet = widths
-                .map((width) => `${img.src}&width=${width} ${width}w`)
-                .join(', ');
+          <div
+            className="carousel-inner relative overflow-hidden aspect-2/3 bg-neutral-900"
+            ref={emblaRef}
+          >
+            <div className="flex h-full touch-pan-y">
+              {/* TODO test srcSet and sizes */}
+              {images.map((img, idx) => {
+                const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
+                const srcSet = widths
+                  .map((width) => `${img.src}&width=${width} ${width}w`)
+                  .join(', ');
 
-              return (
-                <img
-                  key={img.id}
-                  src={`${img.src}&width=800`}
-                  srcSet={srcSet}
-                  sizes="(min-width: 64rem) 30vw, 90vw"
-                  alt={product.title}
-                  className={`absolute inset-0 w-full h-full object-cover transition-opacity duration-500 ${
-                    idx === currentImageIndex ? 'opacity-100' : 'opacity-0'
-                  }`}
-                />
-              );
-            })}
+                return (
+                  <div
+                    key={img.id}
+                    className="flex-[0_0_100%] min-w-0 relative h-full"
+                  >
+                    <img
+                      src={`${img.src}&width=800`}
+                      srcSet={srcSet}
+                      sizes="(min-width: 64rem) 30vw, 90vw"
+                      alt={product.title}
+                      className="absolute inset-0 w-full h-full object-cover select-none"
+                    />
+                  </div>
+                );
+              })}
+            </div>
 
             {images.length > 1 && (
               <>
                 <button
-                  onClick={prevImage}
+                  onClick={scrollPrev}
                   className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full transition-colors z-10"
                   aria-label="Previous image"
                 >
@@ -131,7 +157,7 @@ export default function ProductPreview({ handle }) {
                   </svg>
                 </button>
                 <button
-                  onClick={nextImage}
+                  onClick={scrollNext}
                   className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full transition-colors z-10"
                   aria-label="Next image"
                 >
@@ -146,7 +172,7 @@ export default function ProductPreview({ handle }) {
                     <path d="M9 18l6-6-6-6" />
                   </svg>
                 </button>
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10">
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10 pointer-events-none">
                   {images.map((_, idx) => (
                     <div
                       key={idx}
