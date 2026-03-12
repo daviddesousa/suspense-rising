@@ -375,6 +375,28 @@ hr {
   .preview {
     grid-row-gap: 4rem;
   }
+
+  .product-preview {
+    display: grid;
+    gap: 1.5rem 2rem;
+    grid-template-areas:
+      'slider description'
+      'slider experience';
+    grid-template-columns: 30vw 1fr;
+    grid-template-rows: auto 1fr;
+  }
+
+  .product-carousel {
+    grid-area: slider;
+  }
+
+  .product-info {
+    grid-area: description;
+  }
+
+  .product-experience {
+    grid-area: experience;
+  }
 }
 
 .main-image-wrapper {
