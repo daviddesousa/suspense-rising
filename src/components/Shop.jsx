@@ -1,6 +1,7 @@
 import ShopSection from './ShopSection';
 import ProductPreview from './ProductPreview';
 import HaslowBackground from './HaslowBackground';
+import ScrollIndicator from './ScrollIndicator';
 
 const SHOP_CONTENT = [
   'He speaks with charm and moves with grace',
@@ -19,6 +20,8 @@ export default function Shop() {
 
   return (
     <main>
+      <ScrollIndicator />
+
       <ShopSection key="dsa89ds9d6as7d6s9ad678as987d" text="Meet Haslow." />
 
       <HaslowBackground />
