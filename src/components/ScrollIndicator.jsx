@@ -16,7 +16,7 @@ const ScrollIndicator = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 1.2, duration: 1 }}
-        className="text-[10px] uppercase tracking-[0.4em] font-medium text-white/70"
+        className="text-[10px] uppercase tracking-[0.4em] text-white/70"
       >
         Scroll
       </Motion.span>
