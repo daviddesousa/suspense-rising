@@ -40,7 +40,7 @@ export default function Shop() {
         <div className="flex justify-center pb-20">
           <button
             onClick={scrollToTop}
-            className="text-white/50 hover:text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[10px] font-bold border-b border-white/10 hover:border-white pb-1"
+            className="text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[12px] font-bold border-b border-white/10 hover:border-white pb-1 cursor-pointer"
           >
             Back to top
           </button>
