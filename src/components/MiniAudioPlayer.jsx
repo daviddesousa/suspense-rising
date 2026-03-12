@@ -115,7 +115,7 @@ export default function MiniAudioPlayer({ src }) {
           align-items: center;
           gap: 8px;
           padding: 8px 14px;
-          border: 1px solid rgba(255, 255, 255, 0.08);
+          border: 1px solid rgba(255, 255, 255, 0.6);
           border-radius: 100px;
           cursor: pointer;
           user-select: none;
@@ -138,7 +138,7 @@ export default function MiniAudioPlayer({ src }) {
         }
 
         .speaker-icon--muted {
-          opacity: 0.25;
+          opacity: 0.6;
         }
 
         .speaker-icon--active {
@@ -157,7 +157,7 @@ export default function MiniAudioPlayer({ src }) {
         .wave-bar {
           width: 2px;
           border-radius: 2px;
-          background: rgba(255, 255, 255, 0.18);
+          background: rgba(255, 255, 255, 1);
           animation: idleWave 2.2s ease-in-out infinite;
           transform-origin: center bottom;
           will-change: height, opacity;
@@ -165,13 +165,13 @@ export default function MiniAudioPlayer({ src }) {
 
         /* Muted: very subtle, slow pulse */
         @keyframes idleWave {
-          0%, 100% { height: 4px;  opacity: 0.15; }
-          50%       { height: 8px;  opacity: 0.25; }
+          0%, 100% { height: 4px;  opacity: 0.25; }
+          50%       { height: 8px;  opacity: 0.35; }
         }
 
         /* Active: bright, lively bars */
         .wave-bar--active {
-          background: rgba(255, 255, 255, 0.85);
+          background: rgba(255, 255, 255, 1);
           animation: activeWave 0.7s ease-in-out infinite alternate;
         }
 

@@ -1,8 +1,14 @@
+import { useRef } from 'react';
+import { useGSAP } from '@gsap/react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import ShopSection from './ShopSection';
 import ProductPreview from './ProductPreview';
 import HaslowBackground from './HaslowBackground';
 import ScrollIndicator from './ScrollIndicator';
 import MiniAudioPlayer from './MiniAudioPlayer';
+
+gsap.registerPlugin(ScrollTrigger, useGSAP);
 
 const SHOP_CONTENT = [
   'He speaks with charm and moves with grace',
@@ -12,6 +18,35 @@ const SHOP_CONTENT = [
 ];
 
 export default function Shop() {
+  const haslowRef = useRef(null);
+  const playerRef = useRef(null);
+
+  useGSAP(() => {
+    if (!haslowRef.current || !playerRef.current) return;
+
+    // Slide IN on scroll down, slide OUT only when scrolling back above the trigger.
+    // No onLeave — so the player stays visible for the rest of the page.
+    ScrollTrigger.create({
+      trigger: haslowRef.current,
+      // markers: true,
+      start: 'bottom bottom',
+      onEnter: () =>
+        gsap.to(playerRef.current, {
+          y: '0%',
+          opacity: 1,
+          duration: 0.7,
+          ease: 'power1.out',
+        }),
+      onLeaveBack: () =>
+        gsap.to(playerRef.current, {
+          y: '120%',
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power1.in',
+        }),
+    });
+  }, []);
+
   const scrollToTop = () => {
     window.scrollTo({
       top: 0,
@@ -25,11 +60,22 @@ export default function Shop() {
 
       <ShopSection key="dsa89ds9d6as7d6s9ad678as987d" text="Meet Haslow." />
 
-      <div className="fixed right-8 bottom-8 z-50">
-        <MiniAudioPlayer src="/vocal_loop.mp3" />
+      {/* Ref wrapper — marks the trigger point */}
+      <div
+        ref={haslowRef}
+        className="sticky top-0 w-full h-svh -z-1 after:absolute after:inset-0 after:bg-black/70"
+      >
+        <HaslowBackground />
       </div>
 
-      <HaslowBackground />
+      {/* Fixed player — slides in via GSAP */}
+      <div
+        ref={playerRef}
+        style={{ transform: 'translateY(120%)', opacity: 0 }}
+        className="fixed right-8 bottom-8 z-50"
+      >
+        <MiniAudioPlayer src="/vocal_loop.mp3" />
+      </div>
 
       {SHOP_CONTENT.map((text, index) => (
         <ShopSection key={index} text={text} />

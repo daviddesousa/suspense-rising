@@ -15,7 +15,7 @@ const ScrollIndicator = () => {
       <Motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.3, duration: 1 }}
+        transition={{ delay: 1.2, duration: 1 }}
         className="text-[10px] uppercase tracking-[0.4em] font-medium text-white/70"
       >
         Scroll
@@ -24,7 +24,7 @@ const ScrollIndicator = () => {
       <Motion.div
         initial={{ opacity: 0, height: 0 }}
         animate={{ opacity: 1, height: 48 }}
-        transition={{ delay: 1.5, duration: 1.5, ease: "easeOut" }}
+        transition={{ delay: 1.4, duration: 1.5, ease: "easeOut" }}
         className="relative w-px bg-white/10 overflow-hidden"
       >
         <Motion.div
