@@ -20,7 +20,9 @@ export default function Shop() {
         <ShopSection key={index} text={text} />
       ))}
 
-      <section className="h-svh flex items-center justify-center">
+      <div className="h-svh"></div>
+
+      <section className="page-width pb-30">
         <ProductPreview handle="the-haslow-tee" />
       </section>
     </main>

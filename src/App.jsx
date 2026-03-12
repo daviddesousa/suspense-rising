@@ -26,7 +26,6 @@ function App() {
       root
       options={{
         autoRaf: false,
-        prevent: (node) => node.id === 'preview-modal',
       }}
       ref={lenisRef}
     >
