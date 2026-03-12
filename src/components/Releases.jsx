@@ -1,16 +1,16 @@
 import { motion as Motion } from 'motion/react';
 
-import haslow302 from '../assets/haslow-302.jpg';
-import haslow672 from '../assets/haslow-672.jpg';
-import haslow906 from '../assets/haslow-906.jpg';
-import haslow1208 from '../assets/haslow-1208.jpg';
-import haslow1600 from '../assets/haslow-1600.jpg';
+import haslow302 from '../assets/releases/haslow-302.jpg';
+import haslow672 from '../assets/releases/haslow-672.jpg';
+import haslow906 from '../assets/releases/haslow-906.jpg';
+import haslow1208 from '../assets/releases/haslow-1208.jpg';
+import haslow1600 from '../assets/releases/haslow-1600.jpg';
 
-import petrone302 from '../assets/petrone-302.jpg';
-import petrone672 from '../assets/petrone-672.jpg';
-import petrone906 from '../assets/petrone-906.jpg';
-import petrone1208 from '../assets/petrone-1208.jpg';
-import petrone1600 from '../assets/petrone-1600.jpg';
+import petrone302 from '../assets/releases/petrone-302.jpg';
+import petrone672 from '../assets/releases/petrone-672.jpg';
+import petrone906 from '../assets/releases/petrone-906.jpg';
+import petrone1208 from '../assets/releases/petrone-1208.jpg';
+import petrone1600 from '../assets/releases/petrone-1600.jpg';
 
 const itemVariants = {
   initial: { opacity: 0, scale: 0.8 },
