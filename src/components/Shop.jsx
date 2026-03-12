@@ -1,5 +1,5 @@
 import ShopSection from './ShopSection';
-import Carousel3D from './Carousel3D';
+import ProductPreview from './ProductPreview';
 import HaslowBackground from './HaslowBackground';
 
 const SHOP_CONTENT = [
@@ -20,7 +20,9 @@ export default function Shop() {
         <ShopSection key={index} text={text} />
       ))}
 
-      <Carousel3D />
+      <section className="h-svh flex items-center justify-center">
+        <ProductPreview handle="the-haslow-tee" />
+      </section>
     </main>
   );
 }
