@@ -159,10 +159,11 @@ export default function ProductPreview({ handle }) {
       )}
 
       <div className="product-info space-y-4 text-left">
-        <h1 className="text-5xl uppercase font-bold tracking-tighter">{product.title}</h1>
-        <div className="product-price text-[27px] font-medium">{price}</div>
+        <h1 className="text-5xl uppercase font-bold">{product.title}</h1>
+        <div className="product-price text-4xl">{price}</div>
         <div
-          className="product-description leading-relaxed font-light text-lg"
+          className="product-description leading-relaxed text-lg"
+          // @TODO fix dangerouslySetInnerHTML
           dangerouslySetInnerHTML={{ __html: product.descriptionHtml }}
         />
       </div>
