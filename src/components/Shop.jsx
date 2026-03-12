@@ -65,7 +65,8 @@ export default function Shop() {
       });
 
       // Hide the mini audio player in sync
-      gsap.fromTo(playerRef.current,
+      gsap.fromTo(
+        playerRef.current,
         {
           y: '0%',
           opacity: 1,
@@ -76,7 +77,7 @@ export default function Shop() {
           opacity: 0,
           ease: 'power1.inOut',
           immediateRender: false,
-        }
+        },
       );
     }
   }, []);
@@ -123,11 +124,11 @@ export default function Shop() {
       {/* Spacer for the haslow zoom/blur animation */}
       <div ref={animationSpacerRef} className="h-svh" />
 
-      <section className="page-width relative z-10 pt-20">
-        <div className="mb-20">
+      <section className="page-width relative z-10 h-svh flex flex-col justify-center">
+        <div className="mb-10">
           <ProductPreview handle="the-haslow-tee" />
         </div>
-        <div className="flex justify-center py-8">
+        <div className="flex justify-center py-4">
           <button
             onClick={scrollToTop}
             className="text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[12px] font-bold border-b border-white/10 hover:border-white pb-1 cursor-pointer"
