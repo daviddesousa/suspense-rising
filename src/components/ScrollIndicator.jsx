@@ -2,6 +2,7 @@ import { motion as Motion, useScroll, useTransform } from 'motion/react';
 
 const ScrollIndicator = () => {
   const { scrollY } = useScroll();
+  const delay = 1.1;
 
   // Fade out the indicator as the user scrolls down
   const opacity = useTransform(scrollY, [0, 300], [1, 0]);
@@ -15,7 +16,7 @@ const ScrollIndicator = () => {
       <Motion.span
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ delay: 1.2, duration: 1 }}
+        transition={{ delay: delay, duration: 1 }}
         className="text-md uppercase tracking-[0.4em] text-white/90"
       >
         Scroll
@@ -24,7 +25,7 @@ const ScrollIndicator = () => {
       <Motion.div
         initial={{ opacity: 0, height: 0 }}
         animate={{ opacity: 1, height: 80 }}
-        transition={{ delay: 1.4, duration: 1.5, ease: "easeOut" }}
+        transition={{ delay: delay + 0.2, duration: 1.5, ease: "easeOut" }}
         className="relative w-px bg-white/10 overflow-hidden"
       >
         <Motion.div
