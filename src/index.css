@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+@theme {
+  --breakpoint-laptop-lg: 90rem; /* 1440px */
+  --breakpoint-3xl: 120rem; /* 1920px */
+}
+
 @font-face {
   font-family: 'Felony Condensed';
   /* Prefer woff2 if you add a .woff2 font to assets; fall back to the existing OTF.
@@ -229,7 +234,7 @@ a {
   display: flex;
   flex-direction: column;
   min-height: 100svh;
-  max-width: 1440px;
+  max-width: var(--breakpoint-laptop-lg);
   margin-left: auto;
   margin-right: auto;
 }
@@ -365,4 +370,17 @@ hr {
 
 .carousel-button-arrow {
   display: none;
+}
+
+.mini-audio-player-wrapper {
+  @apply fixed z-50;
+
+  @variant pointer-coarse {
+    @apply right-8 bottom-8;
+  }
+
+  @variant pointer-fine {
+    @apply text-right left-4 right-4 bottom-[calc(50%-14px)] 3xl:right-17
+      mx-auto max-w-(--breakpoint-laptop-lg) 2xl:max-w-none 3xl:max-w-(--breakpoint-3xl);
+  }
 }
