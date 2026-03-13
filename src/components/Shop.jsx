@@ -112,7 +112,7 @@ export default function Shop() {
       <div
         ref={playerRef}
         style={{ transform: 'translateY(120%)', opacity: 0 }}
-        className="fixed right-8 bottom-8 z-50"
+        className="mini-audio-player-wrapper"
       >
         <MiniAudioPlayer src="/haslow_vocal_tee.mp3" />
       </div>

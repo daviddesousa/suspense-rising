@@ -59,7 +59,7 @@ const ShopSection = ({ text }) => {
           5) 1280 x 720
           4) 1366 x 768
           3) 1536 x 864
-          1) 1920 x 1080
+          1) 1920 x 1080 Mac mini Apple M2
       */}
       <p
         className="
@@ -67,7 +67,7 @@ const ShopSection = ({ text }) => {
           text-white uppercase font-bold tracking-tighter
           text-4xl md:text-6xl 2xl:text-7xl
           px-3 min-[384px]:px-6 min-[414px]:px-9 min-[425px]:px-10 md:px-24 2xl:px-0
-          max-md:max-w-[425px] md:max-w-3xl xl:max-w-none 2xl:max-w-[1440px]
+          max-md:max-w-[425px] md:max-w-3xl xl:max-w-none 2xl:max-w-(--breakpoint-laptop-lg)
          "
       >
         {text.split(' ').map((word, i) => (
