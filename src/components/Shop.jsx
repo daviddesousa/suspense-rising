@@ -114,7 +114,7 @@ export default function Shop() {
         style={{ transform: 'translateY(120%)', opacity: 0 }}
         className="fixed right-8 bottom-8 z-50"
       >
-        <MiniAudioPlayer src="/haslow_vocal_CBR_320.mp3" />
+        <MiniAudioPlayer src="/haslow_vocal_tee.mp3" />
       </div>
 
       {SHOP_CONTENT.map((text, index) => (
