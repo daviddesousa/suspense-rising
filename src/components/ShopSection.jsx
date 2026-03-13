@@ -39,7 +39,37 @@ const ShopSection = ({ text }) => {
       ref={sectionRef}
       className="h-[50svh] flex items-center justify-center"
     >
-      <p className="text-4xl md:text-6xl text-white uppercase font-bold tracking-tighter flex flex-wrap justify-center gap-x-[0.25em] gap-y-2 max-w-5xl mx-auto px-6">
+      {/* 
+        Mobile Screen Resolution Stats Worldwide (Feb 2025 - Feb 2026)
+        https://gs.statcounter.com/screen-resolution-stats/mobile/worldwide
+
+        In order of resolution (smallest to largest):
+          2) 360 x 800 Samsung Galaxy S8+ || BlackBerry Z30
+          5) 384 x 832 Nexus 4
+          3) 390 x 844 iPhone 12 Pro
+          4) 393 x 873 Pixel 3
+          1) 414 x 896 iPhone XR
+
+        Desktop Screen Resolution Stats Worldwide (Feb 2025 - Feb 2026)
+        https://gs.statcounter.com/screen-resolution-stats/desktop/worldwide
+
+        In order of resolution (smallest to largest):
+          6) 800 x 600
+          2) 1280 x 1200
+          5) 1280 x 720
+          4) 1366 x 768
+          3) 1536 x 864
+          1) 1920 x 1080
+      */}
+      <p
+        className="
+          flex flex-wrap justify-center gap-x-[0.25em] gap-y-2 mx-auto
+          text-white uppercase font-bold tracking-tighter
+          text-4xl md:text-6xl 2xl:text-7xl
+          px-3 min-[384px]:px-6 min-[414px]:px-9 min-[425px]:px-10 md:px-24 2xl:px-0
+          max-md:max-w-[425px] md:max-w-3xl xl:max-w-none 2xl:max-w-[1440px]
+         "
+      >
         {text.split(' ').map((word, i) => (
           <span
             key={i}
