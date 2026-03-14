@@ -340,6 +340,16 @@ hr {
   }
 }
 
+.product-description {
+  ul li {
+    @apply mt-2 text-pretty;
+  }
+
+  ul li strong {
+    @apply block;
+  }
+}
+
 .main-image-wrapper {
   position: relative;
 }

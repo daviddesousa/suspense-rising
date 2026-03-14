@@ -108,7 +108,7 @@ export default function ProductPreview({ handle }) {
   return (
     <div className="product-preview grid gap-8">
       {images.length > 0 && (
-        <div className="product-carousel">
+        <div className="product-carousel -mx-(--gutter-size)">
           <div
             className="carousel-inner relative overflow-hidden aspect-2/3 bg-neutral-900"
             ref={emblaRef}
@@ -142,7 +142,7 @@ export default function ProductPreview({ handle }) {
               <>
                 <button
                   onClick={scrollPrev}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full transition-colors z-10"
+                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full transition-colors z-10 pointer-coarse:hidden"
                   aria-label="Previous image"
                 >
                   <svg
@@ -158,7 +158,7 @@ export default function ProductPreview({ handle }) {
                 </button>
                 <button
                   onClick={scrollNext}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full transition-colors z-10"
+                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full transition-colors z-10 pointer-coarse:hidden"
                   aria-label="Next image"
                 >
                   <svg
@@ -190,7 +190,7 @@ export default function ProductPreview({ handle }) {
         <h1 className="text-5xl uppercase font-bold">{product.title}</h1>
         <div className="product-price text-4xl">{price}</div>
         <div
-          className="product-description leading-relaxed text-lg"
+          className="product-description font-mono leading-relaxed text-sm space-y-6"
           dangerouslySetInnerHTML={{
             __html: DOMPurify.sanitize(product.descriptionHtml),
           }}

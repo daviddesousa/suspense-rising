@@ -113,11 +113,11 @@ const RealTimeDropStore = ({
                 onClick={() => onBuy()}
                 disabled={!selectedVariantId || isLoading}
                 className={`
-                  w-full py-4 bg-white text-black text-xl font-bold uppercase tracking-widest transition-all
+                  w-full py-4 bg-amber-600 text-black text-xl font-bold uppercase tracking-widest transition-all
                   ${
                     !selectedVariantId || isLoading
                       ? 'opacity-50 cursor-not-allowed'
-                      : 'hover:bg-neutral-200 hover:scale-[1.02] active:scale-95 cursor-pointer'
+                      : 'hover:bg-amber-500 hover:scale-[1.02] active:scale-95 cursor-pointer'
                   }
                 `}
               >
@@ -135,7 +135,7 @@ const RealTimeDropStore = ({
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            className="space-y-8 py-8"
+            className="space-y-8 py-2"
           >
             <div className="text-center space-y-4 max-w-sm mx-auto">
               <div className="w-20 h-20 bg-neutral-900 border border-neutral-800 rounded-full flex items-center justify-center mx-auto mb-6">

@@ -124,11 +124,11 @@ export default function Shop() {
       {/* Spacer for the haslow zoom/blur animation */}
       <div ref={animationSpacerRef} className="h-svh" />
 
-      <section className="page-width relative z-10 h-svh flex flex-col justify-center">
+      <section className="page-width relative z-10 h-svh flex flex-col justify-center max-sm:pt-200">
         <div className="mb-10">
           <ProductPreview handle="the-haslow-tee" />
         </div>
-        <div className="flex justify-center py-4">
+        <div className="flex justify-center pt-14 pb-10 sm:py-4">
           <button
             onClick={scrollToTop}
             className="text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[12px] font-bold border-b border-white/10 hover:border-white pb-1 cursor-pointer"
