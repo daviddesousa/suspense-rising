@@ -21,7 +21,11 @@ export default function ProductPreview({ handle }) {
     handle ? ['product', handle] : null,
     () => client.product.fetchByHandle(handle),
     {
-      refreshInterval: 5000,
+      refreshInterval:
+        import.meta.env.PROD ||
+        import.meta.env.VITE_ENABLE_PRODUCT_POLLING === 'true'
+          ? 5000
+          : 0,
       refreshWhenHidden: false,
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
