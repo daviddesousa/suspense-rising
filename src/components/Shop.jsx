@@ -126,7 +126,7 @@ export default function Shop() {
 
       <section className="page-width relative z-10 h-svh flex flex-col justify-center max-sm:pt-200">
         <div className="mb-10">
-          <ProductPreview handle="the-haslow-tee" />
+          <ProductPreview handle="the-haslow-tee-prototype" />
         </div>
         <div className="flex justify-center pt-14 pb-10 sm:py-4">
           <button
