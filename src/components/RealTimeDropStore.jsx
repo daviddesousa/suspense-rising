@@ -10,7 +10,6 @@ const RealTimeDropStore = ({
 }) => {
   const [activeExperience, setActiveExperience] = useState('choose'); // 'choose' | 'blind'
 
-  const selectedVariant = variants.find((v) => v.id === selectedVariantId);
   const availableCount = variants.filter((v) => v.available).length;
   const totalCount = variants.length;
 
