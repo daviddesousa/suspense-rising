@@ -110,21 +110,23 @@ const RealTimeDropStore = ({
             <div className="pt-4">
               <button
                 onClick={() => onBuy()}
-                disabled={!selectedVariantId || isLoading}
+                disabled={!selectedVariantId || isLoading || availableCount === 0}
                 className={`
                   w-full py-4 bg-amber-600 text-black text-xl font-bold uppercase tracking-widest transition-all
                   ${
-                    !selectedVariantId || isLoading
+                    !selectedVariantId || isLoading || availableCount === 0
                       ? 'opacity-50 cursor-not-allowed'
                       : 'hover:bg-amber-500 hover:scale-[1.02] active:scale-95 cursor-pointer'
                   }
                 `}
               >
-                {isLoading
-                  ? 'Processing...'
-                  : selectedVariantId
-                    ? `Buy Figure #${variants.findIndex((v) => v.id === selectedVariantId) + 1}`
-                    : 'Select a Number'}
+                {availableCount === 0
+                  ? 'Sold Out'
+                  : isLoading
+                    ? 'Processing...'
+                    : selectedVariantId
+                      ? `Buy Figure #${variants.findIndex((v) => v.id === selectedVariantId) + 1}`
+                      : 'Select a Number'}
               </button>
             </div>
           </Motion.div>
