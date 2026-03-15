@@ -27,10 +27,11 @@ export default function ProductPreview({ handle }) {
     }
 
     fetchProduct();
-    // @TODO disable polling during development. look at google ai canvas for "polling" to see how they do it.
+    // @TODO look at google ai canvas for "polling" to see how they do it.
+
     // Poll every 5 seconds for inventory updates
-    // const interval = setInterval(fetchProduct, 5000);
-    // return () => clearInterval(interval);
+    const interval = setInterval(fetchProduct, 5000);
+    return () => clearInterval(interval);
   }, [handle, loading]);
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
