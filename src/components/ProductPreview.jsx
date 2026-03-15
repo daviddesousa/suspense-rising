@@ -1,12 +1,11 @@
 import { useState, useEffect, useCallback } from 'react';
+import useSWR from 'swr';
 import useEmblaCarousel from 'embla-carousel-react';
 import { client } from '../lib/shopify';
 import RealTimeDropStore from './RealTimeDropStore';
 import DOMPurify from 'dompurify';
 
 export default function ProductPreview({ handle }) {
-  const [product, setProduct] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // State for inventory polling
@@ -14,25 +13,25 @@ export default function ProductPreview({ handle }) {
   const [isLoadingSandbox, setIsLoadingSandbox] = useState(false);
   const [sandboxError, setSandboxError] = useState(null);
 
-  useEffect(() => {
-    async function fetchProduct() {
-      try {
-        const fetchProduct = await client.product.fetchByHandle(handle);
-        setProduct(fetchProduct);
-        if (loading) setLoading(false);
-      } catch (error) {
-        console.error('Error fetching product:', error);
-        if (loading) setLoading(false);
-      }
-    }
+  const {
+    data: product,
+    error,
+    isLoading,
+  } = useSWR(
+    handle ? ['product', handle] : null,
+    () => client.product.fetchByHandle(handle),
+    {
+      refreshInterval: 5000,
+      refreshWhenHidden: false,
+      revalidateOnFocus: true,
+      revalidateOnReconnect: true,
+      dedupingInterval: 2000,
+      shouldRetryOnError: false,
+    },
+  );
 
-    fetchProduct();
-    // @TODO look at google ai canvas for "polling" to see how they do it.
-
-    // Poll every 5 seconds for inventory updates
-    const interval = setInterval(fetchProduct, 5000);
-    return () => clearInterval(interval);
-  }, [handle, loading]);
+  const loading = isLoading;
+  const productNotFound = !isLoading && !error && !product;
 
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
 
@@ -61,7 +60,13 @@ export default function ProductPreview({ handle }) {
   }, [emblaApi, onSelect]);
 
   if (loading) return <div className="p-8 text-center">Loading product...</div>;
-  if (!product)
+  if (error)
+    return (
+      <div className="p-8 text-center text-red-500">
+        Failed to load product.{error?.message ? ` (${error.message})` : ''}
+      </div>
+    );
+  if (productNotFound)
     return (
       <div className="p-8 text-center text-red-500">Product not found.</div>
     );
@@ -116,7 +121,7 @@ export default function ProductPreview({ handle }) {
           >
             <div className="flex h-full touch-pan-y">
               {/* TODO test srcSet and sizes */}
-              {images.map((img, idx) => {
+              {images.map((img) => {
                 const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
                 const srcSet = widths
                   .map((width) => `${img.src}&width=${width} ${width}w`)
