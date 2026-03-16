@@ -126,16 +126,18 @@ export default function Shop() {
 
       <section className="relative z-10 h-svh flex flex-col justify-center max-sm:pt-200 px-(--gutter-size)">
         <ProductPreview handle="the-haslow-tee" />
+        {/* TODO figure out what to do with back to top */}
+        {/*
+        <div className="flex justify-center mt-10 pt-14 pb-10 sm:py-4">
+          <button
+            onClick={scrollToTop}
+            className="text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[12px] font-bold border-b border-white/10 hover:border-white pb-1 cursor-pointer"
+          >
+            Back to top
+          </button>
+        </div>
+        */}
       </section>
-
-      <div className="flex justify-center pt-14 pb-10 sm:py-4">
-        <button
-          onClick={scrollToTop}
-          className="text-white transition-colors duration-300 uppercase tracking-[0.2em] text-[12px] font-bold border-b border-white/10 hover:border-white pb-1 cursor-pointer"
-        >
-          Back to top
-        </button>
-      </div>
     </main>
   );
 }
