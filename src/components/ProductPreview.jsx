@@ -118,7 +118,7 @@ export default function ProductPreview({ handle }) {
   return (
     <div className="product-preview grid gap-8">
       {images.length > 0 && (
-        <div className="product-carousel -mx-(--gutter-size)">
+        <div className="product-carousel max-sm:-mx-(--gutter-size)">
           <div
             className="carousel-inner relative overflow-hidden aspect-2/3 bg-neutral-900"
             ref={emblaRef}
@@ -139,7 +139,7 @@ export default function ProductPreview({ handle }) {
                     <img
                       src={`${img.src}&width=800`}
                       srcSet={srcSet}
-                      sizes="(min-width: 64rem) 30vw, 90vw"
+                      sizes="(min-width: 64rem) 33vw, 100vw"
                       alt={product.title}
                       className="absolute inset-0 w-full h-full object-cover select-none"
                     />

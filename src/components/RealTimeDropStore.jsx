@@ -69,7 +69,7 @@ const RealTimeDropStore = ({
               </div>
             </div>
 
-            <div className="grid grid-cols-5 md:grid-cols-10 gap-2">
+            <div className="grid grid-cols-5 sm:grid-cols-10 gap-2">
               {variants.map((variant, idx) => (
                 <button
                   key={variant.id}
