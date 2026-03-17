@@ -19,9 +19,20 @@ export default function MiniAudioPlayer({ src }) {
   const unmute = useCallback(() => {
     if (audioRef.current) {
       audioRef.current.muted = false;
-      audioRef.current.play().catch(() => {});
+      const playPromise = audioRef.current.play();
+      if (playPromise !== undefined) {
+        playPromise
+          .then(() => {
+            setActive(true);
+          })
+          .catch(() => {
+            // Autoplay blocked by browser policy; wait for user interaction
+            setActive(false);
+          });
+      } else {
+        setActive(true);
+      }
     }
-    setActive(true);
   }, []);
 
   const mute = useCallback(() => {
@@ -49,6 +60,15 @@ export default function MiniAudioPlayer({ src }) {
       mute();
     },
     [mute],
+  );
+
+  const handlePointerDown = useCallback(
+    (e) => {
+      if (e.pointerType === 'touch') return;
+      // Allow clicking the player to unmute if hover was blocked by autoplay policy
+      unmute();
+    },
+    [unmute],
   );
 
   // ------------------------------------------------------------------
@@ -85,6 +105,7 @@ export default function MiniAudioPlayer({ src }) {
       className="mini-audio-player"
       onPointerEnter={handlePointerEnter}
       onPointerLeave={handlePointerLeave}
+      onPointerDown={handlePointerDown}
       onTouchStart={handleTouchStart}
       onTouchMove={handleTouchMove}
       onTouchEnd={handleTouchEnd}
