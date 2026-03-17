@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => {
       {
         name: 'html-transform',
         transformIndexHtml(html) {
-          const beaconScript = isProduction
+          const beaconScript = isProduction && env.VITE_CLOUDFLARE_TOKEN
             ? `<script
       defer
       src="https://static.cloudflareinsights.com/beacon.min.js"
