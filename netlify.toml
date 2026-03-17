@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = "dist"
+
+[context.deploy-preview]
+  command = "npm run build -- --mode preview"
+
+[context.branch-deploy]
+  command = "npm run build -- --mode staging"

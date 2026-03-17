@@ -4,7 +4,7 @@ import react from '@vitejs/plugin-react'
 // https://vite.dev/config/
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
-  const isProduction = process.env.CONTEXT === 'production'
+  const isProduction = mode === 'production'
 
   return {
     plugins: [
@@ -17,8 +17,7 @@ export default defineConfig(({ mode }) => {
         name: 'html-transform',
         transformIndexHtml(html) {
           const beaconScript = isProduction
-            ? `
-    <script
+            ? `<script
       defer
       src="https://static.cloudflareinsights.com/beacon.min.js"
       data-cf-beacon='{"token": "${env.VITE_CLOUDFLARE_TOKEN}"}'
