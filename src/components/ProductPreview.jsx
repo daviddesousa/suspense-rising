@@ -134,7 +134,7 @@ export default function ProductPreview({ handle }) {
       {images.length > 0 && (
         <div className="product-carousel max-sm:-mx-(--gutter-size)">
           <div
-            className="carousel-inner relative overflow-hidden aspect-2/3 bg-neutral-900"
+            className="carousel-inner relative overflow-hidden aspect-2/3"
             ref={emblaRef}
           >
             <div className="flex h-full touch-pan-y">
@@ -155,7 +155,7 @@ export default function ProductPreview({ handle }) {
                       srcSet={srcSet}
                       sizes="(min-width: 64rem) 33vw, 100vw"
                       alt={product.title}
-                      className="absolute inset-0 w-full h-full object-cover select-none"
+                      className="absolute inset-0 w-full h-full object-contain select-none"
                     />
                   </div>
                 );
@@ -166,7 +166,7 @@ export default function ProductPreview({ handle }) {
               <>
                 <button
                   onClick={scrollPrev}
-                  className="absolute left-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full transition-colors z-10 pointer-coarse:hidden"
+                  className="absolute left-2 top-1/2 -translate-y-1/2 text-white border border-white bg-black hover:bg-white hover:text-black cursor-pointer p-2 rounded-full transition-colors z-10 pointer-coarse:hidden"
                   aria-label="Previous image"
                 >
                   <svg
@@ -182,7 +182,7 @@ export default function ProductPreview({ handle }) {
                 </button>
                 <button
                   onClick={scrollNext}
-                  className="absolute right-4 top-1/2 -translate-y-1/2 bg-black/50 hover:bg-black text-white p-2 rounded-full transition-colors z-10 pointer-coarse:hidden"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 text-white border border-white bg-black hover:bg-white hover:text-black cursor-pointer p-2 rounded-full transition-colors z-10 pointer-coarse:hidden"
                   aria-label="Next image"
                 >
                   <svg
