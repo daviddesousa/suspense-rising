@@ -221,7 +221,7 @@ export default function ProductPreview({ handle }) {
         />
       </div>
 
-      <div className="product-experience max-w-full text-left">
+      <div className="product-experience text-left">
         <RealTimeDropStore
           variants={product.variants}
           selectedVariantId={selectedVariantId}
