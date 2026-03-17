@@ -1,1 +1,2 @@
+# Redirect rule for single-page applications using client-side routing (e.g., on Netlify).
 /* /index.html 200
