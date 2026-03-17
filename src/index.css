@@ -326,7 +326,6 @@ hr {
       'slider experience';
     grid-template-rows: min-content min-content;
     grid-template-columns: auto 32rem;
-    max-height: calc(100svh - var(--gutter-size) * 2);
   }
 
   .product-carousel {
