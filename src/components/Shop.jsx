@@ -132,7 +132,7 @@ export default function Shop() {
       {/* Spacer for the haslow zoom/blur animation */}
       <div ref={animationSpacerRef} className="h-svh" />
 
-      <section className="relative z-10 h-svh flex flex-col justify-center max-sm:pt-200 px-(--gutter-size)">
+      <section className="relative z-10 flex flex-col justify-center px-(--gutter-size) pb-(--gutter-size) sm:h-svh">
         <ProductPreview handle="the-haslow-tee" />
         {/* TODO figure out what to do with back to top */}
         {/*
