@@ -63,6 +63,20 @@ export default function ProductPreview({ handle }) {
     };
   }, [emblaApi, onSelect]);
 
+  // Handle returning from Shopify Checkout via browser back button (BFCache)
+  useEffect(() => {
+    const handlePageShow = (event) => {
+      if (event.persisted) {
+        setIsLoadingSandbox(false);
+      }
+    };
+
+    window.addEventListener('pageshow', handlePageShow);
+    return () => {
+      window.removeEventListener('pageshow', handlePageShow);
+    };
+  }, []);
+
   if (loading) return <div className="p-8 text-center">Loading product...</div>;
   if (error)
     return (
