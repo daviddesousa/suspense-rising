@@ -1,6 +1,6 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
-import { HashRouter, Routes, Route } from 'react-router';
+import { BrowserRouter, Routes, Route } from 'react-router';
 
 import App from './App';
 
@@ -16,7 +16,7 @@ document.head.appendChild(webpScript);
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <HashRouter>
+    <BrowserRouter>
       <Routes>
         <Route element={<App />}>
           <Route index element={null} />
@@ -24,6 +24,6 @@ createRoot(document.getElementById('root')).render(
           <Route path="shop" element={<Shop />} />
         </Route>
       </Routes>
-    </HashRouter>
+    </BrowserRouter>
   </StrictMode>
 );
