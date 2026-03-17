@@ -36,6 +36,7 @@ export default function Shop() {
         gsap.to(playerRef.current, {
           y: '0%',
           opacity: 1,
+          pointerEvents: 'auto',
           duration: 0.7,
           ease: 'power1.out',
         }),
@@ -43,6 +44,7 @@ export default function Shop() {
         gsap.to(playerRef.current, {
           y: '120%',
           opacity: 0,
+          pointerEvents: 'none',
           duration: 0.5,
           ease: 'power1.in',
         }),
@@ -70,11 +72,13 @@ export default function Shop() {
         {
           y: '0%',
           opacity: 1,
+          pointerEvents: 'auto',
         },
         {
           scrollTrigger: spacerTrigger,
           y: '120%',
           opacity: 0,
+          pointerEvents: 'none',
           ease: 'power1.inOut',
           immediateRender: false,
         },
@@ -111,7 +115,11 @@ export default function Shop() {
       {/* Fixed player — slides in via GSAP */}
       <div
         ref={playerRef}
-        style={{ transform: 'translateY(120%)', opacity: 0 }}
+        style={{
+          transform: 'translateY(120%)',
+          opacity: 0,
+          pointerEvents: 'none',
+        }}
         className="mini-audio-player-wrapper"
       >
         <MiniAudioPlayer src="/haslow_vocal_tee.mp3" />
