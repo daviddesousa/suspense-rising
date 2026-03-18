@@ -39,7 +39,7 @@ const ShopSection = ({ text }) => {
       ref={sectionRef}
       className="h-[50svh] flex items-center justify-center"
     >
-      {/* 
+      {/*
         Mobile Screen Resolution Stats Worldwide (Feb 2025 - Feb 2026)
         https://gs.statcounter.com/screen-resolution-stats/mobile/worldwide
 
@@ -66,9 +66,9 @@ const ShopSection = ({ text }) => {
           flex flex-wrap justify-center gap-x-[0.25em] gap-y-2 mx-auto
           text-white uppercase font-bold tracking-tighter
           text-4xl md:text-6xl 2xl:text-7xl
-          px-3 min-[384px]:px-6 min-[414px]:px-9 min-[425px]:px-10 md:px-24 2xl:px-0
+          px-3 min-[384px]:px-6 min-[414px]:px-9 min-[425px]:px-10 md:px-24 xl:px-26 2xl:px-0
           max-md:max-w-[425px] md:max-w-3xl xl:max-w-none 2xl:max-w-(--breakpoint-laptop-lg)
-         "
+        "
       >
         {text.split(' ').map((word, i) => (
           <span
