@@ -345,6 +345,11 @@ hr {
 
 .product-description ul li strong {
   @apply block;
+
+  /* lg-short (large, short screens) */
+  @media (min-width: 1024px) and (max-height: 800px) {
+    @apply inline;
+  }
 }
 
 .main-image-wrapper {
