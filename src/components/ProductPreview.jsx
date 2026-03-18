@@ -96,8 +96,8 @@ export default function ProductPreview({ handle }) {
     ? `$${amount.toFixed(2).replace(/\.00$/, '')}`
     : '';
 
-  const buyNow = async (variantIdToBuy) => {
-    let targetVariantId = variantIdToBuy || selectedVariantId;
+  const buyNow = async () => {
+    let targetVariantId = selectedVariantId;
 
     // If no variant selected (Blind Buy mode), pick a random available one
     if (!targetVariantId) {
