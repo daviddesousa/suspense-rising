@@ -10,6 +10,17 @@ const VariantSelector = ({
 }) => {
   const [activeExperience, setActiveExperience] = useState('choose'); // 'choose' | 'blind'
 
+  const decodeVariantTitle = (title) => {
+    try {
+      // Decode Base64 and parse as integer (e.g. "MDE=" -> "01" -> 1)
+      const decoded = atob(title);
+      const parsed = parseInt(decoded, 10);
+      return isNaN(parsed) ? decoded : parsed;
+    } catch (e) {
+      return title;
+    }
+  };
+
   const availableCount = variants.filter((v) => v.available).length;
   const totalCount = variants.length;
 
@@ -101,7 +112,7 @@ const VariantSelector = ({
                       />
                     </svg>
                   ) : (
-                    idx + 1
+                    decodeVariantTitle(variant.title)
                   )}
                 </button>
               ))}
@@ -127,7 +138,7 @@ const VariantSelector = ({
                   : isLoading
                     ? 'Processing...'
                     : selectedVariantId
-                      ? `Buy Figure #${variants.findIndex((v) => v.id === selectedVariantId) + 1}`
+                      ? `Buy Figure #${decodeVariantTitle(variants.find((v) => v.id === selectedVariantId)?.title)}`
                       : 'Select a Number'}
               </button>
             </div>
