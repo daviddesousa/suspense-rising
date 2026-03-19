@@ -1,14 +1,14 @@
 import { NavLink } from 'react-router';
 import { motion as Motion } from 'motion/react';
 
-import suspenseRisingLogo265Webp from '../assets/suspense-rising-chrome-unicolor-265.webp';
-import suspenseRisingLogo530Webp from '../assets/suspense-rising-chrome-unicolor-530.webp';
-import suspenseRisingLogo795Webp from '../assets/suspense-rising-chrome-unicolor-795.webp';
-import suspenseRisingLogo1060Webp from '../assets/suspense-rising-chrome-unicolor-1060.webp';
-import suspenseRisingLogo265Png from '../assets/suspense-rising-chrome-unicolor-265.png';
-import suspenseRisingLogo530Png from '../assets/suspense-rising-chrome-unicolor-530.png';
-import suspenseRisingLogo795Png from '../assets/suspense-rising-chrome-unicolor-795.png';
-import suspenseRisingLogo1060Png from '../assets/suspense-rising-chrome-unicolor-1060.png';
+import suspenseRisingLogo265Webp from '../assets/logo/suspense-rising-chrome-unicolor-265.webp';
+import suspenseRisingLogo530Webp from '../assets/logo/suspense-rising-chrome-unicolor-530.webp';
+import suspenseRisingLogo795Webp from '../assets/logo/suspense-rising-chrome-unicolor-795.webp';
+import suspenseRisingLogo1060Webp from '../assets/logo/suspense-rising-chrome-unicolor-1060.webp';
+import suspenseRisingLogo265Png from '../assets/logo/suspense-rising-chrome-unicolor-265.png';
+import suspenseRisingLogo530Png from '../assets/logo/suspense-rising-chrome-unicolor-530.png';
+import suspenseRisingLogo795Png from '../assets/logo/suspense-rising-chrome-unicolor-795.png';
+import suspenseRisingLogo1060Png from '../assets/logo/suspense-rising-chrome-unicolor-1060.png';
 
 export default function Logo() {
   return (

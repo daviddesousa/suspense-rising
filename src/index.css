@@ -1,22 +1,29 @@
+@import 'tailwindcss';
+
+@theme {
+  --breakpoint-laptop-lg: 90rem; /* 1440px */
+  --breakpoint-3xl: 120rem; /* 1920px */
+}
+
 @font-face {
   font-family: 'Felony Condensed';
   /* Prefer woff2 if you add a .woff2 font to assets; fall back to the existing OTF.
      Add a woff2 build of this font for better performance in production. */
-  src: url('assets/FelonyCondensed.woff2') format('woff2'),
-       url('assets/FelonyCondensed.otf') format('opentype');
+  src:
+    url('assets/FelonyCondensed.woff2') format('woff2'),
+    url('assets/FelonyCondensed.otf') format('opentype');
   font-display: swap;
 }
 
 :root {
-  --gutter-size: 24px;
+  --gutter-size: 1.5rem;
 
-  @media screen and (min-width: 536px) {
-    --gutter-size: 40px;
+  @variant sm {
+    --gutter-size: 2.5rem;
   }
 }
 
 html {
-  box-sizing: border-box;
   background: url(assets/wallpaper-bw.webp) #060606 no-repeat top center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -32,13 +39,13 @@ body {
   font-family: 'Felony Condensed', sans-serif;
   font-weight: 400;
   font-style: normal;
-  font-size: 16px;
+  font-size: 1rem;
   color: white;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
   @media screen and (min-width: 536px) {
-    font-size: 18px;
+    font-size: 1.125rem;
   }
 
   &::before {
@@ -56,14 +63,14 @@ body {
   }
 }
 
-body:has(.site-wrapper[data-page-handle="/"])::before {
+body:has(.site-wrapper[data-page-handle='/'])::before {
   opacity: 0.5;
 }
 
-* {
-  box-sizing: inherit;
-  padding: 0;
-  margin: 0;
+html:has(.site-wrapper[data-page-handle='/shop']) {
+  -webkit-background-size: contain;
+  -moz-background-size: contain;
+  background-size: contain;
 }
 
 img {
@@ -87,6 +94,7 @@ h3 {
   font-size: 150%;
 }
 
+/* TODO remove and refactor */
 p {
   line-height: 150%;
 }
@@ -109,10 +117,6 @@ a {
   padding-right: var(--gutter-size);
 }
 
-section {
-  margin: 0 var(--gutter-size);
-}
-
 .section-title {
   margin-bottom: 2rem;
 }
@@ -132,7 +136,7 @@ section {
   width: 40px;
   height: 100%;
   opacity: 1;
-  transition: opacity .1s ease-in-out;
+  transition: opacity 0.1s ease-in-out;
 }
 
 .release {
@@ -165,8 +169,9 @@ section {
 
     &:hover {
       border-color: var(--shimmer-color-2, #ffffff);
-      box-shadow: 0 0 20px rgba(255, 255, 255, 0.05),
-                  inset 0 0 10px rgba(255, 255, 255, 0.02);
+      box-shadow:
+        0 0 20px rgba(255, 255, 255, 0.05),
+        inset 0 0 10px rgba(255, 255, 255, 0.02);
       transform: translateY(-3px);
     }
 
@@ -221,29 +226,23 @@ section {
   }
 }
 
-header {
+.site-header {
   padding: var(--gutter-size);
-}
-
-main {
-  padding-top: var(--gutter-size);
-  padding-bottom: var(--gutter-size);
-  margin-bottom: auto;
 }
 
 .site-wrapper {
   display: flex;
   flex-direction: column;
   min-height: 100svh;
-  max-width: 1440px;
+  max-width: var(--breakpoint-laptop-lg);
   margin-left: auto;
   margin-right: auto;
 }
 
-.site-wrapper[data-page-handle="/"] {
+.site-wrapper[data-page-handle='/'] {
   justify-content: center;
 
-  header {
+  .site-header {
     position: absolute;
     top: 0;
     left: 0;
@@ -297,4 +296,98 @@ h1.sr-only {
 hr {
   margin: calc(var(--gutter-size) * 1.5) auto;
   max-width: 75%;
+}
+
+@variant sm {
+  .product-preview {
+    grid-template-areas:
+      'slider description'
+      'experience experience';
+    grid-template-columns: 33vw 1fr;
+  }
+
+  .product-carousel {
+    grid-area: slider;
+  }
+
+  .product-info {
+    grid-area: description;
+  }
+
+  .product-experience {
+    grid-area: experience;
+  }
+}
+
+@variant lg {
+  .product-preview {
+    grid-template-areas:
+      'slider description'
+      'slider experience';
+    grid-template-rows: min-content min-content;
+    grid-template-columns: auto 32rem;
+  }
+
+  .product-carousel {
+    min-height: 0;
+    height: 100%;
+
+    .carousel-inner {
+      height: 100%;
+      aspect-ratio: auto;
+    }
+  }
+}
+
+.product-description ul li {
+  @apply mt-2 text-pretty;
+}
+
+.product-description ul li strong {
+  @apply block;
+
+  /* lg-short (large, short screens) */
+  @media (min-width: 1024px) and (max-height: 800px) {
+    @apply inline;
+  }
+}
+
+.main-image-wrapper {
+  position: relative;
+}
+
+.carousel-button {
+  position: absolute;
+  cursor: pointer;
+}
+
+.carousel-button--previous,
+.carousel-button--next {
+  top: 50%;
+  transform: translateY(-50%);
+  text-transform: uppercase;
+}
+
+.carousel-button--previous {
+  left: 0;
+}
+.carousel-button--next {
+  right: 0;
+}
+
+.carousel-button-arrow {
+  display: none;
+}
+
+.mini-audio-player-wrapper {
+  @apply fixed z-50;
+
+  @variant pointer-coarse {
+    @apply right-8 bottom-8;
+  }
+
+  @variant pointer-fine {
+    @apply text-right left-4 right-4 bottom-[calc(50%-14px)] 3xl:right-17
+      mx-auto max-w-(--breakpoint-laptop-lg) 2xl:max-w-none 3xl:max-w-(--breakpoint-3xl);
+  }
 }
