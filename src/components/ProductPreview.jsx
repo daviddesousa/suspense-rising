@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
 import useEmblaCarousel from 'embla-carousel-react';
 import { client } from '../lib/shopify';
-import RealTimeDropStore from './RealTimeDropStore';
+import VariantSelector from './VariantSelector';
 import DOMPurify from 'dompurify';
 
 export default function ProductPreview({ handle }) {
@@ -138,7 +138,7 @@ export default function ProductPreview({ handle }) {
             ref={emblaRef}
           >
             <div className="flex h-full touch-pan-y">
-              {/* TODO test srcSet and sizes */}
+              {/* TODO test srcSet and sizes. refactor for lg breakpoint */}
               {images.map((img) => {
                 const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
                 const srcSet = widths
@@ -222,7 +222,7 @@ export default function ProductPreview({ handle }) {
       </div>
 
       <div className="product-experience text-left">
-        <RealTimeDropStore
+        <VariantSelector
           variants={product.variants}
           selectedVariantId={selectedVariantId}
           onSelectVariant={setSelectedVariantId}
