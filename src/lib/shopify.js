@@ -19,3 +19,20 @@ export const client = Client.buildClient({
   domain: domain || '',
   storefrontAccessToken: storefrontAccessToken || '',
 });
+
+/**
+ * Decodes variant titles that are Base64 encoded numbers.
+ * @param {string} title 
+ * @returns {string|number}
+ */
+export const decodeVariantTitle = (title) => {
+  if (!title) return '';
+  try {
+    // Decode Base64 and parse as integer (e.g. "MDE=" -> "01" -> 1)
+    const decoded = atob(title);
+    const parsed = parseInt(decoded, 10);
+    return isNaN(parsed) ? decoded : parsed;
+  } catch (e) {
+    return title;
+  }
+};
