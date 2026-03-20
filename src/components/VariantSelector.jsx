@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
+import { decodeVariantTitle } from '../lib/shopify';
 
 const VariantSelector = ({
   variants = [],
@@ -9,17 +10,6 @@ const VariantSelector = ({
   isLoading,
 }) => {
   const [activeExperience, setActiveExperience] = useState('choose'); // 'choose' | 'blind'
-
-  const decodeVariantTitle = (title) => {
-    try {
-      // Decode Base64 and parse as integer (e.g. "MDE=" -> "01" -> 1)
-      const decoded = atob(title);
-      const parsed = parseInt(decoded, 10);
-      return isNaN(parsed) ? decoded : parsed;
-    } catch (e) {
-      return title;
-    }
-  };
 
   const availableCount = variants.filter((v) => v.available).length;
   const totalCount = variants.length;
@@ -159,7 +149,8 @@ const VariantSelector = ({
                 Let Haslow Choose
               </h2>
               <p className="text-neutral-400 leading-relaxed">
-                You buy a number blindly and discover your number only once you've received your package.
+                You buy a number blindly and discover your number only once
+                you've received your package.
               </p>
             </div>
 

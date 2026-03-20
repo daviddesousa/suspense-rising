@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
 import useEmblaCarousel from 'embla-carousel-react';
-import { client } from '../lib/shopify';
+import { client, decodeVariantTitle } from '../lib/shopify';
 import VariantSelector from './VariantSelector';
 import DOMPurify from 'dompurify';
 
@@ -97,10 +97,11 @@ export default function ProductPreview({ handle }) {
     : '';
 
   const buyNow = async () => {
+    const isRandom = !selectedVariantId;
     let targetVariantId = selectedVariantId;
 
     // If no variant selected (Blind Buy mode), pick a random available one
-    if (!targetVariantId) {
+    if (isRandom) {
       const available = product.variants.filter((v) => v.available);
       if (available.length === 0) {
         setSandboxError('Sorry, this item is sold out!');
@@ -109,6 +110,13 @@ export default function ProductPreview({ handle }) {
       const random = available[Math.floor(Math.random() * available.length)];
       targetVariantId = random.id;
     }
+
+    const targetVariant = product.variants.find(
+      (v) => v.id === targetVariantId,
+    );
+    const figureNumber = targetVariant
+      ? decodeVariantTitle(targetVariant.title)
+      : 'Unknown';
 
     setIsLoadingSandbox(true);
     setSandboxError(null);
@@ -119,6 +127,10 @@ export default function ProductPreview({ handle }) {
         {
           variantId: targetVariantId,
           quantity: 1,
+          customAttributes: [
+            { key: '_selection_method', value: isRandom ? 'random' : 'manual' },
+            { key: '_figure_number', value: figureNumber.toString() },
+          ],
         },
       ]);
       window.location.href = checkout.webUrl;
