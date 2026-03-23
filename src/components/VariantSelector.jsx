@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion as Motion, AnimatePresence } from 'framer-motion';
+import { decodeVariantTitle } from '../lib/shopify';
 
-const RealTimeDropStore = ({
+const VariantSelector = ({
   variants = [],
   selectedVariantId,
   onSelectVariant,
@@ -101,7 +102,7 @@ const RealTimeDropStore = ({
                       />
                     </svg>
                   ) : (
-                    idx + 1
+                    decodeVariantTitle(variant.title)
                   )}
                 </button>
               ))}
@@ -127,7 +128,7 @@ const RealTimeDropStore = ({
                   : isLoading
                     ? 'Processing...'
                     : selectedVariantId
-                      ? `Buy Figure #${variants.findIndex((v) => v.id === selectedVariantId) + 1}`
+                      ? `Buy Figure #${decodeVariantTitle(variants.find((v) => v.id === selectedVariantId)?.title)}`
                       : 'Select a Number'}
               </button>
             </div>
@@ -148,7 +149,8 @@ const RealTimeDropStore = ({
                 Let Haslow Choose
               </h2>
               <p className="text-neutral-400 leading-relaxed">
-                You buy a number blindly and discover your number only once you've received your package.
+                You buy a number blindly and discover your number only once
+                you've received your package.
               </p>
             </div>
 
@@ -179,4 +181,4 @@ const RealTimeDropStore = ({
   );
 };
 
-export default RealTimeDropStore;
+export default VariantSelector;

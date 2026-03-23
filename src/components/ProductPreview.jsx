@@ -1,8 +1,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import useSWR from 'swr';
 import useEmblaCarousel from 'embla-carousel-react';
-import { client } from '../lib/shopify';
-import RealTimeDropStore from './RealTimeDropStore';
+import { client, decodeVariantTitle } from '../lib/shopify';
+import VariantSelector from './VariantSelector';
 import DOMPurify from 'dompurify';
 
 export default function ProductPreview({ handle }) {
@@ -10,8 +10,8 @@ export default function ProductPreview({ handle }) {
 
   // State for inventory polling
   const [selectedVariantId, setSelectedVariantId] = useState(null);
-  const [isLoadingSandbox, setIsLoadingSandbox] = useState(false);
-  const [sandboxError, setSandboxError] = useState(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [checkoutError, setCheckoutError] = useState(null);
 
   const {
     data: product,
@@ -67,7 +67,7 @@ export default function ProductPreview({ handle }) {
   useEffect(() => {
     const handlePageShow = (event) => {
       if (event.persisted) {
-        setIsLoadingSandbox(false);
+        setIsCheckingOut(false);
       }
     };
 
@@ -97,21 +97,29 @@ export default function ProductPreview({ handle }) {
     : '';
 
   const buyNow = async () => {
+    const isRandom = !selectedVariantId;
     let targetVariantId = selectedVariantId;
 
     // If no variant selected (Blind Buy mode), pick a random available one
-    if (!targetVariantId) {
+    if (isRandom) {
       const available = product.variants.filter((v) => v.available);
       if (available.length === 0) {
-        setSandboxError('Sorry, this item is sold out!');
+        setCheckoutError('Sorry, this item is sold out!');
         return;
       }
       const random = available[Math.floor(Math.random() * available.length)];
       targetVariantId = random.id;
     }
 
-    setIsLoadingSandbox(true);
-    setSandboxError(null);
+    const targetVariant = product.variants.find(
+      (v) => v.id === targetVariantId,
+    );
+    const figureNumber = targetVariant
+      ? decodeVariantTitle(targetVariant.title)
+      : 'Unknown';
+
+    setIsCheckingOut(true);
+    setCheckoutError(null);
 
     try {
       const checkout = await client.checkout.create();
@@ -119,13 +127,18 @@ export default function ProductPreview({ handle }) {
         {
           variantId: targetVariantId,
           quantity: 1,
+          customAttributes: [
+            { key: '_selection_method', value: isRandom ? 'random' : 'manual' },
+            { key: '_figure_number', value: figureNumber.toString() },
+            { key: 'Number', value: isRandom ? 'Haslow has chosen for you.' : figureNumber.toString() },
+          ],
         },
       ]);
       window.location.href = checkout.webUrl;
     } catch (err) {
       console.error('Checkout error:', err);
-      setSandboxError(err.message || 'Something went wrong with the checkout.');
-      setIsLoadingSandbox(false);
+      setCheckoutError(err.message || 'Something went wrong with the checkout.');
+      setIsCheckingOut(false);
     }
   };
 
@@ -138,7 +151,7 @@ export default function ProductPreview({ handle }) {
             ref={emblaRef}
           >
             <div className="flex h-full touch-pan-y">
-              {/* TODO test srcSet and sizes */}
+              {/* TODO test srcSet and sizes. refactor for lg breakpoint */}
               {images.map((img) => {
                 const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
                 const srcSet = widths
@@ -222,20 +235,20 @@ export default function ProductPreview({ handle }) {
       </div>
 
       <div className="product-experience text-left">
-        <RealTimeDropStore
+        <VariantSelector
           variants={product.variants}
           selectedVariantId={selectedVariantId}
           onSelectVariant={setSelectedVariantId}
           onBuy={buyNow}
-          isLoading={isLoadingSandbox}
+          isLoading={isCheckingOut}
         />
 
         {/* @TODO improve mobile display (toast?) */}
-        {sandboxError && (
+        {checkoutError && (
           <div className="flex items-center justify-between gap-4 mt-4 p-4 bg-red-500/5 border border-red-500/20 rounded-lg backdrop-blur-sm animate-in fade-in slide-in-from-top-1 duration-300">
-            <p className="text-red-500 text-lg flex-1">{sandboxError}</p>
+            <p className="text-red-500 text-lg flex-1">{checkoutError}</p>
             <button
-              onClick={() => setSandboxError(null)}
+              onClick={() => setCheckoutError(null)}
               className="p-1 text-red-500 hover:bg-red-500/10 rounded-full transition-all active:scale-95 cursor-pointer"
               aria-label="Dismiss error"
             >
