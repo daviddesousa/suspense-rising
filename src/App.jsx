@@ -11,6 +11,7 @@ import ResponsiveBackground from './components/ResponsiveBackground';
 function App() {
   const location = useLocation();
   const isShop = location.pathname === '/shop';
+  const isHome = location.pathname === '/';
   const lenisRef = useRef();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ function App() {
       ref={lenisRef}
     >
       <div className="site-wrapper" data-page-handle={location.pathname}>
-        <ResponsiveBackground isShop={isShop} />
+        <ResponsiveBackground isShop={isShop} isHome={isHome} />
         <header className="site-header">
           <Nav />
         </header>
