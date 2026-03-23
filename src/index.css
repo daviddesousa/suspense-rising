@@ -39,7 +39,6 @@ body {
     font-size: 1.125rem;
   }
 
-  /* TODO refactor into ResponsiveBackground */
   &::before {
     content: '';
     display: block;
@@ -55,7 +54,6 @@ body {
   }
 }
 
-/* TODO refactor into ResponsiveBackground */
 body:has(.site-wrapper[data-page-handle='/'])::before {
   opacity: 0.5;
 }
