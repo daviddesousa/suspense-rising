@@ -10,8 +10,8 @@ export default function ProductPreview({ handle }) {
 
   // State for inventory polling
   const [selectedVariantId, setSelectedVariantId] = useState(null);
-  const [isLoadingSandbox, setIsLoadingSandbox] = useState(false);
-  const [sandboxError, setSandboxError] = useState(null);
+  const [isCheckingOut, setIsCheckingOut] = useState(false);
+  const [checkoutError, setCheckoutError] = useState(null);
 
   const {
     data: product,
@@ -67,7 +67,7 @@ export default function ProductPreview({ handle }) {
   useEffect(() => {
     const handlePageShow = (event) => {
       if (event.persisted) {
-        setIsLoadingSandbox(false);
+        setIsCheckingOut(false);
       }
     };
 
@@ -104,7 +104,7 @@ export default function ProductPreview({ handle }) {
     if (isRandom) {
       const available = product.variants.filter((v) => v.available);
       if (available.length === 0) {
-        setSandboxError('Sorry, this item is sold out!');
+        setCheckoutError('Sorry, this item is sold out!');
         return;
       }
       const random = available[Math.floor(Math.random() * available.length)];
@@ -118,8 +118,8 @@ export default function ProductPreview({ handle }) {
       ? decodeVariantTitle(targetVariant.title)
       : 'Unknown';
 
-    setIsLoadingSandbox(true);
-    setSandboxError(null);
+    setIsCheckingOut(true);
+    setCheckoutError(null);
 
     try {
       const checkout = await client.checkout.create();
@@ -136,8 +136,8 @@ export default function ProductPreview({ handle }) {
       window.location.href = checkout.webUrl;
     } catch (err) {
       console.error('Checkout error:', err);
-      setSandboxError(err.message || 'Something went wrong with the checkout.');
-      setIsLoadingSandbox(false);
+      setCheckoutError(err.message || 'Something went wrong with the checkout.');
+      setIsCheckingOut(false);
     }
   };
 
@@ -239,15 +239,15 @@ export default function ProductPreview({ handle }) {
           selectedVariantId={selectedVariantId}
           onSelectVariant={setSelectedVariantId}
           onBuy={buyNow}
-          isLoading={isLoadingSandbox}
+          isLoading={isCheckingOut}
         />
 
         {/* @TODO improve mobile display (toast?) */}
-        {sandboxError && (
+        {checkoutError && (
           <div className="flex items-center justify-between gap-4 mt-4 p-4 bg-red-500/5 border border-red-500/20 rounded-lg backdrop-blur-sm animate-in fade-in slide-in-from-top-1 duration-300">
-            <p className="text-red-500 text-lg flex-1">{sandboxError}</p>
+            <p className="text-red-500 text-lg flex-1">{checkoutError}</p>
             <button
-              onClick={() => setSandboxError(null)}
+              onClick={() => setCheckoutError(null)}
               className="p-1 text-red-500 hover:bg-red-500/10 rounded-full transition-all active:scale-95 cursor-pointer"
               aria-label="Dismiss error"
             >
