@@ -21,11 +21,12 @@ import wallpaperFallback from '../assets/wallpaper-bw.jpg?w=1920';
 const ResponsiveBackground = () => {
   const location = useLocation();
   const isShop = location.pathname === '/shop';
-  const objectFitClass = isShop ? 'object-contain' : 'object-cover';
 
   return (
     <div
-      className="fixed inset-0 -z-20 pointer-events-none select-none bg-[#060606]"
+      className={`-z-20 pointer-events-none select-none bg-[#060606] ${
+        isShop ? 'absolute inset-x-0 top-0 h-svh' : 'fixed inset-0'
+      }`}
       aria-hidden="true"
     >
       <picture className="absolute inset-0">
@@ -37,7 +38,7 @@ const ResponsiveBackground = () => {
         <img
           src={wallpaperFallback}
           alt=""
-          className={`w-full h-full ${objectFitClass} object-top`}
+          className={`w-full ${isShop ? '' : 'h-full object-cover'} object-top`}
           loading="eager"
           decoding="async"
           fetchPriority="high"
