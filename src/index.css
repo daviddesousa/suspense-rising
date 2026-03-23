@@ -7,11 +7,9 @@
 
 @font-face {
   font-family: 'Felony Condensed';
-  /* Prefer woff2 if you add a .woff2 font to assets; fall back to the existing OTF.
-     Add a woff2 build of this font for better performance in production. */
   src:
-    url('assets/FelonyCondensed.woff2') format('woff2'),
-    url('assets/FelonyCondensed.otf') format('opentype');
+    url('/fonts/FelonyCondensed.woff2') format('woff2'),
+    url('/fonts/FelonyCondensed.otf') format('opentype');
   font-display: swap;
 }
 
