@@ -228,6 +228,9 @@ a {
 
 .site-header {
   padding: var(--gutter-size);
+  width: 100%;
+  max-width: var(--breakpoint-laptop-lg);
+  margin-inline: auto;
 }
 
 .site-wrapper {
@@ -235,8 +238,7 @@ a {
   flex-direction: column;
   min-height: 100svh;
   max-width: var(--breakpoint-laptop-lg);
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
 }
 
 .site-wrapper[data-page-handle='/'] {
