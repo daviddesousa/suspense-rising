@@ -26,7 +26,11 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
 
     // Fragment shader with improved noise and object-fit logic
     const fsSource = `
+      #ifdef GL_FRAGMENT_PRECISION_HIGH
+      precision highp float;
+      #else
       precision mediump float;
+      #endif
       varying vec2 vUv;
       uniform sampler2D uTexture;
       uniform float uTime;
@@ -64,11 +68,11 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
 
         // Apply wavy effect
         vec2 displacedUv = newUv;
-        
+
         // Combine a few layers of noise for organic motion
         float n = noise(newUv * 3.5 + uTime * 0.15);
         float n2 = noise(newUv * 6.0 - uTime * 0.1);
-        
+
         float dist = (n + n2 * 0.5) * 0.012;
         displacedUv.x += dist;
         displacedUv.y += dist;
@@ -91,6 +95,10 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
     const program = gl.createProgram();
     gl.attachShader(program, vertexShader);
     gl.attachShader(program, fragmentShader);
+
+    // Best practice: ensure attrib 0 is enabled in WebGL 1
+    gl.bindAttribLocation(program, 0, 'position');
+
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
       console.error('Program link failed:', gl.getProgramInfoLog(program));
@@ -107,7 +115,7 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
     const positions = [-1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0];
     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-    const positionLocation = gl.getAttribLocation(program, 'position');
+    const positionLocation = 0; // bound earlier via bindAttribLocation
     const uTextureLocation = gl.getUniformLocation(program, 'uTexture');
     const uTimeLocation = gl.getUniformLocation(program, 'uTime');
     const uResolutionLocation = gl.getUniformLocation(program, 'uResolution');
@@ -136,6 +144,7 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
     };
 
     let animationId;
+    let frameCount = 0;
     const render = (time) => {
       time *= 0.001; // Convert to seconds
 
@@ -164,6 +173,15 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
       );
 
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+      frameCount += 1;
+      if (frameCount % 120 === 0) {
+        const err = gl.getError();
+        if (err !== gl.NO_ERROR) {
+          console.warn('WebGL error on frame', frameCount, err);
+        }
+      }
+
       animationId = requestAnimationFrame(render);
     };
 
