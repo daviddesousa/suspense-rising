@@ -81,11 +81,7 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
       const shader = gl.createShader(type);
       gl.shaderSource(shader, source);
       gl.compileShader(shader);
-      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        console.error(gl.getShaderInfoLog(shader));
-        gl.deleteShader(shader);
-        return null;
-      }
+      // Do not query compile status here in production to avoid synchronous GPU stalls.
       return shader;
     }
 
@@ -97,7 +93,12 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
     gl.attachShader(program, fragmentShader);
     gl.linkProgram(program);
     if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
-      console.error(gl.getProgramInfoLog(program));
+      console.error('Program link failed:', gl.getProgramInfoLog(program));
+      console.error('Vertex shader log:', gl.getShaderInfoLog(vertexShader));
+      console.error(
+        'Fragment shader log:',
+        gl.getShaderInfoLog(fragmentShader),
+      );
       return;
     }
 
