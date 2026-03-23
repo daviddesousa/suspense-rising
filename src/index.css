@@ -352,33 +352,6 @@ hr {
   }
 }
 
-.main-image-wrapper {
-  position: relative;
-}
-
-.carousel-button {
-  position: absolute;
-  cursor: pointer;
-}
-
-.carousel-button--previous,
-.carousel-button--next {
-  top: 50%;
-  transform: translateY(-50%);
-  text-transform: uppercase;
-}
-
-.carousel-button--previous {
-  left: 0;
-}
-.carousel-button--next {
-  right: 0;
-}
-
-.carousel-button-arrow {
-  display: none;
-}
-
 .mini-audio-player-wrapper {
   @apply fixed z-50;
 
