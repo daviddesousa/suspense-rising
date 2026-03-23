@@ -16,9 +16,9 @@ export default function Logo() {
       <h1 className="sr-only">Suspense Rising</h1>
       {/* Keep the image visible for LCP; only animate translation so we don't delay the LCP paint */}
       <Motion.picture
-        initial={{ x: -80 }}
+        initial={{ x: -60 }}
         animate={{ x: 0 }}
-        transition={{ duration: 1, ease: 'easeIn' }}
+        transition={{ duration: 1.2, ease: 'easeOut' }}
       >
         <source
           type="image/webp"
