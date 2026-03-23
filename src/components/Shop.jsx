@@ -30,16 +30,19 @@ export default function Shop() {
     // No onLeave — so the player stays visible for the rest of the page.
     ScrollTrigger.create({
       trigger: haslowRef.current,
-      // markers: true,
       start: 'bottom bottom',
-      onEnter: () =>
+      endTrigger: animationSpacerRef.current,
+      end: 'top bottom',
+      onEnter: (self) => {
+        if (self.progress === 1) return;
         gsap.to(playerRef.current, {
           y: '0%',
           opacity: 1,
           pointerEvents: 'auto',
           duration: 0.7,
           ease: 'power1.out',
-        }),
+        });
+      },
       onLeaveBack: () =>
         gsap.to(playerRef.current, {
           y: '120%',
