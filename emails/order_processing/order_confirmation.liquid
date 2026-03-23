@@ -393,13 +393,22 @@
 
           <span class="order-list__item-title">{{ line_title }}&nbsp;&times;&nbsp;{{ line_display }}</span><br/>
 
-          {% if line.variant.title != 'Default Title' and is_parent == false %}
-            <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
-          {% elsif line.variant.title != 'Default Title' and line.nested_line_parent? %}
-            <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
-          {% elsif line.variant.title != 'Default Title' and line.bundle_parent? and false == false %}
-            <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = line.properties['_selection_method'] -%}
+          {%- assign decoded_title = line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if line.variant.title != 'Default Title' and is_parent == false %}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% elsif line.variant.title != 'Default Title' and line.nested_line_parent? %}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% elsif line.variant.title != 'Default Title' and line.bundle_parent? and false == false %}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
 
           {% if false %}
             {% for child_line in line.bundle_components %}
@@ -444,9 +453,18 @@
 
             <span class="order-list__item-title">{{ item_display }}&nbsp;&times;&nbsp;{{ item_title }}</span><br>
 
-          {% if child_line.variant.title != 'Default Title'%}
-            <span class="order-list__item-variant">{{ child_line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = child_line.properties['_selection_method'] -%}
+          {%- assign decoded_title = child_line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ child_line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if child_line.variant.title != 'Default Title'%}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
           {% if child_line.selling_plan_allocation %}
             <span class="order-list__item-variant">{{ child_line.selling_plan_allocation.selling_plan.name }}</span>
           {% endif %}
@@ -600,9 +618,18 @@
 
             <span class="order-list__item-title">{{ item_title }}&nbsp;&times;&nbsp;{{ item_display }}</span><br>
 
-          {% if child_line.variant.title != 'Default Title'%}
-            <span class="order-list__item-variant">{{ child_line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = child_line.properties['_selection_method'] -%}
+          {%- assign decoded_title = child_line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ child_line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if child_line.variant.title != 'Default Title'%}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
           {% if child_line.selling_plan_allocation %}
             <span class="order-list__item-variant">{{ child_line.selling_plan_allocation.selling_plan.name }}</span>
           {% endif %}
@@ -1060,13 +1087,22 @@
 
           <span class="order-list__item-title">{{ line_title }}&nbsp;&times;&nbsp;{{ line_display }}</span><br/>
 
-          {% if line.variant.title != 'Default Title' and is_parent == false %}
-            <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
-          {% elsif line.variant.title != 'Default Title' and line.nested_line_parent? %}
-            <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
-          {% elsif line.variant.title != 'Default Title' and line.bundle_parent? and false == false %}
-            <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = line.properties['_selection_method'] -%}
+          {%- assign decoded_title = line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if line.variant.title != 'Default Title' and is_parent == false %}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% elsif line.variant.title != 'Default Title' and line.nested_line_parent? %}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% elsif line.variant.title != 'Default Title' and line.bundle_parent? and false == false %}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
 
           {% if false %}
             {% for child_line in line.bundle_components %}
@@ -1111,9 +1147,18 @@
 
             <span class="order-list__item-title">{{ item_display }}&nbsp;&times;&nbsp;{{ item_title }}</span><br>
 
-          {% if child_line.variant.title != 'Default Title'%}
-            <span class="order-list__item-variant">{{ child_line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = child_line.properties['_selection_method'] -%}
+          {%- assign decoded_title = child_line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ child_line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if child_line.variant.title != 'Default Title'%}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
           {% if child_line.selling_plan_allocation %}
             <span class="order-list__item-variant">{{ child_line.selling_plan_allocation.selling_plan.name }}</span>
           {% endif %}
@@ -1267,9 +1312,18 @@
 
             <span class="order-list__item-title">{{ item_title }}&nbsp;&times;&nbsp;{{ item_display }}</span><br>
 
-          {% if child_line.variant.title != 'Default Title'%}
-            <span class="order-list__item-variant">{{ child_line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = child_line.properties['_selection_method'] -%}
+          {%- assign decoded_title = child_line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ child_line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if child_line.variant.title != 'Default Title'%}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
           {% if child_line.selling_plan_allocation %}
             <span class="order-list__item-variant">{{ child_line.selling_plan_allocation.selling_plan.name }}</span>
           {% endif %}
@@ -2097,9 +2151,18 @@
 
             <span class="order-list__item-title">{{ item_display }}&nbsp;&times;&nbsp;{{ item_title }}</span><br>
 
-          {% if child_line.variant.title != 'Default Title'%}
-            <span class="order-list__item-variant">{{ child_line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = child_line.properties['_selection_method'] -%}
+          {%- assign decoded_title = child_line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ child_line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if child_line.variant.title != 'Default Title'%}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
           {% if child_line.selling_plan_allocation %}
             <span class="order-list__item-variant">{{ child_line.selling_plan_allocation.selling_plan.name }}</span>
           {% endif %}
@@ -2253,9 +2316,18 @@
 
             <span class="order-list__item-title">{{ item_title }}&nbsp;&times;&nbsp;{{ item_display }}</span><br>
 
-          {% if child_line.variant.title != 'Default Title'%}
-            <span class="order-list__item-variant">{{ child_line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = child_line.properties['_selection_method'] -%}
+          {%- assign decoded_title = child_line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ child_line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if child_line.variant.title != 'Default Title'%}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
           {% if child_line.selling_plan_allocation %}
             <span class="order-list__item-variant">{{ child_line.selling_plan_allocation.selling_plan.name }}</span>
           {% endif %}
@@ -2369,13 +2441,22 @@
 
           <span class="order-list__item-title">{{ line_title }}&nbsp;&times;&nbsp;{{ line_display }}</span><br/>
 
-          {% if line.variant.title != 'Default Title' and is_parent == false %}
-            <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
-          {% elsif line.variant.title != 'Default Title' and line.nested_line_parent? %}
-            <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
-          {% elsif line.variant.title != 'Default Title' and line.bundle_parent? and false == false %}
-            <span class="order-list__item-variant">{{ line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = line.properties['_selection_method'] -%}
+          {%- assign decoded_title = line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if line.variant.title != 'Default Title' and is_parent == false %}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% elsif line.variant.title != 'Default Title' and line.nested_line_parent? %}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% elsif line.variant.title != 'Default Title' and line.bundle_parent? and false == false %}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
 
           {% if false %}
             {% for child_line in line.bundle_components %}
@@ -2420,9 +2501,18 @@
 
             <span class="order-list__item-title">{{ item_display }}&nbsp;&times;&nbsp;{{ item_title }}</span><br>
 
-          {% if child_line.variant.title != 'Default Title'%}
-            <span class="order-list__item-variant">{{ child_line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = child_line.properties['_selection_method'] -%}
+          {%- assign decoded_title = child_line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ child_line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if child_line.variant.title != 'Default Title'%}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
           {% if child_line.selling_plan_allocation %}
             <span class="order-list__item-variant">{{ child_line.selling_plan_allocation.selling_plan.name }}</span>
           {% endif %}
@@ -2576,9 +2666,18 @@
 
             <span class="order-list__item-title">{{ item_title }}&nbsp;&times;&nbsp;{{ item_display }}</span><br>
 
-          {% if child_line.variant.title != 'Default Title'%}
-            <span class="order-list__item-variant">{{ child_line.variant.title }}</span><br/>
-          {% endif %}
+          {%- assign selection_method = child_line.properties['_selection_method'] -%}
+          {%- assign decoded_title = child_line.variant.title | base64_decode | strip -%}
+          {%- assign decoded_number = decoded_title | plus: 0 -%}
+          {%- if selection_method == 'random' -%}
+            <span class="order-list__item-variant">Haslow has chosen your number.</span><br/>
+          {%- elsif selection_method == 'manual' -%}
+            <span class="order-list__item-variant">Number: {{ child_line.properties['Number'] | default: decoded_number }}</span><br/>
+          {%- else -%}
+            {% if child_line.variant.title != 'Default Title'%}
+              <span class="order-list__item-variant">{{ decoded_number }}</span><br/>
+            {% endif %}
+          {%- endif -%}
           {% if child_line.selling_plan_allocation %}
             <span class="order-list__item-variant">{{ child_line.selling_plan_allocation.selling_plan.name }}</span>
           {% endif %}

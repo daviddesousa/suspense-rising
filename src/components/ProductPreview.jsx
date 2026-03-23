@@ -130,6 +130,7 @@ export default function ProductPreview({ handle }) {
           customAttributes: [
             { key: '_selection_method', value: isRandom ? 'random' : 'manual' },
             { key: '_figure_number', value: figureNumber.toString() },
+            { key: 'Number', value: isRandom ? 'Haslow has chosen for you.' : figureNumber.toString() },
           ],
         },
       ]);
