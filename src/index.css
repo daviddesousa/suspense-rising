@@ -24,15 +24,8 @@
 }
 
 html {
-  background: url(assets/wallpaper-bw.webp) #060606 no-repeat top center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
+  background-color: #060606;
   scroll-behavior: smooth;
-
-  &.no-webp {
-    background-image: url(assets/wallpaper-bw.jpg);
-  }
 }
 
 body {
@@ -48,6 +41,7 @@ body {
     font-size: 1.125rem;
   }
 
+  /* TODO refactor into ResponsiveBackground */
   &::before {
     content: '';
     display: block;
@@ -63,18 +57,9 @@ body {
   }
 }
 
+/* TODO refactor into ResponsiveBackground */
 body:has(.site-wrapper[data-page-handle='/'])::before {
   opacity: 0.5;
-}
-
-html:has(.site-wrapper[data-page-handle='/shop']) {
-  -webkit-background-size: contain;
-  -moz-background-size: contain;
-  background-size: contain;
-}
-
-img {
-  max-width: 100%;
 }
 
 picture {

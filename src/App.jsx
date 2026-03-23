@@ -6,6 +6,7 @@ import gsap from 'gsap';
 
 import Logo from './components/Logo';
 import Nav from './components/Nav';
+import ResponsiveBackground from './components/ResponsiveBackground';
 
 function App() {
   const location = useLocation();
@@ -30,6 +31,7 @@ function App() {
       ref={lenisRef}
     >
       <div className="site-wrapper" data-page-handle={location.pathname}>
+        <ResponsiveBackground />
         <header className="site-header">
           <Nav />
         </header>
