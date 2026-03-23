@@ -9,11 +9,6 @@ import Shop from './components/Shop';
 
 import './index.css';
 
-// Add WebP detection
-const webpScript = document.createElement('script');
-webpScript.src = '/modernizr-webp.js';
-document.head.appendChild(webpScript);
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <BrowserRouter>
