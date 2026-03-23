@@ -1,5 +1,3 @@
-import { useLocation } from 'react-router';
-
 // vite-imagetools uses query parameters to generate different versions of the image.
 // We're generating WebP versions at multiple widths to support 1x, 2x, and 3x devices across all screen sizes.
 import wallpaperWebp from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;3000&format=webp&as=srcset';
@@ -18,10 +16,7 @@ import wallpaperFallback from '../assets/wallpaper-bw.jpg?w=1920';
  * 3. Handles WebP generation with JPG fallback.
  * 4. Benefits from Vite's automatic hashing for cache-busting.
  */
-const ResponsiveBackground = () => {
-  const location = useLocation();
-  const isShop = location.pathname === '/shop';
-
+const ResponsiveBackground = ({ isShop }) => {
   return (
     <div
       className={`-z-20 pointer-events-none select-none bg-[#060606] ${
