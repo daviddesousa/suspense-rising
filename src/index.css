@@ -3,15 +3,14 @@
 @theme {
   --breakpoint-laptop-lg: 90rem; /* 1440px */
   --breakpoint-3xl: 120rem; /* 1920px */
+  --main-bg-color: #060606;
 }
 
 @font-face {
   font-family: 'Felony Condensed';
-  /* Prefer woff2 if you add a .woff2 font to assets; fall back to the existing OTF.
-     Add a woff2 build of this font for better performance in production. */
   src:
-    url('assets/FelonyCondensed.woff2') format('woff2'),
-    url('assets/FelonyCondensed.otf') format('opentype');
+    url('/fonts/FelonyCondensed.woff2') format('woff2'),
+    url('/fonts/FelonyCondensed.otf') format('opentype');
   font-display: swap;
 }
 
@@ -23,24 +22,13 @@
   }
 }
 
-html {
-  background: url(assets/wallpaper-bw.webp) #060606 no-repeat top center;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  background-size: cover;
-  scroll-behavior: smooth;
-
-  &.no-webp {
-    background-image: url(assets/wallpaper-bw.jpg);
-  }
-}
-
 body {
   font-family: 'Felony Condensed', sans-serif;
   font-weight: 400;
   font-style: normal;
   font-size: 1rem;
-  color: white;
+  color: var(--color-white);
+  background-color: var(--main-bg-color);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 
@@ -58,23 +46,13 @@ body {
     bottom: 0;
     background-color: #000;
     opacity: 0.9;
-    transition: opacity 400ms ease-in-out;
+    transition: opacity 300ms ease-in-out;
     z-index: -1;
   }
 }
 
 body:has(.site-wrapper[data-page-handle='/'])::before {
   opacity: 0.5;
-}
-
-html:has(.site-wrapper[data-page-handle='/shop']) {
-  -webkit-background-size: contain;
-  -moz-background-size: contain;
-  background-size: contain;
-}
-
-img {
-  max-width: 100%;
 }
 
 picture {
@@ -207,7 +185,11 @@ a {
   will-change: transform;
 
   &:has(.active) {
-    transform: scale(1.25);
+    transform: scale(1.1);
+
+    @media screen and (min-width: 360px) {
+      transform: scale(1.25);
+    }
   }
 }
 
@@ -228,6 +210,9 @@ a {
 
 .site-header {
   padding: var(--gutter-size);
+  width: 100%;
+  max-width: var(--breakpoint-laptop-lg);
+  margin-inline: auto;
 }
 
 .site-wrapper {
@@ -235,8 +220,7 @@ a {
   flex-direction: column;
   min-height: 100svh;
   max-width: var(--breakpoint-laptop-lg);
-  margin-left: auto;
-  margin-right: auto;
+  margin-inline: auto;
 }
 
 .site-wrapper[data-page-handle='/'] {

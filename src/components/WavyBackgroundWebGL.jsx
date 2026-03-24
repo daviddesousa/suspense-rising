@@ -1,0 +1,240 @@
+import { useEffect, useRef, useState } from 'react';
+import { motion as Motion } from 'motion/react';
+
+const WavyBackgroundWebGL = ({ imageUrl }) => {
+  const [isLoaded, setIsLoaded] = useState(false);
+  const canvasRef = useRef(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+
+    const gl = canvas.getContext('webgl', { antialias: true, alpha: true });
+    if (!gl) {
+      console.error('WebGL not supported');
+      return;
+    }
+
+    // Vertex shader
+    const vsSource = `
+      attribute vec2 position;
+      varying vec2 vUv;
+      void main() {
+        // Map vertex position [-1, 1] to UV [0, 1] with Y flipped (0 at top)
+        vUv = vec2(position.x * 0.5 + 0.5, 0.5 - position.y * 0.5);
+        gl_Position = vec4(position, 0.0, 1.0);
+      }
+    `;
+
+    // Fragment shader with improved noise and object-fit logic
+    const fsSource = `
+      #ifdef GL_FRAGMENT_PRECISION_HIGH
+      precision highp float;
+      #else
+      precision mediump float;
+      #endif
+      varying vec2 vUv;
+      uniform sampler2D uTexture;
+      uniform float uTime;
+      uniform vec2 uResolution;
+      uniform vec2 uImageResolution;
+
+      // Simple 2D Noise
+      float random(vec2 st) {
+        return fract(sin(dot(st.xy, vec2(12.9898,78.233))) * 43758.5453123);
+      }
+
+      float noise(vec2 st) {
+        vec2 i = floor(st);
+        vec2 f = fract(st);
+        float a = random(i);
+        float b = random(i + vec2(1.0, 0.0));
+        float c = random(i + vec2(0.0, 1.0));
+        float d = random(i + vec2(1.0, 1.0));
+        vec2 u = f*f*(3.0-2.0*f);
+        return mix(a, b, u.x) + (c - a)* u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+      }
+
+      void main() {
+        // Handle background-size: cover
+        vec2 s = uResolution;
+        vec2 i = uImageResolution;
+        float rs = s.x / s.y;
+        float ri = i.x / i.y;
+        vec2 newUv = vUv;
+        if (rs > ri) {
+          newUv.y = vUv.y * (ri / rs);
+        } else {
+          newUv.x = (vUv.x - 0.5) * (rs / ri) + 0.5;
+        }
+
+        // Apply wavy effect
+        vec2 displacedUv = newUv;
+
+        // Combine a few layers of noise for organic motion
+        float n = noise(newUv * 3.5 + uTime * 0.15);
+        float n2 = noise(newUv * 6.0 - uTime * 0.1);
+
+        float dist = (n + n2 * 0.5) * 0.012;
+        displacedUv.x += dist;
+        displacedUv.y += dist;
+
+        gl_FragColor = texture2D(uTexture, displacedUv);
+      }
+    `;
+
+    function createShader(gl, type, source) {
+      const shader = gl.createShader(type);
+      gl.shaderSource(shader, source);
+      gl.compileShader(shader);
+
+      if (
+        import.meta.env.DEV &&
+        !gl.getShaderParameter(shader, gl.COMPILE_STATUS)
+      ) {
+        console.error(
+          `A shader compilation error occurred: ${gl.getShaderInfoLog(shader)}`,
+        );
+        gl.deleteShader(shader);
+        return null;
+      }
+
+      return shader;
+    }
+
+    const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
+    const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+    if (!vertexShader || !fragmentShader) {
+      return;
+    }
+
+    const program = gl.createProgram();
+    gl.attachShader(program, vertexShader);
+    gl.attachShader(program, fragmentShader);
+
+    // Best practice: ensure attrib 0 is enabled in WebGL 1
+    gl.bindAttribLocation(program, 0, 'position');
+
+    gl.linkProgram(program);
+    if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+      console.error('Program link failed:', gl.getProgramInfoLog(program));
+      console.error('Vertex shader log:', gl.getShaderInfoLog(vertexShader));
+      console.error(
+        'Fragment shader log:',
+        gl.getShaderInfoLog(fragmentShader),
+      );
+      return;
+    }
+
+    const positionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+    const positions = [-1.0, 1.0, 1.0, 1.0, -1.0, -1.0, 1.0, -1.0];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
+
+    const positionLocation = 0; // bound earlier via bindAttribLocation
+    const uTextureLocation = gl.getUniformLocation(program, 'uTexture');
+    const uTimeLocation = gl.getUniformLocation(program, 'uTime');
+    const uResolutionLocation = gl.getUniformLocation(program, 'uResolution');
+    const uImageResolutionLocation = gl.getUniformLocation(
+      program,
+      'uImageResolution',
+    );
+
+    let isCurrent = true;
+
+    const texture = gl.createTexture();
+    const image = new Image();
+    image.onload = () => {
+      if (!isCurrent) return;
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+      gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+      gl.texImage2D(
+        gl.TEXTURE_2D,
+        0,
+        gl.RGBA,
+        gl.RGBA,
+        gl.UNSIGNED_BYTE,
+        image,
+      );
+      setIsLoaded(true);
+    };
+    image.onerror = () => {
+      if (!isCurrent) return;
+      console.error('Failed to load wavy background image:', imageUrl);
+    };
+    image.src = imageUrl;
+
+    let animationId;
+    let frameCount = 0;
+    const render = (time) => {
+      if (!isCurrent) return;
+      time *= 0.001; // Convert to seconds
+
+      const width = canvas.clientWidth;
+      const height = canvas.clientHeight;
+      if (canvas.width !== width || canvas.height !== height) {
+        canvas.width = width;
+        canvas.height = height;
+        gl.viewport(0, 0, width, height);
+      }
+
+      gl.useProgram(program);
+      gl.enableVertexAttribArray(positionLocation);
+      gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+      gl.vertexAttribPointer(positionLocation, 2, gl.FLOAT, false, 0, 0);
+
+      gl.activeTexture(gl.TEXTURE0);
+      gl.bindTexture(gl.TEXTURE_2D, texture);
+      gl.uniform1i(uTextureLocation, 0);
+      gl.uniform1f(uTimeLocation, time);
+      gl.uniform2f(uResolutionLocation, width, height);
+      gl.uniform2f(
+        uImageResolutionLocation,
+        image.width || 1,
+        image.height || 1,
+      );
+
+      gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+
+      frameCount += 1;
+      if (import.meta.env.DEV && frameCount % 120 === 0) {
+        const err = gl.getError();
+        if (err !== gl.NO_ERROR) {
+          console.warn('WebGL error on frame', frameCount, err);
+        }
+      }
+
+      animationId = requestAnimationFrame(render);
+    };
+
+    animationId = requestAnimationFrame(render);
+
+    return () => {
+      isCurrent = false;
+      image.onload = null;
+      image.onerror = null;
+      if (animationId) cancelAnimationFrame(animationId);
+      gl.deleteBuffer(positionBuffer);
+      gl.deleteTexture(texture);
+      gl.deleteProgram(program);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
+    };
+  }, [imageUrl]);
+
+  return (
+    <Motion.canvas
+      ref={canvasRef}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: isLoaded ? 1 : 0 }}
+      transition={{ duration: 0.8 }}
+      className="absolute inset-0 w-full min-h-[110svh] pointer-events-none select-none"
+    />
+  );
+};
+
+export default WavyBackgroundWebGL;
