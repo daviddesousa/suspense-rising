@@ -24,23 +24,20 @@ const ResponsiveBackground = ({ isShop, isHome }) => {
       `}
       aria-hidden="true"
     >
-      {isHome ? (
-        <WavyBackgroundWebGL imageUrl={wallpaperFallback} />
-      ) : (
-        <picture className="absolute inset-0">
-          <source srcSet={wallpaperAvif} sizes="100vw" type="image/avif" />
-          <source srcSet={wallpaperWebp} sizes="100vw" type="image/webp" />
-          <source srcSet={wallpaperJpg} sizes="100vw" type="image/jpeg" />
-          <img
-            src={wallpaperFallback}
-            alt=""
-            className={`w-full ${isShop ? '' : 'h-full object-cover'} object-top`}
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-          />
-        </picture>
-      )}
+      <picture className="absolute inset-0">
+        <source srcSet={wallpaperAvif} sizes="100vw" type="image/avif" />
+        <source srcSet={wallpaperWebp} sizes="100vw" type="image/webp" />
+        <source srcSet={wallpaperJpg} sizes="100vw" type="image/jpeg" />
+        <img
+          src={wallpaperFallback}
+          alt=""
+          className={`w-full ${isShop ? '' : 'h-full object-cover'} object-top`}
+          loading="eager"
+          decoding="async"
+          fetchPriority="high"
+        />
+      </picture>
+      {isHome && <WavyBackgroundWebGL imageUrl={wallpaperFallback} />}
     </div>
   );
 };
