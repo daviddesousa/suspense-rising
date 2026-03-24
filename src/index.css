@@ -72,11 +72,6 @@ h3 {
   font-size: 150%;
 }
 
-/* TODO remove and refactor */
-p {
-  line-height: 150%;
-}
-
 a {
   color: inherit;
   transition: opacity 200ms ease-in-out;
