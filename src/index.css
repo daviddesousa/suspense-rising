@@ -185,7 +185,11 @@ a {
   will-change: transform;
 
   &:has(.active) {
-    transform: scale(1.25);
+    transform: scale(1.1);
+
+    @media screen and (min-width: 360px) {
+      transform: scale(1.25);
+    }
   }
 }
 
