@@ -54,7 +54,7 @@ const VariantSelector = ({
           >
             <div className="flex justify-between items-end">
               <div>
-                <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-1.25">
+                <h3 className="text-xs uppercase tracking-[0.2em] text-neutral-400 mb-[10.5px]">
                   Select your number
                 </h3>
                 <p className="text-sm text-neutral-100">
@@ -71,7 +71,7 @@ const VariantSelector = ({
             </div>
 
             <div className="grid grid-cols-6 sm:grid-cols-10 gap-2">
-              {variants.map((variant, idx) => (
+              {variants.map((variant) => (
                 <button
                   key={variant.id}
                   disabled={!variant.available}
