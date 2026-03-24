@@ -1,14 +1,14 @@
-import wallpaperAvif from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;3000&format=avif&as=srcset';
-import wallpaperWebp from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;3000&format=webp&as=srcset';
-import wallpaperJpg from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;3000&as=srcset';
-import wallpaperFallback from '../assets/wallpaper-bw.jpg?w=1920';
+import wallpaperAvif from '../assets/wallpaper-bw-2880x1620.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=avif&as=srcset';
+import wallpaperWebp from '../assets/wallpaper-bw-2880x1620.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=webp&as=srcset';
+import wallpaperJpg from '../assets/wallpaper-bw-2880x1620.jpg?w=640;768;1024;1280;1536;1920;2560;2880&as=srcset';
+import wallpaperFallback from '../assets/wallpaper-bw-2880x1620.jpg?w=1920';
 
 import WavyBackgroundWebGL from './WavyBackgroundWebGL';
 
 /**
  * ResponsiveBackground handles the site's main wallpaper using modern responsive image practices.
  * By using vite-imagetools, it automatically:
- * 1. Resizes the 3000px master image into multiple widths.
+ * 1. Resizes the 2880px master image into multiple widths.
  * 2. Compresses and optimizes the output.
  * 3. Handles AVIF and WebP generation with JPG fallback.
  * 4. Benefits from Vite's automatic hashing for cache-busting.
@@ -21,7 +21,6 @@ const ResponsiveBackground = ({ isShop, isHome }) => {
       className={`
         -z-20 pointer-events-none select-none bg-(--main-bg-color)
         ${isShop ? 'absolute inset-x-0 top-0 h-svh' : 'fixed inset-0'}
-        ${isHome ? 'max-xl:left-[-8%] xl:-right-[8%]' : ''}
       `}
       aria-hidden="true"
     >

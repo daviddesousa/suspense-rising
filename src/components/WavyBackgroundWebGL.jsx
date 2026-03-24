@@ -226,7 +226,7 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
   return (
     <canvas
       ref={canvasRef}
-      className="absolute inset-0 w-full max-xl:h-[130%] xl:aspect-3/2 pointer-events-none select-none"
+      className="absolute inset-0 w-full min-h-[110svh] pointer-events-none select-none"
     />
   );
 };
