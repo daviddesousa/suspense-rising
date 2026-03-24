@@ -85,12 +85,27 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
       const shader = gl.createShader(type);
       gl.shaderSource(shader, source);
       gl.compileShader(shader);
-      // Do not query compile status here in production to avoid synchronous GPU stalls.
+
+      if (
+        import.meta.env.DEV &&
+        !gl.getShaderParameter(shader, gl.COMPILE_STATUS)
+      ) {
+        console.error(
+          `A shader compilation error occurred: ${gl.getShaderInfoLog(shader)}`,
+        );
+        gl.deleteShader(shader);
+        return null;
+      }
+
       return shader;
     }
 
     const vertexShader = createShader(gl, gl.VERTEX_SHADER, vsSource);
     const fragmentShader = createShader(gl, gl.FRAGMENT_SHADER, fsSource);
+
+    if (!vertexShader || !fragmentShader) {
+      return;
+    }
 
     const program = gl.createProgram();
     gl.attachShader(program, vertexShader);
@@ -124,10 +139,12 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
       'uImageResolution',
     );
 
+    let isCurrent = true;
+
     const texture = gl.createTexture();
     const image = new Image();
-    image.src = imageUrl;
     image.onload = () => {
+      if (!isCurrent) return;
       gl.bindTexture(gl.TEXTURE_2D, texture);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
       gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
@@ -142,10 +159,16 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
         image,
       );
     };
+    image.onerror = () => {
+      if (!isCurrent) return;
+      console.error('Failed to load wavy background image:', imageUrl);
+    };
+    image.src = imageUrl;
 
     let animationId;
     let frameCount = 0;
     const render = (time) => {
+      if (!isCurrent) return;
       time *= 0.001; // Convert to seconds
 
       const width = canvas.clientWidth;
@@ -175,7 +198,7 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
       gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
 
       frameCount += 1;
-      if (frameCount % 120 === 0) {
+      if (import.meta.env.DEV && frameCount % 120 === 0) {
         const err = gl.getError();
         if (err !== gl.NO_ERROR) {
           console.warn('WebGL error on frame', frameCount, err);
@@ -188,10 +211,15 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
     animationId = requestAnimationFrame(render);
 
     return () => {
-      cancelAnimationFrame(animationId);
+      isCurrent = false;
+      image.onload = null;
+      image.onerror = null;
+      if (animationId) cancelAnimationFrame(animationId);
       gl.deleteBuffer(positionBuffer);
       gl.deleteTexture(texture);
       gl.deleteProgram(program);
+      gl.deleteShader(vertexShader);
+      gl.deleteShader(fragmentShader);
     };
   }, [imageUrl]);
 
