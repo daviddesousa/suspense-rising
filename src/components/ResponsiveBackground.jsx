@@ -18,9 +18,11 @@ import WavyBackgroundWebGL from './WavyBackgroundWebGL';
 const ResponsiveBackground = ({ isShop, isHome }) => {
   return (
     <div
-      className={`-z-20 pointer-events-none select-none bg-(--main-bg-color) ${
-        isShop ? 'absolute inset-x-0 top-0 h-svh' : 'fixed inset-0 lg:aspect-3/2'
-      }`}
+      className={`
+        -z-20 pointer-events-none select-none bg-(--main-bg-color)
+        ${isShop ? 'absolute inset-x-0 top-0 h-svh' : 'fixed inset-0'}
+        ${isHome ? 'max-xl:left-[-8%] xl:-right-[8%]' : ''}
+      `}
       aria-hidden="true"
     >
       {isHome ? (
