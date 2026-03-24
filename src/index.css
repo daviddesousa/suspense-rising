@@ -99,13 +99,13 @@ a {
   height: auto;
 }
 
-.instagram-link {
+.brand-link {
   font-size: 0;
   display: inline-block;
   margin-left: auto;
 }
 
-.instagram-icon {
+.brand-icon {
   width: 40px;
   height: 100%;
   opacity: 1;
