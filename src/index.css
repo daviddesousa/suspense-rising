@@ -315,6 +315,16 @@ hr {
   }
 }
 
+.carousel-dot {
+  position: relative;
+  box-shadow: 0 0 2px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+
+  &.is-active {
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.3);
+  }
+}
+
 .product-description ul li {
   @apply mt-2 text-pretty;
 }
