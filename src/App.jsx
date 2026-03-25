@@ -15,6 +15,14 @@ function App() {
   const lenisRef = useRef();
 
   useEffect(() => {
+    const titles = {
+      '/': 'Suspense Rising',
+      '/releases': 'Suspense Rising | Releases',
+      '/shop': 'Suspense Rising | Shop',
+    };
+
+    document.title = titles[location.pathname] || 'Suspense Rising';
+
     function update(time) {
       lenisRef.current?.lenis?.raf(time * 1000);
     }
@@ -22,7 +30,7 @@ function App() {
     gsap.ticker.add(update);
 
     return () => gsap.ticker.remove(update);
-  }, []);
+  }, [location.pathname]);
 
   return (
     <ReactLenis
