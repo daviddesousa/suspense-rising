@@ -1,14 +1,10 @@
 import { NavLink } from 'react-router';
 import { motion as Motion } from 'motion/react';
 
-import suspenseRisingLogo265Webp from '../assets/logo/suspense-rising-chrome-unicolor-265.webp';
-import suspenseRisingLogo530Webp from '../assets/logo/suspense-rising-chrome-unicolor-530.webp';
-import suspenseRisingLogo795Webp from '../assets/logo/suspense-rising-chrome-unicolor-795.webp';
-import suspenseRisingLogo1060Webp from '../assets/logo/suspense-rising-chrome-unicolor-1060.webp';
-import suspenseRisingLogo265Png from '../assets/logo/suspense-rising-chrome-unicolor-265.png';
-import suspenseRisingLogo530Png from '../assets/logo/suspense-rising-chrome-unicolor-530.png';
-import suspenseRisingLogo795Png from '../assets/logo/suspense-rising-chrome-unicolor-795.png';
-import suspenseRisingLogo1060Png from '../assets/logo/suspense-rising-chrome-unicolor-1060.png';
+import logoAvif from '../assets/logo/suspense-rising-chrome-unicolor-1060.png?w=265;530;795;1060&format=avif&as=srcset';
+import logoWebp from '../assets/logo/suspense-rising-chrome-unicolor-1060.png?w=265;530;795;1060&format=webp&as=srcset';
+import logoPng from '../assets/logo/suspense-rising-chrome-unicolor-1060.png?w=265;530;795;1060&format=png&as=srcset';
+import logoFallback from '../assets/logo/suspense-rising-chrome-unicolor-1060.png?w=265&format=png';
 
 export default function Logo() {
   return (
@@ -20,33 +16,18 @@ export default function Logo() {
         animate={{ x: 0 }}
         transition={{ duration: 1.2, ease: 'easeOut' }}
       >
-        <source
-          type="image/webp"
-          srcSet={`
-          ${suspenseRisingLogo265Webp},
-          ${suspenseRisingLogo530Webp} 2x,
-          ${suspenseRisingLogo795Webp} 3x,
-          ${suspenseRisingLogo1060Webp} 4x
-        `}
-        />
-        <source
-          type="image/png"
-          srcSet={`
-          ${suspenseRisingLogo265Png},
-          ${suspenseRisingLogo530Png} 2x,
-          ${suspenseRisingLogo795Png} 3x,
-          ${suspenseRisingLogo1060Png} 4x
-        `}
-        />
+        <source srcSet={logoAvif} sizes="265px" type="image/avif" />
+        <source srcSet={logoWebp} sizes="265px" type="image/webp" />
+        <source srcSet={logoPng} sizes="265px" type="image/png" />
         <img
-          src={suspenseRisingLogo265Png}
+          src={logoFallback}
           alt="Suspense Rising in chrome lettering"
           width="265"
           height="28"
           className="logo"
-          fetchPriority="high"
           decoding="async"
           loading="eager"
+          fetchPriority="high"
         />
       </Motion.picture>
     </NavLink>
