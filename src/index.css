@@ -113,14 +113,10 @@ a {
 }
 
 .release {
-  @media screen and (min-width: 768px) {
+  @variant md {
     display: grid;
-    grid-template-columns: 1fr 2fr;
+    grid-template-columns: 300px 1fr;
     gap: var(--gutter-size);
-  }
-
-  + .release {
-    margin-top: calc(var(--gutter-size) * 1.5);
   }
 }
 
