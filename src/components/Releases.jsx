@@ -1,21 +1,34 @@
 import { motion as Motion } from 'motion/react';
 
-import haslow302 from '../assets/releases/haslow-302.jpg';
-import haslow672 from '../assets/releases/haslow-672.jpg';
-import haslow906 from '../assets/releases/haslow-906.jpg';
-import haslow1208 from '../assets/releases/haslow-1208.jpg';
-import haslow1600 from '../assets/releases/haslow-1600.jpg';
+/*
+  IMAGE OPTIMIZATION STRATEGY
+  ---------------------------
+  Mobile (< 768px): Image width is 100vw - 48px (gutters are 2 * 24px).
+  - Common 1x targets: 312px (min phone), 366px (max phone), 553px (601px tablet).
+  - Common 2x targets: 624px, 732px, 1106px.
+  - Common 3x targets: 936px, 1098px, 1659px.
+  - Common 4x targets: 1248px (Samsung Galaxy S8+).
 
-import petrone302 from '../assets/releases/petrone-302.jpg';
-import petrone672 from '../assets/releases/petrone-672.jpg';
-import petrone906 from '../assets/releases/petrone-906.jpg';
-import petrone1208 from '../assets/releases/petrone-1208.jpg';
-import petrone1600 from '../assets/releases/petrone-1600.jpg';
+  Desktop (>= 768px): Fixed image width is 300px.
+  - Targets: 300px (1x), 600px (2x), 900px (3x).
+
+  Final srcset: 300, 366, 600, 732, 900, 1100, 1250, 1600.
+  (Accurately covers all density requirements including 4x screens)
+*/
+
+import petroneAvif from '../assets/releases/petrone.jpg?w=300;366;600;732;900;1100;1250;1600&format=avif&as=srcset';
+import petroneWebp from '../assets/releases/petrone.jpg?w=300;366;600;732;900;1100;1250;1600&format=webp&as=srcset';
+import petroneJpg from '../assets/releases/petrone.jpg?w=300;366;600;732;900;1100;1250;1600&as=srcset';
+import petroneFallback from '../assets/releases/petrone.jpg?w=600';
+
+import haslowAvif from '../assets/releases/haslow.jpg?w=300;366;600;732;900;1100;1250;1600&format=avif&as=srcset';
+import haslowWebp from '../assets/releases/haslow.jpg?w=300;366;600;732;900;1100;1250;1600&format=webp&as=srcset';
+import haslowJpg from '../assets/releases/haslow.jpg?w=300;366;600;732;900;1100;1250;1600&as=srcset';
+import haslowFallback from '../assets/releases/haslow.jpg?w=600';
 
 const itemVariants = {
-  initial: { opacity: 0, scale: 0.8 },
+  initial: { scale: 0.8 },
   animate: {
-    opacity: 1,
     scale: 1,
     transition: {
       duration: 0.8,
@@ -29,6 +42,8 @@ const itemVariants = {
 };
 
 export default function Releases() {
+  const imageSizes = '(max-width: 767px) calc(100vw - 48px), 300px';
+
   return (
     <main className="py-(--gutter-size) mb-auto">
       <section className="page-width" id="releases">
@@ -41,26 +56,25 @@ export default function Releases() {
           Releases
         </Motion.h2>
         <article className="release" id="petrone">
-          <Motion.img
-            variants={itemVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hovering"
-            srcSet={`
-              ${petrone302} 302w,
-              ${petrone672} 672w,
-              ${petrone906} 906w,
-              ${petrone1208} 1208w,
-              ${petrone1600} 1600w
-            `}
-            sizes="(max-width: 767px) 100vw, 302px"
-            src={petrone672}
-            alt="A man's stretched and distorted face with text A story about Haslow"
-            className="release-cover"
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-          />
+          <picture>
+            <source srcSet={petroneAvif} sizes={imageSizes} type="image/avif" />
+            <source srcSet={petroneWebp} sizes={imageSizes} type="image/webp" />
+            <source srcSet={petroneJpg} sizes={imageSizes} type="image/jpeg" />
+            <Motion.img
+              variants={itemVariants}
+              initial="initial"
+              animate="animate"
+              whileHover="hovering"
+              src={petroneFallback}
+              alt="A green-tinted distorted face of a horse with text A Story About Petrone"
+              className="release-cover"
+              width={1600}
+              height={1600}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
           <Motion.div
             className="release-info"
             initial={{ y: 20, opacity: 0 }}
@@ -96,26 +110,25 @@ export default function Releases() {
         </article>
         <hr />
         <article className="release" id="haslow">
-          <Motion.img
-            variants={itemVariants}
-            initial="initial"
-            animate="animate"
-            whileHover="hovering"
-            srcSet={`
-              ${haslow302} 302w,
-              ${haslow672} 672w,
-              ${haslow906} 906w,
-              ${haslow1208} 1208w,
-              ${haslow1600} 1600w
-            `}
-            sizes="(max-width: 767px) 100vw, 302px"
-            src={haslow672}
-            alt="A man's stretched and distorted face with text A story about Haslow"
-            className="release-cover"
-            loading="eager"
-            decoding="async"
-            fetchPriority="high"
-          />
+          <picture>
+            <source srcSet={haslowAvif} sizes={imageSizes} type="image/avif" />
+            <source srcSet={haslowWebp} sizes={imageSizes} type="image/webp" />
+            <source srcSet={haslowJpg} sizes={imageSizes} type="image/jpeg" />
+            <Motion.img
+              variants={itemVariants}
+              initial="initial"
+              animate="animate"
+              whileHover="hovering"
+              src={haslowFallback}
+              alt="A man's stretched and distorted face with text A Story About Haslow"
+              className="release-cover"
+              width={1600}
+              height={1600}
+              loading="eager"
+              decoding="async"
+              fetchPriority="high"
+            />
+          </picture>
           <Motion.div
             className="release-info"
             initial={{ y: 20, opacity: 0 }}

@@ -1,10 +1,10 @@
 import { NavLink } from 'react-router';
 import { motion as Motion } from 'motion/react';
 
-import logoAvif from '../assets/logo/suspense-rising-chrome-unicolor-1060.png?w=265;530;795;1060&format=avif&as=srcset';
-import logoWebp from '../assets/logo/suspense-rising-chrome-unicolor-1060.png?w=265;530;795;1060&format=webp&as=srcset';
-import logoPng from '../assets/logo/suspense-rising-chrome-unicolor-1060.png?w=265;530;795;1060&format=png&as=srcset';
-import logoFallback from '../assets/logo/suspense-rising-chrome-unicolor-1060.png?w=265&format=png';
+import logoAvif from '../assets/logo/suspense-rising-chrome-unicolor.png?w=265;530;795;1060&format=avif&as=srcset';
+import logoWebp from '../assets/logo/suspense-rising-chrome-unicolor.png?w=265;530;795;1060&format=webp&as=srcset';
+import logoPng from '../assets/logo/suspense-rising-chrome-unicolor.png?w=265;530;795;1060&format=png&as=srcset';
+import logoFallback from '../assets/logo/suspense-rising-chrome-unicolor.png?w=265&format=png';
 
 export default function Logo() {
   return (

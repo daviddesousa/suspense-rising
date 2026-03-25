@@ -1,7 +1,7 @@
-import wallpaperAvif from '../assets/wallpaper-bw-2880x1620.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=avif&as=srcset';
-import wallpaperWebp from '../assets/wallpaper-bw-2880x1620.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=webp&as=srcset';
-import wallpaperJpg from '../assets/wallpaper-bw-2880x1620.jpg?w=640;768;1024;1280;1536;1920;2560;2880&as=srcset';
-import wallpaperFallback from '../assets/wallpaper-bw-2880x1620.jpg?w=1920';
+import wallpaperAvif from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=avif&as=srcset';
+import wallpaperWebp from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=webp&as=srcset';
+import wallpaperJpg from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;2880&as=srcset';
+import wallpaperFallback from '../assets/wallpaper-bw.jpg?w=1920';
 
 import WavyBackgroundWebGL from './WavyBackgroundWebGL';
 
