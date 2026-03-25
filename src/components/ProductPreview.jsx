@@ -218,7 +218,7 @@ export default function ProductPreview({ handle }) {
               {images.map((_, idx) => (
                 <div
                   key={idx}
-                  className={`carousel-dot w-2 h-2 rounded-full transition-colors ${idx === currentImageIndex ? 'is-active bg-white' : 'bg-white/30'}`}
+                  className={`carousel-dot rounded-full ${idx === currentImageIndex ? 'is-active bg-white' : 'bg-white/30'}`}
                 />
               ))}
             </div>
