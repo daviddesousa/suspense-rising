@@ -20,18 +20,18 @@ const ResponsiveBackground = ({ isShop, isHome }) => {
     <div
       className={`
         -z-20 pointer-events-none select-none bg-(--main-bg-color)
-        ${isShop ? 'absolute inset-x-0 top-0 h-svh' : 'fixed inset-0'}
+        ${isShop ? 'absolute inset-x-0 top-0' : 'fixed inset-0'}
       `}
       aria-hidden="true"
     >
-      <picture className="absolute inset-0">
+      <picture>
         <source srcSet={wallpaperAvif} sizes="100vw" type="image/avif" />
         <source srcSet={wallpaperWebp} sizes="100vw" type="image/webp" />
         <source srcSet={wallpaperJpg} sizes="100vw" type="image/jpeg" />
         <img
           src={wallpaperFallback}
           alt=""
-          className={`w-full ${isShop ? '' : 'h-full object-cover'} object-top`}
+          className={`absolute inset-0 w-full min-h-[110svh] object-cover`}
           loading="eager"
           decoding="async"
           fetchPriority="high"
