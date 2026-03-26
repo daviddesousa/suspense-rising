@@ -83,10 +83,15 @@ export default function ProductPreview({ handle }) {
       setIsAutoplayActive(true);
       if (intervalId) clearInterval(intervalId);
       intervalId = setInterval(() => {
-        if (emblaApi.canScrollNext()) {
+        const index = emblaApi.selectedScrollSnap();
+        const lastIndex = emblaApi.scrollSnapList().length - 1;
+
+        if (index === lastIndex) {
           emblaApi.scrollNext();
+          stopAutoplay();
+          observer.unobserve(emblaNode);
         } else {
-          emblaApi.scrollTo(0);
+          emblaApi.scrollNext();
         }
       }, 4000);
     };
