@@ -1,7 +1,7 @@
-import wallpaperAvif from '../assets/wallpaper-bw-2880x1620.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=avif&as=srcset';
-import wallpaperWebp from '../assets/wallpaper-bw-2880x1620.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=webp&as=srcset';
-import wallpaperJpg from '../assets/wallpaper-bw-2880x1620.jpg?w=640;768;1024;1280;1536;1920;2560;2880&as=srcset';
-import wallpaperFallback from '../assets/wallpaper-bw-2880x1620.jpg?w=1920';
+import wallpaperAvif from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=avif&as=srcset';
+import wallpaperWebp from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=webp&as=srcset';
+import wallpaperJpg from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;2880&as=srcset';
+import wallpaperFallback from '../assets/wallpaper-bw.jpg?w=1920';
 
 import WavyBackgroundWebGL from './WavyBackgroundWebGL';
 
@@ -20,18 +20,18 @@ const ResponsiveBackground = ({ isShop, isHome }) => {
     <div
       className={`
         -z-20 pointer-events-none select-none bg-(--main-bg-color)
-        ${isShop ? 'absolute inset-x-0 top-0 h-svh' : 'fixed inset-0'}
+        ${isShop ? 'absolute inset-x-0 top-0' : 'fixed inset-0'}
       `}
       aria-hidden="true"
     >
-      <picture className="absolute inset-0">
+      <picture>
         <source srcSet={wallpaperAvif} sizes="100vw" type="image/avif" />
         <source srcSet={wallpaperWebp} sizes="100vw" type="image/webp" />
         <source srcSet={wallpaperJpg} sizes="100vw" type="image/jpeg" />
         <img
           src={wallpaperFallback}
           alt=""
-          className={`w-full ${isShop ? '' : 'h-full object-cover'} object-top`}
+          className={`absolute inset-0 w-full min-h-[110svh] object-cover`}
           loading="eager"
           decoding="async"
           fetchPriority="high"

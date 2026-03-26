@@ -12,6 +12,9 @@ export default function MiniAudioPlayer({ src }) {
   const audioRef = useRef(null);
   const holdTimer = useRef(null);
   const [active, setActive] = useState(false);
+  const [showHint, setShowHint] = useState(false);
+  const hintTimeout = useRef(null);
+  const touchStartTime = useRef(0);
 
   // ------------------------------------------------------------------
   // Audio control
@@ -77,6 +80,8 @@ export default function MiniAudioPlayer({ src }) {
   const handleTouchStart = useCallback(
     (e) => {
       e.preventDefault(); // prevent ghost clicks & text selection
+      touchStartTime.current = Date.now();
+      setShowHint(false);
       holdTimer.current = setTimeout(() => {
         unmute();
       }, 200); // slight delay so quick taps don't trigger
@@ -91,13 +96,25 @@ export default function MiniAudioPlayer({ src }) {
   }, []);
 
   const handleTouchEnd = useCallback(() => {
+    const duration = Date.now() - touchStartTime.current;
     clearTimeout(holdTimer.current);
     mute();
+
+    if (duration < 200) {
+      setShowHint(true);
+      if (hintTimeout.current) clearTimeout(hintTimeout.current);
+      hintTimeout.current = setTimeout(() => {
+        setShowHint(false);
+      }, 1500);
+    }
   }, [mute]);
 
-  // Clean up timer on unmount
+  // Clean up timers on unmount
   useEffect(() => {
-    return () => clearTimeout(holdTimer.current);
+    return () => {
+      clearTimeout(holdTimer.current);
+      clearTimeout(hintTimeout.current);
+    };
   }, []);
 
   return (
@@ -117,9 +134,7 @@ export default function MiniAudioPlayer({ src }) {
       tabIndex={0}
     >
       {/* Hidden audio element */}
-      {src && (
-        <audio ref={audioRef} src={src} loop muted autoPlay preload="auto" />
-      )}
+      {src && <audio ref={audioRef} src={src} loop muted preload="auto" />}
 
       {/* ── Desktop layout ── */}
       <div className="player-desktop">
@@ -155,9 +170,12 @@ export default function MiniAudioPlayer({ src }) {
           </div>
         </div>
         <div
-          className={`fingerprint-wrap ${active ? 'fingerprint-wrap--hidden' : ''}`}
+          className={`fingerprint-wrap ${active ? 'fingerprint-wrap--active' : ''}`}
         >
           <FingerprintIcon />
+          <div className={`hold-hint ${showHint ? 'hold-hint--visible' : ''}`}>
+            HOLD
+          </div>
         </div>
       </div>
     </div>

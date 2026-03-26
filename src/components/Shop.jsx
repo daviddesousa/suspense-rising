@@ -93,12 +93,12 @@ export default function Shop() {
     <main>
       <ScrollIndicator />
 
-      <ShopSection text="Meet Haslow." />
+      <ShopSection text="Meet Haslow." height="10vh" />
 
       {/* Ref wrapper — marks the trigger point */}
       <div
         ref={haslowRef}
-        className="sticky top-0 w-full h-svh -z-1 overflow-hidden"
+        className="sticky top-0 w-full h-screen -z-1 overflow-hidden"
       >
         <div
           ref={bgContainerRef}
