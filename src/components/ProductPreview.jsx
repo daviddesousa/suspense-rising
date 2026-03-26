@@ -12,6 +12,7 @@ export default function ProductPreview({ handle }) {
   const [selectedVariantId, setSelectedVariantId] = useState(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
+  const [isAutoplayActive, setIsAutoplayActive] = useState(false);
 
   const {
     data: product,
@@ -37,7 +38,10 @@ export default function ProductPreview({ handle }) {
   const loading = isLoading;
   const productNotFound = !isLoading && !error && !product;
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' });
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'center',
+  });
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -62,6 +66,66 @@ export default function ProductPreview({ handle }) {
       emblaApi.off('reInit', onSelect);
     };
   }, [emblaApi, onSelect]);
+
+  // Autoplay functionality - only for touch devices when in viewport
+  useEffect(() => {
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    if (
+      !emblaApi ||
+      !isTouchDevice ||
+      !product?.images ||
+      product.images.length <= 1
+    )
+      return;
+
+    let intervalId;
+    const startAutoplay = () => {
+      setIsAutoplayActive(true);
+      if (intervalId) clearInterval(intervalId);
+      intervalId = setInterval(() => {
+        if (emblaApi.canScrollNext()) {
+          emblaApi.scrollNext();
+        } else {
+          emblaApi.scrollTo(0);
+        }
+      }, 4000);
+    };
+
+    const stopAutoplay = () => {
+      setIsAutoplayActive(false);
+      if (intervalId) clearInterval(intervalId);
+      intervalId = null;
+    };
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            startAutoplay();
+          } else {
+            stopAutoplay();
+          }
+        });
+      },
+      { threshold: 0.5 },
+    );
+
+    const emblaNode = emblaApi.rootNode();
+    observer.observe(emblaNode);
+
+    const onPointerDown = () => {
+      stopAutoplay();
+      observer.unobserve(emblaNode);
+    };
+
+    emblaApi.on('pointerDown', onPointerDown);
+
+    return () => {
+      stopAutoplay();
+      observer.disconnect();
+      emblaApi.off('pointerDown', onPointerDown);
+    };
+  }, [emblaApi, product?.images]);
 
   // Handle returning from Shopify Checkout via browser back button (BFCache)
   useEffect(() => {
@@ -130,14 +194,21 @@ export default function ProductPreview({ handle }) {
           customAttributes: [
             { key: '_selection_method', value: isRandom ? 'random' : 'manual' },
             { key: '_figure_number', value: figureNumber.toString() },
-            { key: 'Number', value: isRandom ? 'Haslow has chosen for you.' : figureNumber.toString() },
+            {
+              key: 'Number',
+              value: isRandom
+                ? 'Haslow has chosen for you.'
+                : figureNumber.toString(),
+            },
           ],
         },
       ]);
       window.location.href = checkout.webUrl;
     } catch (err) {
       console.error('Checkout error:', err);
-      setCheckoutError(err.message || 'Something went wrong with the checkout.');
+      setCheckoutError(
+        err.message || 'Something went wrong with the checkout.',
+      );
       setIsCheckingOut(false);
     }
   };
@@ -215,12 +286,16 @@ export default function ProductPreview({ handle }) {
 
           {images.length > 1 && (
             <div className="carousel-dots flex justify-center gap-2 mt-4 pointer-events-none">
-              {images.map((img, idx) => (
-                <div
-                  key={img.id}
-                  className={`carousel-dot rounded-full ${idx === currentImageIndex ? 'is-active bg-white' : 'bg-white/30'}`}
-                />
-              ))}
+              {images.map((img, idx) => {
+                const isActive = idx === currentImageIndex;
+                const isLoading = isAutoplayActive && isActive;
+                return (
+                  <div
+                    key={img.id}
+                    className={`carousel-dot rounded-full ${isActive ? 'is-active' : ''} ${isLoading ? 'is-loading' : ''}`}
+                  />
+                );
+              })}
             </div>
           )}
         </div>
