@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import useSWR from 'swr';
 import useEmblaCarousel from 'embla-carousel-react';
 import { client, decodeVariantTitle } from '../lib/shopify';
@@ -12,7 +12,9 @@ export default function ProductPreview({ handle }) {
   const [selectedVariantId, setSelectedVariantId] = useState(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
-  const [isAutoplayActive, setIsAutoplayActive] = useState(false);
+  const [isPeeking, setIsPeeking] = useState(false);
+  const hasPeekedRef = useRef(false);
+  const hasInteractedRef = useRef(false);
 
   const {
     data: product,
@@ -67,70 +69,74 @@ export default function ProductPreview({ handle }) {
     };
   }, [emblaApi, onSelect]);
 
-  // Autoplay functionality - only for touch devices when in viewport
+  // Track user interaction to cancel discovery peek
+  useEffect(() => {
+    if (!emblaApi) return;
+    const handleInteract = () => {
+      hasInteractedRef.current = true;
+    };
+    emblaApi.on('dragStart', handleInteract);
+    return () => {
+      emblaApi.off('dragStart', handleInteract);
+    };
+  }, [emblaApi]);
+
+  // One-time "peek" effect to indicate swipeability on touch devices when coming into view
   useEffect(() => {
     const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    const imagesCount = product?.images?.length || 0;
+
     if (
-      !emblaApi ||
       !isTouchDevice ||
-      !product?.images ||
-      product.images.length <= 1
-    )
+      !emblaApi ||
+      imagesCount <= 1 ||
+      hasPeekedRef.current ||
+      hasInteractedRef.current
+    ) {
       return;
+    }
 
-    let intervalId;
-    const startAutoplay = () => {
-      setIsAutoplayActive(true);
-      if (intervalId) clearInterval(intervalId);
-      intervalId = setInterval(() => {
-        const index = emblaApi.selectedScrollSnap();
-        const lastIndex = emblaApi.scrollSnapList().length - 1;
-
-        if (index === lastIndex) {
-          emblaApi.scrollNext();
-          stopAutoplay();
-          observer.unobserve(emblaNode);
-        } else {
-          emblaApi.scrollNext();
-        }
-      }, 4000);
-    };
-
-    const stopAutoplay = () => {
-      setIsAutoplayActive(false);
-      if (intervalId) clearInterval(intervalId);
-      intervalId = null;
-    };
+    let peekTimer = null;
 
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            startAutoplay();
+          if (
+            entry.isIntersecting &&
+            !hasPeekedRef.current &&
+            !hasInteractedRef.current
+          ) {
+            // Trigger peek after 3 seconds of being in view with no interaction
+            peekTimer = setTimeout(() => {
+              if (!hasInteractedRef.current && entry.isIntersecting) {
+                setIsPeeking(true);
+                setTimeout(() => {
+                  setIsPeeking(false);
+                }, 700);
+                hasPeekedRef.current = true;
+                observer.disconnect();
+              }
+            }, 3000);
           } else {
-            stopAutoplay();
+            // Cancel timer if user scrolls away before it fires
+            if (peekTimer) {
+              clearTimeout(peekTimer);
+              peekTimer = null;
+            }
           }
         });
       },
-      { threshold: 0.5 },
+      { threshold: 0.75 },
     );
 
     const emblaNode = emblaApi.rootNode();
     observer.observe(emblaNode);
 
-    const onPointerDown = () => {
-      stopAutoplay();
-      observer.unobserve(emblaNode);
-    };
-
-    emblaApi.on('pointerDown', onPointerDown);
-
     return () => {
-      stopAutoplay();
       observer.disconnect();
-      emblaApi.off('pointerDown', onPointerDown);
+      if (peekTimer) clearTimeout(peekTimer);
     };
-  }, [emblaApi, product?.images]);
+  }, [emblaApi, product?.images?.length]);
 
   // Handle returning from Shopify Checkout via browser back button (BFCache)
   useEffect(() => {
@@ -226,7 +232,10 @@ export default function ProductPreview({ handle }) {
             className="carousel-inner relative overflow-hidden aspect-2/3"
             ref={emblaRef}
           >
-            <div className="flex h-full touch-pan-y">
+            <div
+              className={`flex h-full touch-pan-y relative transition-[left] duration-800 ease-in-out`}
+              style={{ left: isPeeking ? '-24px' : '0px' }}
+            >
               {/* TODO test srcSet and sizes. refactor for lg breakpoint */}
               {images.map((img) => {
                 const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
@@ -293,11 +302,10 @@ export default function ProductPreview({ handle }) {
             <div className="carousel-dots flex justify-center gap-2 mt-4 pointer-events-none">
               {images.map((img, idx) => {
                 const isActive = idx === currentImageIndex;
-                const isLoading = isAutoplayActive && isActive;
                 return (
                   <div
                     key={img.id}
-                    className={`carousel-dot rounded-full ${isActive ? 'is-active' : ''} ${isLoading ? 'is-loading' : ''}`}
+                    className={`carousel-dot rounded-full ${isActive ? 'is-active' : ''}`}
                   />
                 );
               })}
