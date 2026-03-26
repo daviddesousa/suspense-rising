@@ -9,7 +9,7 @@ gsap.registerPlugin(ScrollTrigger, useGSAP);
  * A reusable section component for the Shop page that reveals text word-by-word
  * as the user scrolls. Each section pins until the reveal is complete.
  */
-const ShopSection = ({ text }) => {
+const ShopSection = ({ text, height = '50vh' }) => {
   const sectionRef = useRef();
 
   useGSAP(
@@ -37,7 +37,8 @@ const ShopSection = ({ text }) => {
   return (
     <section
       ref={sectionRef}
-      className="h-[50svh] flex items-center justify-center"
+      style={{ height }}
+      className="flex items-center justify-center"
     >
       {/*
         Mobile Screen Resolution Stats Worldwide (Feb 2025 - Feb 2026)
