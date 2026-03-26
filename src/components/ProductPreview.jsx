@@ -37,7 +37,7 @@ export default function ProductPreview({ handle }) {
   const loading = isLoading;
   const productNotFound = !isLoading && !error && !product;
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true, align: 'center' });
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -161,7 +161,7 @@ export default function ProductPreview({ handle }) {
                 return (
                   <div
                     key={img.id}
-                    className="flex-[0_0_100%] min-w-0 relative h-full"
+                    className="carousel-slide flex-[0_0_100%] min-w-0 relative h-full"
                   >
                     <img
                       src={`${img.src}&width=800`}
