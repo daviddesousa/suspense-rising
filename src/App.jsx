@@ -7,6 +7,7 @@ import gsap from 'gsap';
 import Logo from './components/Logo';
 import Nav from './components/Nav';
 import ResponsiveBackground from './components/ResponsiveBackground';
+import { Toaster } from 'sonner';
 
 const titles = {
   '/': 'Suspense Rising',
@@ -41,6 +42,17 @@ function App() {
       ref={lenisRef}
     >
       <div className="site-wrapper" data-page-handle={location.pathname}>
+        <Toaster
+          position="bottom-center"
+          expand={false}
+          richColors
+          theme="dark"
+          toastOptions={{
+            classNames: {
+              toast: 'rounded-sm!',
+            },
+          }}
+        />
         <ResponsiveBackground isShop={isShop} isHome={isHome} />
         <header className="site-header">
           <Nav />

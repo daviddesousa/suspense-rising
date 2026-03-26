@@ -4,6 +4,7 @@ import useEmblaCarousel from 'embla-carousel-react';
 import { client, decodeVariantTitle } from '../lib/shopify';
 import VariantSelector from './VariantSelector';
 import DOMPurify from 'dompurify';
+import { toast } from 'sonner';
 
 const PEEK_INTERSECTION_THRESHOLD = 0.75; // Intersection observer threshold
 const PEEK_DELAY = 3000; // Delay before triggering peek animation (ms)
@@ -16,7 +17,6 @@ export default function ProductPreview({ handle }) {
   // State for inventory polling
   const [selectedVariantId, setSelectedVariantId] = useState(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
-  const [checkoutError, setCheckoutError] = useState(null);
   const [isPeeking, setIsPeeking] = useState(false);
   const hasPeekedRef = useRef(false);
   const hasInteractedRef = useRef(false);
@@ -186,7 +186,7 @@ export default function ProductPreview({ handle }) {
     if (isRandom) {
       const available = product.variants.filter((v) => v.available);
       if (available.length === 0) {
-        setCheckoutError('Sorry, this item is sold out!');
+        toast.warning('Sorry, this item is sold out!');
         return;
       }
       const random = available[Math.floor(Math.random() * available.length)];
@@ -201,7 +201,6 @@ export default function ProductPreview({ handle }) {
       : 'Unknown';
 
     setIsCheckingOut(true);
-    setCheckoutError(null);
 
     try {
       const checkout = await client.checkout.create();
@@ -224,9 +223,7 @@ export default function ProductPreview({ handle }) {
       window.location.href = checkout.webUrl;
     } catch (err) {
       console.error('Checkout error:', err);
-      setCheckoutError(
-        err.message || 'Something went wrong with the checkout.',
-      );
+      toast.error(err.message || 'Something went wrong with the checkout.');
       setIsCheckingOut(false);
     }
   };
@@ -345,31 +342,6 @@ export default function ProductPreview({ handle }) {
           onBuy={buyNow}
           isLoading={isCheckingOut}
         />
-
-        {/* @TODO improve mobile display (toast?) */}
-        {checkoutError && (
-          <div className="flex items-center justify-between gap-4 mt-4 p-4 bg-red-500/5 border border-red-500/20 rounded-lg backdrop-blur-sm animate-in fade-in slide-in-from-top-1 duration-300">
-            <p className="text-red-500 text-lg flex-1">{checkoutError}</p>
-            <button
-              onClick={() => setCheckoutError(null)}
-              className="p-1 text-red-500 hover:bg-red-500/10 rounded-full transition-all active:scale-95 cursor-pointer"
-              aria-label="Dismiss error"
-            >
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              >
-                <path d="M18 6L6 18M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-        )}
       </div>
     </div>
   );
