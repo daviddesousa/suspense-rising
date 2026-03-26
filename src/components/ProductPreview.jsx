@@ -10,6 +10,7 @@ const PEEK_INTERSECTION_THRESHOLD = 0.75; // Intersection observer threshold
 const PEEK_DELAY = 3000; // Delay before triggering peek animation (ms)
 const PEEK_DURATION = 700; // Duration of peek animation (ms)
 const PEEK_OFFSET = '-1.5rem'; // Offset to shift carousel briefly for peek swipe affordance
+const IMAGE_WIDTHS = [360, 414, 512, 768, 828, 1024, 1242, 1536];
 
 export default function ProductPreview({ handle }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -243,12 +244,10 @@ export default function ProductPreview({ handle }) {
                 transitionDuration: `${PEEK_DURATION}ms`,
               }}
             >
-              {/* TODO test srcSet and sizes. refactor for lg breakpoint */}
               {images.map((img) => {
-                const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
-                const srcSet = widths
-                  .map((width) => `${img.src}&width=${width} ${width}w`)
-                  .join(', ');
+                const srcSet = IMAGE_WIDTHS.map(
+                  (width) => `${img.src}&width=${width} ${width}w`,
+                ).join(', ');
 
                 return (
                   <div
@@ -256,9 +255,9 @@ export default function ProductPreview({ handle }) {
                     className="flex-[0_0_100%] min-w-0 relative h-full pointer-coarse:mr-[3%]"
                   >
                     <img
-                      src={`${img.src}&width=800`}
+                      src={`${img.src}&width=1024`}
                       srcSet={srcSet}
-                      sizes="(min-width: 64rem) 33vw, 100vw"
+                      sizes="(min-width: 1151px) 512px, (min-width: 64rem) calc(100vw - 39rem), (min-width: 40rem) 33vw, 100vw"
                       alt={product.title}
                       className="absolute inset-0 w-full h-full object-contain select-none"
                     />
