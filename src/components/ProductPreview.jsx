@@ -143,7 +143,7 @@ export default function ProductPreview({ handle }) {
   };
 
   return (
-    <div className="product-preview grid gap-8">
+    <div className="product-preview grid gap-10 lg:gap-8">
       {images.length > 0 && (
         <div className="product-carousel max-sm:-mx-(--gutter-size)">
           <div
@@ -209,17 +209,20 @@ export default function ProductPreview({ handle }) {
                     <path d="M9 18l6-6-6-6" />
                   </svg>
                 </button>
-                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-2 z-10 pointer-events-none">
-                  {images.map((_, idx) => (
-                    <div
-                      key={idx}
-                      className={`w-2 h-2 rounded-full transition-colors ${idx === currentImageIndex ? 'bg-white' : 'bg-white/30'}`}
-                    />
-                  ))}
-                </div>
               </>
             )}
           </div>
+
+          {images.length > 1 && (
+            <div className="carousel-dots flex justify-center gap-2 mt-4 pointer-events-none">
+              {images.map((img, idx) => (
+                <div
+                  key={img.id}
+                  className={`carousel-dot rounded-full ${idx === currentImageIndex ? 'is-active bg-white' : 'bg-white/30'}`}
+                />
+              ))}
+            </div>
+          )}
         </div>
       )}
 

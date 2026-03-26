@@ -1,8 +1,6 @@
-import { useEffect, useRef, useState } from 'react';
-import { motion as Motion } from 'motion/react';
+import { useEffect, useRef } from 'react';
 
 const WavyBackgroundWebGL = ({ imageUrl }) => {
-  const [isLoaded, setIsLoaded] = useState(false);
   const canvasRef = useRef(null);
 
   useEffect(() => {
@@ -160,7 +158,6 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
         gl.UNSIGNED_BYTE,
         image,
       );
-      setIsLoaded(true);
     };
     image.onerror = () => {
       if (!isCurrent) return;
@@ -227,12 +224,9 @@ const WavyBackgroundWebGL = ({ imageUrl }) => {
   }, [imageUrl]);
 
   return (
-    <Motion.canvas
+    <canvas
       ref={canvasRef}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: isLoaded ? 1 : 0 }}
-      transition={{ duration: 0.8 }}
-      className="absolute inset-0 w-full min-h-[110svh] pointer-events-none select-none"
+      className="absolute inset-0 w-full min-h-[113svh] pointer-events-none select-none"
     />
   );
 };
