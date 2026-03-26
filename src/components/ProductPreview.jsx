@@ -215,9 +215,9 @@ export default function ProductPreview({ handle }) {
 
           {images.length > 1 && (
             <div className="carousel-dots flex justify-center gap-2 mt-4 pointer-events-none">
-              {images.map((_, idx) => (
+              {images.map((img, idx) => (
                 <div
-                  key={idx}
+                  key={img.id}
                   className={`carousel-dot rounded-full ${idx === currentImageIndex ? 'is-active bg-white' : 'bg-white/30'}`}
                 />
               ))}

@@ -135,7 +135,7 @@ export default function Releases() {
             animate={{ y: 0, opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4, ease: 'easeOut' }}
           >
-            <h2 className="text-[150%]!" >Haffenfold - Haslow (SR001)</h2>
+            <h2 className="text-[150%]!">Haffenfold - Haslow (SR001)</h2>
             <p>
               Meet Haslow. He speaks with charm and moves with grace, but
               there’s something cold beneath his smile, like a man who’s
