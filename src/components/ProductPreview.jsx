@@ -6,6 +6,11 @@ import VariantSelector from './VariantSelector';
 import DOMPurify from 'dompurify';
 
 export default function ProductPreview({ handle }) {
+  const PEEK_INTERSECTION_THRESHOLD = 0.75; // Intersection observer threshold
+  const PEEK_DELAY = 3000; // Delay before triggering peek animation (ms)
+  const PEEK_DURATION = 700; // Duration of peek animation (ms)
+  const PEEK_OFFSET = '-1.5rem'; // Offset to shift carousel briefly for peek swipe affordance
+
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // State for inventory polling
@@ -107,17 +112,17 @@ export default function ProductPreview({ handle }) {
             !hasPeekedRef.current &&
             !hasInteractedRef.current
           ) {
-            // Trigger peek after 3 seconds of being in view with no interaction
+            // Trigger peek after PEEK_DELAY of being in view with no interaction
             peekTimer = setTimeout(() => {
               if (!hasInteractedRef.current && entry.isIntersecting) {
                 setIsPeeking(true);
                 resetTimer = setTimeout(() => {
                   setIsPeeking(false);
-                }, 700);
+                }, PEEK_DURATION);
                 hasPeekedRef.current = true;
                 observer.disconnect();
               }
-            }, 3000);
+            }, PEEK_DELAY);
           } else {
             // Cancel timer if user scrolls away before it fires
             if (peekTimer) {
@@ -127,7 +132,7 @@ export default function ProductPreview({ handle }) {
           }
         });
       },
-      { threshold: 0.75 },
+      { threshold: PEEK_INTERSECTION_THRESHOLD },
     );
 
     const emblaNode = emblaApi.rootNode();
@@ -235,8 +240,11 @@ export default function ProductPreview({ handle }) {
             ref={emblaRef}
           >
             <div
-              className={`flex h-full touch-pan-y relative transition-[left] duration-700 ease-in-out`}
-              style={{ left: isPeeking ? '-1.5rem' : '0' }}
+              className={`flex h-full touch-pan-y relative transition-[left] ease-in-out`}
+              style={{
+                left: isPeeking ? PEEK_OFFSET : '0',
+                transitionDuration: `${PEEK_DURATION}ms`,
+              }}
             >
               {/* TODO test srcSet and sizes. refactor for lg breakpoint */}
               {images.map((img) => {
