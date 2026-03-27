@@ -5,10 +5,16 @@ import logoAvif from '../assets/logo/suspense-rising-chrome-unicolor.png?w=265;5
 import logoWebp from '../assets/logo/suspense-rising-chrome-unicolor.png?w=265;530;795;1060&format=webp&as=srcset';
 import logoPng from '../assets/logo/suspense-rising-chrome-unicolor.png?w=265;530;795;1060&format=png&as=srcset';
 import logoFallback from '../assets/logo/suspense-rising-chrome-unicolor.png?w=265&format=png';
+// React DOM uses the first arg to preload() as a deduplication key, not as an href.
+// When imageSrcSet is provided, React omits href entirely from the <link> tag (valid per spec).
+// A stable single-URL string is used here so the key is meaningful and collision-free.
+import logoAvif265 from '../assets/logo/suspense-rising-chrome-unicolor.png?w=265&format=avif';
 
 // Preload the critical LCP image to make it discoverable as early as possible.
-// This call injects a <link rel="preload"> tag during the head render phase.
-preload(logoAvif, {
+// React DOM injects <link rel="preload" as="image" imagesrcset="..." imagesizes="...">
+// without an href (correct per spec when imagesrcset is present). The browser then
+// selects the right variant via the srcset algorithm before any JS has executed.
+preload(logoAvif265, {
   as: 'image',
   imageSrcSet: logoAvif,
   imageSizes: '265px',
