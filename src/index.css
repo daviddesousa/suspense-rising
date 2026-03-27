@@ -99,6 +99,20 @@ a {
   height: auto;
 }
 
+@keyframes logo-slide-in {
+  from {
+    transform: translateX(-60px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.logo-container {
+  display: block;
+  animation: logo-slide-in 1.2s cubic-bezier(0.165, 0.84, 0.44, 1) forwards;
+}
+
 .brand-link {
   font-size: 0;
   display: inline-block;
