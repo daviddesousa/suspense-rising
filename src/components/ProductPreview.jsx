@@ -97,6 +97,7 @@ export default function ProductPreview({ handle }) {
     }
 
     let peekTimer = null;
+    let resetTimer = null;
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -110,7 +111,7 @@ export default function ProductPreview({ handle }) {
             peekTimer = setTimeout(() => {
               if (!hasInteractedRef.current && entry.isIntersecting) {
                 setIsPeeking(true);
-                setTimeout(() => {
+                resetTimer = setTimeout(() => {
                   setIsPeeking(false);
                 }, 700);
                 hasPeekedRef.current = true;
@@ -135,6 +136,7 @@ export default function ProductPreview({ handle }) {
     return () => {
       observer.disconnect();
       if (peekTimer) clearTimeout(peekTimer);
+      if (resetTimer) clearTimeout(resetTimer);
     };
   }, [emblaApi, product?.images?.length]);
 
