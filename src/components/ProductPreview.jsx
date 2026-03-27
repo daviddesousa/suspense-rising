@@ -5,12 +5,12 @@ import { client, decodeVariantTitle } from '../lib/shopify';
 import VariantSelector from './VariantSelector';
 import DOMPurify from 'dompurify';
 
-export default function ProductPreview({ handle }) {
-  const PEEK_INTERSECTION_THRESHOLD = 0.75; // Intersection observer threshold
-  const PEEK_DELAY = 3000; // Delay before triggering peek animation (ms)
-  const PEEK_DURATION = 700; // Duration of peek animation (ms)
-  const PEEK_OFFSET = '-1.5rem'; // Offset to shift carousel briefly for peek swipe affordance
+const PEEK_INTERSECTION_THRESHOLD = 0.75; // Intersection observer threshold
+const PEEK_DELAY = 3000; // Delay before triggering peek animation (ms)
+const PEEK_DURATION = 700; // Duration of peek animation (ms)
+const PEEK_OFFSET = '-1.5rem'; // Offset to shift carousel briefly for peek swipe affordance
 
+export default function ProductPreview({ handle }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   // State for inventory polling
