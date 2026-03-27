@@ -1,4 +1,5 @@
 import { motion as Motion } from 'motion/react';
+import { preload } from 'react-dom';
 
 /*
   IMAGE OPTIMIZATION STRATEGY
@@ -20,11 +21,29 @@ import petroneAvif from '../assets/releases/petrone.jpg?w=300;366;600;732;900;11
 import petroneWebp from '../assets/releases/petrone.jpg?w=300;366;600;732;900;1100;1250;1600&format=webp&as=srcset';
 import petroneJpg from '../assets/releases/petrone.jpg?w=300;366;600;732;900;1100;1250;1600&as=srcset';
 import petroneFallback from '../assets/releases/petrone.jpg?w=600';
+import petroneAvif300 from '../assets/releases/petrone.jpg?w=300&format=avif';
 
 import haslowAvif from '../assets/releases/haslow.jpg?w=300;366;600;732;900;1100;1250;1600&format=avif&as=srcset';
 import haslowWebp from '../assets/releases/haslow.jpg?w=300;366;600;732;900;1100;1250;1600&format=webp&as=srcset';
 import haslowJpg from '../assets/releases/haslow.jpg?w=300;366;600;732;900;1100;1250;1600&as=srcset';
 import haslowFallback from '../assets/releases/haslow.jpg?w=600';
+import haslowAvif300 from '../assets/releases/haslow.jpg?w=300&format=avif';
+
+// Preload the release cover images to make them discoverable as early as possible.
+const imageSizes = '(max-width: 767px) calc(100vw - 48px), 300px';
+preload(petroneAvif300, {
+  as: 'image',
+  imageSrcSet: petroneAvif,
+  imageSizes,
+  fetchPriority: 'high',
+});
+
+preload(haslowAvif300, {
+  as: 'image',
+  imageSrcSet: haslowAvif,
+  imageSizes,
+  fetchPriority: 'high',
+});
 
 const itemVariants = {
   initial: { scale: 0.8 },
@@ -42,8 +61,6 @@ const itemVariants = {
 };
 
 export default function Releases() {
-  const imageSizes = '(max-width: 767px) calc(100vw - 48px), 300px';
-
   return (
     <main className="py-(--gutter-size) mb-auto">
       <section className="page-width" id="releases">
