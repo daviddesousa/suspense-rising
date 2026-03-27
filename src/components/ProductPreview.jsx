@@ -235,8 +235,8 @@ export default function ProductPreview({ handle }) {
             ref={emblaRef}
           >
             <div
-              className={`flex h-full touch-pan-y relative transition-[left] duration-800 ease-in-out`}
-              style={{ left: isPeeking ? '-24px' : '0px' }}
+              className={`flex h-full touch-pan-y relative transition-[left] duration-700 ease-in-out`}
+              style={{ left: isPeeking ? '-1.5rem' : '0' }}
             >
               {/* TODO test srcSet and sizes. refactor for lg breakpoint */}
               {images.map((img) => {
