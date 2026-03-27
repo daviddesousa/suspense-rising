@@ -1,9 +1,25 @@
+import { preload } from 'react-dom';
+
 import wallpaperAvif from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=avif&as=srcset';
 import wallpaperWebp from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;2880&format=webp&as=srcset';
 import wallpaperJpg from '../assets/wallpaper-bw.jpg?w=640;768;1024;1280;1536;1920;2560;2880&as=srcset';
 import wallpaperFallback from '../assets/wallpaper-bw.jpg?w=1920';
+// React DOM uses the first arg to preload() as a deduplication key, not as an href.
+// When imageSrcSet is provided, React omits href entirely from the <link> tag (valid per spec).
+// A stable single-URL string is used here so the key is meaningful and collision-free.
+import wallpaperAvif640 from '../assets/wallpaper-bw.jpg?w=640&format=avif';
 
 import WavyBackgroundWebGL from './WavyBackgroundWebGL';
+
+// Preload the background early to reduce Resource Load Delay.
+// React DOM injects <link rel="preload" as="image" imagesrcset="..." imagesizes="...">
+// without an href (correct per spec when imagesrcset is present).
+preload(wallpaperAvif640, {
+  as: 'image',
+  imageSrcSet: wallpaperAvif,
+  imageSizes: '100vw',
+  fetchPriority: 'high',
+});
 
 /**
  * ResponsiveBackground handles the site's main wallpaper using modern responsive image practices.
@@ -35,7 +51,7 @@ const ResponsiveBackground = ({ isShop, isHome }) => {
           height={1620}
           className={`absolute inset-0 w-full min-h-[110svh] object-cover`}
           loading="eager"
-          decoding="async"
+          decoding="sync"
           fetchPriority="high"
         />
       </picture>
