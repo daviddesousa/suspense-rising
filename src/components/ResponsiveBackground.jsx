@@ -31,6 +31,8 @@ const ResponsiveBackground = ({ isShop, isHome }) => {
         <img
           src={wallpaperFallback}
           alt=""
+          width={2880}
+          height={1620}
           className={`absolute inset-0 w-full min-h-[110svh] object-cover`}
           loading="eager"
           decoding="async"
