@@ -34,11 +34,14 @@ export default defineConfig(({ mode }) => {
     build: {
       outDir: 'dist',
       emptyOutDir: true,
-      sourcemap: false,
+      sourcemap: true,
       rollupOptions: {
         output: {
           manualChunks: {
-            vendor: ['react', 'react-dom'],
+            'vendor-react': ['react', 'react-dom', 'react-router'],
+            'vendor-animation': ['gsap', 'lenis'],
+            'vendor-shopify': ['shopify-buy'],
+            'vendor-ui': ['embla-carousel-react', 'sonner', 'swr', 'dompurify'],
           },
         },
       },
