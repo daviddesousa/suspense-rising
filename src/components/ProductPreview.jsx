@@ -248,7 +248,7 @@ export default function ProductPreview({ handle }) {
                 return (
                   <div
                     key={img.id}
-                    className="carousel-slide flex-[0_0_100%] min-w-0 relative h-full"
+                    className="flex-[0_0_100%] min-w-0 relative h-full pointer-coarse:mr-[3%]"
                   >
                     <img
                       src={`${img.src}&width=800`}

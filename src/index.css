@@ -327,14 +327,6 @@ hr {
   }
 }
 
-.product-carousel {
-  @variant pointer-coarse {
-    .carousel-slide {
-      margin-right: 3%;
-    }
-  }
-}
-
 .product-description ul li {
   @apply mt-2 text-pretty;
 }
