@@ -33,7 +33,7 @@ export default function ProductPreview({ handle }) {
       refreshInterval:
         import.meta.env.PROD ||
         import.meta.env.VITE_ENABLE_PRODUCT_POLLING === 'true'
-          ? 5000
+          ? 15000
           : 0,
       refreshWhenHidden: false,
       revalidateOnFocus: true,
@@ -244,10 +244,11 @@ export default function ProductPreview({ handle }) {
                 transitionDuration: `${PEEK_DURATION}ms`,
               }}
             >
-              {images.map((img) => {
+              {images.map((img, index) => {
                 const srcSet = IMAGE_WIDTHS.map(
                   (width) => `${img.src}&width=${width} ${width}w`,
                 ).join(', ');
+                const isFirst = index === 0;
 
                 return (
                   <div
@@ -260,6 +261,9 @@ export default function ProductPreview({ handle }) {
                       sizes="(min-width: 1151px) 512px, (min-width: 64rem) calc(100vw - 39rem), (min-width: 40rem) 33vw, 100vw"
                       alt={product.title}
                       className="absolute inset-0 w-full h-full object-contain select-none"
+                      loading={isFirst ? 'eager' : 'lazy'}
+                      decoding={isFirst ? 'sync' : 'async'}
+                      fetchPriority={isFirst ? 'high' : 'auto'}
                     />
                   </div>
                 );
