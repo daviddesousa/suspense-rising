@@ -38,7 +38,10 @@ export default defineConfig(({ mode }) => {
       rollupOptions: {
         output: {
           manualChunks: {
-            vendor: ['react', 'react-dom'],
+            'vendor-react': ['react', 'react-dom', 'react-router'],
+            'vendor-animation': ['gsap', 'lenis'],
+            'vendor-shopify': ['shopify-buy'],
+            'vendor-ui': ['embla-carousel-react', 'sonner', 'swr', 'dompurify'],
           },
         },
       },
