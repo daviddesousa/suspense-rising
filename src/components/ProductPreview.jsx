@@ -1,9 +1,14 @@
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import useSWR from 'swr';
 import useEmblaCarousel from 'embla-carousel-react';
 import { client, decodeVariantTitle } from '../lib/shopify';
 import VariantSelector from './VariantSelector';
 import DOMPurify from 'dompurify';
+
+const PEEK_INTERSECTION_THRESHOLD = 0.75; // Intersection observer threshold
+const PEEK_DELAY = 3000; // Delay before triggering peek animation (ms)
+const PEEK_DURATION = 700; // Duration of peek animation (ms)
+const PEEK_OFFSET = '-1.5rem'; // Offset to shift carousel briefly for peek swipe affordance
 
 export default function ProductPreview({ handle }) {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -12,6 +17,9 @@ export default function ProductPreview({ handle }) {
   const [selectedVariantId, setSelectedVariantId] = useState(null);
   const [isCheckingOut, setIsCheckingOut] = useState(false);
   const [checkoutError, setCheckoutError] = useState(null);
+  const [isPeeking, setIsPeeking] = useState(false);
+  const hasPeekedRef = useRef(false);
+  const hasInteractedRef = useRef(false);
 
   const {
     data: product,
@@ -37,7 +45,10 @@ export default function ProductPreview({ handle }) {
   const loading = isLoading;
   const productNotFound = !isLoading && !error && !product;
 
-  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: true });
+  const [emblaRef, emblaApi] = useEmblaCarousel({
+    loop: true,
+    align: 'center',
+  });
 
   const scrollPrev = useCallback(() => {
     if (emblaApi) emblaApi.scrollPrev();
@@ -62,6 +73,77 @@ export default function ProductPreview({ handle }) {
       emblaApi.off('reInit', onSelect);
     };
   }, [emblaApi, onSelect]);
+
+  // Track user interaction to cancel discovery peek
+  useEffect(() => {
+    if (!emblaApi) return;
+    const handleInteract = () => {
+      hasInteractedRef.current = true;
+    };
+    emblaApi.on('dragStart', handleInteract);
+    return () => {
+      emblaApi.off('dragStart', handleInteract);
+    };
+  }, [emblaApi]);
+
+  // One-time "peek" effect to indicate swipeability on touch devices when coming into view
+  useEffect(() => {
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+    const imagesCount = product?.images?.length || 0;
+
+    if (
+      !isTouchDevice ||
+      !emblaApi ||
+      imagesCount <= 1 ||
+      hasPeekedRef.current ||
+      hasInteractedRef.current
+    ) {
+      return;
+    }
+
+    let peekTimer = null;
+    let resetTimer = null;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (
+            entry.isIntersecting &&
+            !hasPeekedRef.current &&
+            !hasInteractedRef.current
+          ) {
+            // Trigger peek after PEEK_DELAY of being in view with no interaction
+            peekTimer = setTimeout(() => {
+              if (!hasInteractedRef.current && entry.isIntersecting) {
+                setIsPeeking(true);
+                resetTimer = setTimeout(() => {
+                  setIsPeeking(false);
+                }, PEEK_DURATION);
+                hasPeekedRef.current = true;
+                observer.disconnect();
+              }
+            }, PEEK_DELAY);
+          } else {
+            // Cancel timer if user scrolls away before it fires
+            if (peekTimer) {
+              clearTimeout(peekTimer);
+              peekTimer = null;
+            }
+          }
+        });
+      },
+      { threshold: PEEK_INTERSECTION_THRESHOLD },
+    );
+
+    const emblaNode = emblaApi.rootNode();
+    observer.observe(emblaNode);
+
+    return () => {
+      observer.disconnect();
+      if (peekTimer) clearTimeout(peekTimer);
+      if (resetTimer) clearTimeout(resetTimer);
+    };
+  }, [emblaApi, product?.images?.length]);
 
   // Handle returning from Shopify Checkout via browser back button (BFCache)
   useEffect(() => {
@@ -130,14 +212,21 @@ export default function ProductPreview({ handle }) {
           customAttributes: [
             { key: '_selection_method', value: isRandom ? 'random' : 'manual' },
             { key: '_figure_number', value: figureNumber.toString() },
-            { key: 'Number', value: isRandom ? 'Haslow has chosen for you.' : figureNumber.toString() },
+            {
+              key: 'Number',
+              value: isRandom
+                ? 'Haslow has chosen for you.'
+                : figureNumber.toString(),
+            },
           ],
         },
       ]);
       window.location.href = checkout.webUrl;
     } catch (err) {
       console.error('Checkout error:', err);
-      setCheckoutError(err.message || 'Something went wrong with the checkout.');
+      setCheckoutError(
+        err.message || 'Something went wrong with the checkout.',
+      );
       setIsCheckingOut(false);
     }
   };
@@ -150,7 +239,13 @@ export default function ProductPreview({ handle }) {
             className="carousel-inner relative overflow-hidden aspect-2/3"
             ref={emblaRef}
           >
-            <div className="flex h-full touch-pan-y">
+            <div
+              className={`flex h-full touch-pan-y relative transition-[left] ease-in-out`}
+              style={{
+                left: isPeeking ? PEEK_OFFSET : '0',
+                transitionDuration: `${PEEK_DURATION}ms`,
+              }}
+            >
               {/* TODO test srcSet and sizes. refactor for lg breakpoint */}
               {images.map((img) => {
                 const widths = [400, 600, 800, 1000, 1200, 1400, 1600];
@@ -161,7 +256,7 @@ export default function ProductPreview({ handle }) {
                 return (
                   <div
                     key={img.id}
-                    className="flex-[0_0_100%] min-w-0 relative h-full"
+                    className="flex-[0_0_100%] min-w-0 relative h-full pointer-coarse:mr-[3%]"
                   >
                     <img
                       src={`${img.src}&width=800`}
@@ -215,19 +310,24 @@ export default function ProductPreview({ handle }) {
 
           {images.length > 1 && (
             <div className="carousel-dots flex justify-center gap-2 mt-4 pointer-events-none">
-              {images.map((img, idx) => (
-                <div
-                  key={img.id}
-                  className={`carousel-dot rounded-full ${idx === currentImageIndex ? 'is-active bg-white' : 'bg-white/30'}`}
-                />
-              ))}
+              {images.map((img, idx) => {
+                const isActive = idx === currentImageIndex;
+                return (
+                  <div
+                    key={img.id}
+                    className={`carousel-dot rounded-full ${isActive ? 'is-active' : ''}`}
+                  />
+                );
+              })}
             </div>
           )}
         </div>
       )}
 
       <div className="product-info space-y-4 text-left">
-        <h1 className="text-5xl uppercase font-bold">{product.title}</h1>
+        <h1 className="uppercase font-bold text-[clamp(1.5rem,12vw,3rem)] leading-none">
+          {product.title}
+        </h1>
         <div className="product-price text-4xl">{price}</div>
         <div
           className="product-description font-mono leading-relaxed text-sm space-y-6"
