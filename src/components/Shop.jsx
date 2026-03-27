@@ -128,7 +128,7 @@ export default function Shop() {
       {/* Spacer for the haslow zoom/blur animation */}
       <div ref={animationSpacerRef} className="h-svh" />
 
-      <section className="relative z-10 flex flex-col justify-start p-(--gutter-size) sm:min-h-svh lg:min-h-[94svh]">
+      <section className="relative z-10 flex flex-col justify-start p-(--gutter-size) pb-22 sm:min-h-svh lg:min-h-[94svh]">
         <ProductPreview handle="the-haslow-tee" />
       </section>
     </main>
