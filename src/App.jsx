@@ -20,6 +20,7 @@ function App() {
   const isShop = location.pathname === '/shop';
   const isHome = location.pathname === '/';
   const lenisRef = useRef();
+  const isTouch = window.matchMedia('(pointer: coarse)').matches;
 
   useEffect(() => {
     document.title = titles[location.pathname] || 'Suspense Rising';
@@ -38,6 +39,7 @@ function App() {
       root
       options={{
         autoRaf: false,
+        prevent: isTouch ? () => true : undefined,
       }}
       ref={lenisRef}
     >
