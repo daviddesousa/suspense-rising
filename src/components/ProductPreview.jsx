@@ -325,7 +325,9 @@ export default function ProductPreview({ handle }) {
       )}
 
       <div className="product-info space-y-4 text-left">
-        <h1 className="text-5xl uppercase font-bold">{product.title}</h1>
+        <h1 className="uppercase font-bold text-[clamp(1.5rem,12vw,3rem)] leading-none">
+          {product.title}
+        </h1>
         <div className="product-price text-4xl">{price}</div>
         <div
           className="product-description font-mono leading-relaxed text-sm space-y-6"
