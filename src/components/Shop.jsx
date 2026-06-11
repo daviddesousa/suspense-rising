@@ -127,7 +127,13 @@ export default function Shop() {
       <main className="my-[25%_auto] sm:my-[10%_auto]">
         <CountdownTimer
           targetDate={TARGET_DATE}
-          onComplete={() => setIsLocked(false)}
+          onComplete={() => {
+            if (new Date() >= TARGET_DATE) {
+              window.location.reload();
+            } else {
+              setIsLocked(false);
+            }
+          }}
         />
       </main>
     );
