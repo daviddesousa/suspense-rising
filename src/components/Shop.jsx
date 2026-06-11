@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { useGSAP } from '@gsap/react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -7,11 +7,8 @@ import ProductPreview from './ProductPreview';
 import HaslowBackground from './HaslowBackground';
 import ScrollIndicator from './ScrollIndicator';
 import MiniAudioPlayer from './MiniAudioPlayer';
-import CountdownTimer from './CountdownTimer';
 
 gsap.registerPlugin(ScrollTrigger, useGSAP);
-
-const TARGET_DATE = new Date('2026-06-11T19:00:00-04:00'); // June 11th, 7:00 PM Eastern Time (EDT)
 
 const SHOP_CONTENT = [
   'He speaks with charm and moves with grace',
@@ -26,37 +23,7 @@ export default function Shop() {
   const playerRef = useRef(null);
   const animationSpacerRef = useRef(null);
 
-  const [isLocked, setIsLocked] = useState(() => {
-    const params = new URLSearchParams(window.location.search);
-    const hasBypassParam = params.get('bypass') === 'true';
-    const hasBypassStorage =
-      typeof window !== 'undefined' &&
-      window.localStorage?.getItem('shop_bypass') === 'true';
-    const forceLock = params.get('bypass') === 'false';
-
-    if (forceLock) {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        window.localStorage.removeItem('shop_bypass');
-      }
-      return new Date() < TARGET_DATE;
-    }
-
-    if (hasBypassParam) {
-      if (typeof window !== 'undefined' && window.localStorage) {
-        window.localStorage.setItem('shop_bypass', 'true');
-      }
-      return false;
-    }
-
-    if (hasBypassStorage) {
-      return false;
-    }
-
-    return new Date() < TARGET_DATE;
-  });
-
   useGSAP(() => {
-    if (isLocked) return;
     if (!haslowRef.current || !playerRef.current) return;
 
     // Slide IN on scroll down, slide OUT only when scrolling back above the trigger.
@@ -120,24 +87,7 @@ export default function Shop() {
         },
       );
     }
-  }, [isLocked]);
-
-  if (isLocked) {
-    return (
-      <main className="my-[25%_auto] sm:my-[10%_auto]">
-        <CountdownTimer
-          targetDate={TARGET_DATE}
-          onComplete={() => {
-            if (new Date() >= TARGET_DATE) {
-              window.location.reload();
-            } else {
-              setIsLocked(false);
-            }
-          }}
-        />
-      </main>
-    );
-  }
+  }, []);
 
   return (
     <main>
