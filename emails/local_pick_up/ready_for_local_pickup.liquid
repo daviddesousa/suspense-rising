@@ -101,24 +101,12 @@
   </tr>
   <tr>
     <td>
-      <p>{{ location.name }}</p>
+      <p>464 rue Lagarde</p>
     </td>
   </tr>
   <tr>
     <td>
-      <p>{{ location.address1 }}</p>
-    </td>
-  </tr>
-  {% if location.address2 != blank %}
-  <tr>
-    <td>
-      <p>{{ location.address2 }}</p>
-    </td>
-  </tr>
-  {% endif %}
-  <tr>
-    <td>
-      <p>{{ location.city | capitalize }} {{ location.province | capitalize }} {{ location.zip | upcase }}</p>
+      <p>Montréal Quebec H2J 1B4</p>
     </td>
   </tr>
   <tr>
@@ -126,7 +114,7 @@
   </tr>
   <tr>
     <td>
-      <a href="http://www.google.com/maps/search/?api=1&query={{ location.name }} - {{ [location.address1, location.address2].compact.join(', ') }}, {{ location.city }}, {{ location.province }}, {{ location.zip }}" target="_blank">
+      <a href="https://www.google.com/maps/place/464+Rue+Lagarde,+Montr%C3%A9al,+QC+H2J+1B4/" target="_blank">
         Open map&nbsp;
         <span class="small">&rarr;</span>
       </a>
