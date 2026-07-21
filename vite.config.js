@@ -35,10 +35,29 @@ export default defineConfig(({ mode }) => {
       outDir: 'dist',
       emptyOutDir: true,
       sourcemap: false,
-      rollupOptions: {
+      rolldownOptions: {
         output: {
-          manualChunks: {
-            vendor: ['react', 'react-dom'],
+          codeSplitting: {
+            groups: [
+              // Order by priority: specific groups first, broad catch-all last.
+              // Higher priority is evaluated first; once a module is claimed it
+              // is removed from consideration for lower-priority groups.
+              {
+                name: 'react',
+                test: /[\\/]node_modules[\\/]react/,
+                priority: 30,
+              },
+              {
+                name: 'animation',
+                test: /[\\/]node_modules[\\/](gsap|@gsap|motion|lenis)/,
+                priority: 20,
+              },
+              {
+                name: 'vendor',
+                test: /[\\/]node_modules[\\/]/,
+                priority: 10,
+              },
+            ],
           },
         },
       },
